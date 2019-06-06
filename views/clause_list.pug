@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1#wb-cont(property="name")= title
+  ul
+    each clause in clause_list
+      li 
+        a(href=clause.url) #{clause.name}
+
+    else
+      li There are no clauses to display.
+
+  a(href='/clause/create') Create clause

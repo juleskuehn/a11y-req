@@ -1,0 +1,11 @@
+extends layout
+
+block content
+
+  h1 Clause: #{clause.name}
+  
+  hr
+  p
+    a(href=clause.url+'/delete') Delete Clause
+  p
+    a(href=clause.url+'/update') Update Clause
