@@ -1,15 +1,9 @@
-extends layout
+extends item_form
 
-block content
-  h1 #{title}
+block form
 
   form(method='POST' action='')
     div.form-group
       label(for='name') Clause title (required):
-      input#name.form-control(type='text' placeholder='' required='true' name='name' value=(undefined===clause ? '' : clause.name))
+      input#name.form-control(type='text' placeholder='' required='true' name='name' value=(undefined===item ? '' : item.name))
     button.btn.btn-primary(type='submit') Submit
-
-  if errors 
-   ul
-    for error in errors
-     li!= error.msg

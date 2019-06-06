@@ -1,0 +1,24 @@
+extends item_form
+
+
+block form
+  -var itemExists = item!==undefined
+
+  form(method='POST' action='')
+    .form-group
+      label.required(for='name')
+        span.field-name Section title 
+        strong.required (required)
+      input#name.form-control(type='text' placeholder='' required='required' name='name' value=(itemExists ? item.name : ''))
+    .checkbox
+      label(for='showHeading')
+        input#showHeading(type='checkbox' name='showHeading' checked=(itemExists ? item.showHeading : 'checked'))
+        | Display section title as a heading
+    .form-group
+      label(for='bodyHtml')
+        span.field-name Body HTML
+      textarea#bodyHtml.form-control(name='bodyHtml' rows='10')
+        if itemExists
+          | #{item.bodyHtml}
+      
+    button.btn.btn-primary(type='submit') Submit

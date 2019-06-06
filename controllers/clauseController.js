@@ -11,28 +11,8 @@ exports.clause_list = function (req, res, next) {
     .exec(function (err, list_clauses) {
       if (err) { return next(err); }
       //Successful, so render
-      res.render('clause_list', { title: 'Clause List', clause_list: list_clauses });
+      res.render('item_list', { title: 'Clause List', item_list: list_clauses, type: 'clause' });
     });
-};
-
-// Display detail page for a specific Clause
-// Using async so that functionality can be extended later (find parent, etc)
-exports.clause_detail = function (req, res, next) {
-  async.parallel({
-    clause: function (callback) {
-      Clause.findById(req.params.id)
-        .exec(callback);
-    },
-  }, function (err, results) {
-    if (err) { return next(err); }
-    if (results.clause == null) { // No results.
-      var err = new Error('Clause not found');
-      err.status = 404;
-      return next(err);
-    }
-    // Successful, so render
-    res.render('clause_detail', { title: 'Clause Detail', clause: results.clause });
-  });
 };
 
 // Display clause create form on GET
@@ -104,7 +84,7 @@ exports.clause_delete_get = function (req, res, next) {
       res.redirect('/clauses');
     }
     // Successful, so render.
-    res.render('clause_delete', { title: 'Delete Clause', clause: results.clause });
+    res.render('item_delete', { title: 'Delete Clause', item: results.clause });
   });
 
 };
@@ -114,12 +94,12 @@ exports.clause_delete_post = function (req, res, next) {
 
   async.parallel({
     clause: function (callback) {
-      Clause.findById(req.body.clauseid).exec(callback)
+      Clause.findById(req.body.itemid).exec(callback)
     },
   }, function (err, results) {
     if (err) { return next(err); }
     // Success. Delete object and redirect to the list of clauses.
-    Clause.findByIdAndRemove(req.body.clauseid, function deleteClause(err) {
+    Clause.findByIdAndRemove(req.body.itemid, function deleteClause(err) {
       if (err) { return next(err); }
       // Success - go to clause list
       res.redirect('/clauses')
@@ -144,7 +124,7 @@ exports.clause_update_get = function (req, res, next) {
       return next(err);
     }
     // Success.
-    res.render('clause_form', { title: 'Update clause', clause: results.clause });
+    res.render('clause_form', { title: 'Edit clause', item: results.clause });
   });
 
 };
