@@ -5,17 +5,18 @@ const { sanitizeBody } = require('express-validator/filter');
 const Info = require('../models/infoSchema');
 
 const strings = {
-  listTitle: 'Informative Section List',
-  createTitle: 'Create Informative Section',
+  listTitle: 'Edit informative sections',
+  createTitle: 'Create informative section',
   sectionTitleRequired: 'Section title required'
 }
 
 // Display list of all Infos
 exports.info_list = function (req, res, next) {
   Info.find()
-    .sort([['name', 'ascending']])
+    .sort([['order', 'descending']])
     .exec(function (err, list_infos) {
       if (err) { return next(err); }
+      
       //Successful, so render
       res.render('item_list', { title: strings.listTitle, item_list: list_infos, type: 'info' });
     });
@@ -39,7 +40,7 @@ exports.info_create_post = [
 
     var info = new Info({
       name: req.body.name,
-      showHeading: req.body.showHeading==='on',
+      showHeading: req.body.showHeading === 'on',
       bodyHtml: req.body.bodyHtml
     });
 
@@ -110,7 +111,7 @@ exports.info_update_post = [
     // Create a info object with escaped/trimmed data and old id.
     var info = new Info({
       name: req.body.name,
-      showHeading: req.body.showHeading==='on',
+      showHeading: req.body.showHeading === 'on',
       bodyHtml: req.body.bodyHtml,
       _id: req.params.id //This is required, or a new ID will be assigned!
     });

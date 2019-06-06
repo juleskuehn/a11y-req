@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1#wb-cont(property="name")= title
+  each item in item_list
+    if item.showHeading 
+      .infoHeading
+        h2 #{item.name}
+    .infoBody
+      | !{item.bodyHtml}
+    
+  else
+    li There are no informative sections to display.

@@ -5,7 +5,8 @@ const InfoSchema = new Schema(
   {
     name: { type: String, required: true },
     showHeading: { type: Boolean, required: true },
-    bodyHtml: { type: String }
+    bodyHtml: { type: String },
+    order: { type: Number }
   }
 );
 
