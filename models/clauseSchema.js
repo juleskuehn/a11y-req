@@ -3,11 +3,15 @@ const Schema = mongoose.Schema;
 
 const ClauseSchema = new Schema(
   {
-    name: {type: String, required: true}
+    number: { type: String, required: true }, // Order and parent/child relationships are determined by number
+    name: { type: String, required: true },
+    informative: { type: Boolean, required: true }, // Informative clauses must be included whenever a parent clause is included
+    description: { type: String },
+    compliance: { type: String }
   }
 );
 
-ClauseSchema.virtual('url').get(function() {
+ClauseSchema.virtual('url').get(function () {
   return '/edit/clause/' + this._id;
 });
 

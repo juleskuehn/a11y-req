@@ -32,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Associate routes
 app.use('/', require('./routes/indexRoutes'));
 app.use('/edit', require('./routes/editRoutes'));
+app.use('/view', require('./routes/generatorRoutes'));
 
 // Error handling
 app.use(function (req, res, next) { next(createError(404)); });

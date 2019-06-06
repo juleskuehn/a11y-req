@@ -1,9 +1,34 @@
 extends item_form
 
 block form
+  -var itemExists = item!==undefined
 
   form(method='POST' action='')
-    div.form-group
-      label(for='name') Clause title (required):
-      input#name.form-control(type='text' placeholder='' required='true' name='name' value=(undefined===item ? '' : item.name))
-    button.btn.btn-primary(type='submit') Submit
+    .form-group
+      label.required(for='number')
+        span.field-name Clause number 
+        strong.required (required)
+      input#number.form-control(type='text' placeholder='' required='required' name='number' value=(itemExists ? item.number : ''))
+    .form-group
+      label.required(for='name')
+        span.field-name Clause name 
+        strong.required (required)
+      input#name.form-control(type='text' placeholder='' required='required' name='name' value=(itemExists ? item.name : ''))
+    .checkbox
+      label(for='informative')
+        input#informative(type='checkbox' name='informative' checked=(itemExists ? item.informative : false))
+        | Informative clause (must be included with parent clause)
+    .form-group
+      label(for='description')
+        span.field-name Description (HTML)
+      textarea#description.form-control(name='description' rows='10')
+        if itemExists
+          | #{item.description}
+    .form-group
+      label(for='compliance')
+        span.field-name Determination of compliance (HTML)
+      textarea#compliance.form-control(name='compliance' rows='10')
+        if itemExists
+          | #{item.compliance}
+      
+    button.btn.btn-primary(type='submit') Submit 

@@ -7,18 +7,23 @@ const Clause = require('../models/clauseSchema');
 const strings = {
   listTitle: 'Edit clauses',
   createTitle: 'Create clause',
-  sectionTitleRequired: 'Clause title required'
+  clauseNameRequired: 'Clause name required',
+  clauseNumberRequired: 'Clause number required',
+  deleteClause: 'Delete clause',
+  editClause: 'Edit clause',
+  clauseNotFound: 'Clause not found',
+  updateClause: 'Update clause'
 }
 
 // Display list of all Clauses
 exports.clause_list = function (req, res, next) {
   Clause.find()
-    .sort([['order', 'descending']])
+    .sort([['number', 'ascending']])
     .exec(function (err, list_clauses) {
       if (err) { return next(err); }
       
       //Successful, so render
-      res.render('item_list', { title: strings.listTitle, item_list: list_clauses, type: 'clause' });
+      res.render('clause_list', { title: strings.listTitle, item_list: list_clauses });
     });
 };
 
@@ -31,7 +36,8 @@ exports.clause_create_get = function (req, res, next) {
 exports.clause_create_post = [
 
   // Validate that the name field is not empty.
-  body('name', strings.sectionTitleRequired).isLength({ min: 1 }).trim(),
+  body('number', strings.clauseNumberRequired).isLength({ min: 1 }).trim(),
+  body('name', strings.clauseNameRequired).isLength({ min: 1 }).trim(),
 
   (req, res, next) => {
 
@@ -39,7 +45,11 @@ exports.clause_create_post = [
     const errors = validationResult(req);
 
     var clause = new Clause({
-      name: req.body.name
+      number: req.body.number,
+      name: req.body.name,
+      informative: req.body.informative === 'on',
+      description: req.body.description,
+      compliance: req.body.compliance
     });
 
     if (!errors.isEmpty()) {
@@ -50,7 +60,7 @@ exports.clause_create_post = [
     else {
       // Data from form is valid.
       // Check if Clause with same name already exists.
-      Clause.findOne({ 'name': req.body.name })
+      Clause.findOne({ 'number': req.body.number })
         .exec(function (err, found_clause) {
           if (err) { return next(err); }
 
@@ -85,12 +95,12 @@ exports.clause_update_get = function (req, res, next) {
   }, function (err, results) {
     if (err) { return next(err); }
     if (results.clause == null) { // No results.
-      var err = new Error('Clause not found');
+      var err = new Error(strings.clauseNotFound);
       err.status = 404;
       return next(err);
     }
     // Success.
-    res.render('clause_form', { title: 'Edit clause', item: results.clause });
+    res.render('clause_form', { title: strings.editClause, item: results.clause });
   });
 
 };
@@ -99,7 +109,8 @@ exports.clause_update_get = function (req, res, next) {
 exports.clause_update_post = [
 
   // Validate that the name field is not empty.
-  body('name', 'Clause name required').isLength({ min: 1 }).trim(),
+  body('number', strings.clauseNumberRequired).isLength({ min: 1 }).trim(),
+  body('name', strings.clauseNameRequired).isLength({ min: 1 }).trim(),
 
   (req, res, next) => {
 
@@ -108,13 +119,17 @@ exports.clause_update_post = [
 
     // Create a clause object with escaped/trimmed data and old id.
     var clause = new Clause({
+      number: req.body.number,
       name: req.body.name,
+      informative: req.body.informative === 'on',
+      description: req.body.description,
+      compliance: req.body.compliance,
       _id: req.params.id //This is required, or a new ID will be assigned!
     });
 
     if (!errors.isEmpty()) {
       // There are errors. 
-      res.render('clause_form', { title: 'Update clause', clause: clause, errors: errors.array() });
+      res.render('clause_form', { title: strings.updateClause, clause: clause, errors: errors.array() });
       return;
     }
     else {
@@ -142,7 +157,7 @@ exports.clause_delete_get = function (req, res, next) {
       res.redirect('/edit/clauses');
     }
     // Successful, so render.
-    res.render('item_delete', { title: 'Delete Clause', item: results.clause });
+    res.render('item_delete', { title: strings.deleteClause, item: results.clause });
   });
 
 };

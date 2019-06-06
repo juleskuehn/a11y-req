@@ -16,4 +16,4 @@ The code is based on:
 ## Usage
 - Run `mongod` to start the database server
 - Run `npm run devstart` to start the node.js server
-- Visit [http://localhost:3000]
+- Visit [localhost:3000](http://localhost:3000)

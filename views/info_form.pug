@@ -1,6 +1,5 @@
 extends item_form
 
-
 block form
   -var itemExists = item!==undefined
 
@@ -16,7 +15,7 @@ block form
         | Display section title as a heading
     .form-group
       label(for='bodyHtml')
-        span.field-name Body HTML
+        span.field-name Content (HTML)
       textarea#bodyHtml.form-control(name='bodyHtml' rows='10')
         if itemExists
           | #{item.bodyHtml}

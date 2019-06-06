@@ -13,7 +13,7 @@ const strings = {
 // Display list of all Infos
 exports.info_list = function (req, res, next) {
   Info.find()
-    .sort([['order', 'descending']])
+    .sort([['order', 'ascending']])
     .exec(function (err, list_infos) {
       if (err) { return next(err); }
       
