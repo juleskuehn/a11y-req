@@ -9,6 +9,11 @@ block form
         span.field-name Section title 
         strong.required (required)
       input#name.form-control(type='text' placeholder='' required='required' name='name' value=(itemExists ? item.name : ''))
+    .form-group(lang='fr')
+      label.required(for='frName')
+        span.field-name Titre de section 
+        strong.required (obligatoire)
+      input#frName.form-control(type='text' placeholder='' required='required' name='frName' value=(itemExists ? item.frName : ''))
     .checkbox
       label(for='showHeading')
         input#showHeading(type='checkbox' name='showHeading' checked=(itemExists ? item.showHeading : 'checked'))
@@ -19,5 +24,11 @@ block form
       textarea#bodyHtml.form-control(name='bodyHtml' rows='10')
         if itemExists
           | #{item.bodyHtml}
+    .form-group(lang='fr')
+      label(for='frBodyHtml')
+        span.field-name Contenu (HTML)
+      textarea#bodyHtml.form-control(name='frBodyHtml' rows='10')
+        if itemExists
+          | #{item.frBodyHtml}
       
     button.btn.btn-primary(type='submit') Submit

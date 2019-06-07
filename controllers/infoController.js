@@ -41,7 +41,9 @@ exports.info_create_post = [
     var info = new Info({
       name: req.body.name,
       showHeading: req.body.showHeading === 'on',
-      bodyHtml: req.body.bodyHtml
+      bodyHtml: req.body.bodyHtml,
+      frName: req.body.frName,
+      frBodyHtml: req.body.frBodyHtml
     });
 
     if (!errors.isEmpty()) {
@@ -113,6 +115,8 @@ exports.info_update_post = [
       name: req.body.name,
       showHeading: req.body.showHeading === 'on',
       bodyHtml: req.body.bodyHtml,
+      frName: req.body.frName,
+      frBodyHtml: req.body.frBodyHtml,
       _id: req.params.id //This is required, or a new ID will be assigned!
     });
 

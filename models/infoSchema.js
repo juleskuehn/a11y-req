@@ -4,8 +4,10 @@ const Schema = mongoose.Schema;
 const InfoSchema = new Schema(
   {
     name: { type: String, required: true },
+    frName: { type: String, required: true },
     showHeading: { type: Boolean, required: true },
     bodyHtml: { type: String },
+    frBodyHtml: {type: String },
     order: { type: Number }
   }
 );

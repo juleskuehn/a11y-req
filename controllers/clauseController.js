@@ -47,9 +47,12 @@ exports.clause_create_post = [
     var clause = new Clause({
       number: req.body.number,
       name: req.body.name,
+      frName: req.body.frName,
       informative: req.body.informative === 'on',
       description: req.body.description,
-      compliance: req.body.compliance
+      frDescription: req.body.frDescription,
+      compliance: req.body.compliance,
+      frCompliance: req.body.frCompliance
     });
 
     if (!errors.isEmpty()) {
@@ -121,9 +124,12 @@ exports.clause_update_post = [
     var clause = new Clause({
       number: req.body.number,
       name: req.body.name,
+      frName: req.body.frName,
       informative: req.body.informative === 'on',
       description: req.body.description,
+      frDescription: req.body.frDescription,
       compliance: req.body.compliance,
+      frCompliance: req.body.frCompliance,
       _id: req.params.id //This is required, or a new ID will be assigned!
     });
 
