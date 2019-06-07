@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1#wb-cont(property="name")= title
+  if item_list.length > 0
+    .wb-frmvld
+      form(method='POST' action='' novalidate='novalidate')
+        fieldset
+          legend.required
+            span.field-name Select clauses to include 
+            strong.required (required)
+
+          each item, i in item_list
+            -item.level = item.number.split(".").length - 1
+            .checkbox(class=('checkbox--level'+item.level))
+              label(for=item.id)
+                input(id=item.id type='checkbox' name='clause' value=item.id required=(i===0 ? 'required' : false))
+                | #{item.number} #{item.name}
+
+          button.btn.btn-primary(type='submit') Submit
+  else
+    p There are no clauses to display.
