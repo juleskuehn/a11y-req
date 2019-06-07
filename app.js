@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Database connection
-const mongoDB = 'mongodb://127.0.0.1/wet-mongoose';
+const mongoDB = process.env.MONGODB_URI || 'mongodb://127.0.0.1/wet-mongoose';
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
