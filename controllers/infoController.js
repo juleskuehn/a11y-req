@@ -43,6 +43,7 @@ exports.info_create_post = [
       showHeading: req.body.showHeading === 'on',
       bodyHtml: req.body.bodyHtml,
       frName: req.body.frName,
+      order: req.body.order,
       frBodyHtml: req.body.frBodyHtml
     });
 
@@ -117,6 +118,7 @@ exports.info_update_post = [
       bodyHtml: req.body.bodyHtml,
       frName: req.body.frName,
       frBodyHtml: req.body.frBodyHtml,
+      order: req.body.order,
       _id: req.params.id //This is required, or a new ID will be assigned!
     });
 

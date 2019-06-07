@@ -30,5 +30,9 @@ block form
       textarea#bodyHtml.form-control(name='frBodyHtml' rows='10')
         if itemExists
           | #{item.frBodyHtml}
+    .form-group
+      label(for='order')
+        span.field-name Order (1 comes before 2, etc.)
+      input#order.form-control(type='text' placeholder='' name='order' value=(itemExists ? item.order : ''))
       
     button.btn.btn-primary(type='submit') Submit
