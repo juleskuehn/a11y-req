@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const mongoose = require('mongoose');
+const auth = require('http-auth');
 
 const app = express();
 
@@ -29,9 +30,15 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Simple authorization for edit routes
+const basicAuth = auth.basic(
+  { realm: "Login with jules / jules" },
+  (user, pass, cb) => cb(user === "jules" && pass === "jules")
+);
+
 // Associate routes
 app.use('/', require('./routes/indexRoutes'));
-app.use('/edit', require('./routes/editRoutes'));
+app.use('/edit', auth.connect(basicAuth), require('./routes/editRoutes'));
 app.use('/view', require('./routes/generatorRoutes'));
 
 // Error handling
