@@ -70,8 +70,8 @@ exports.create_post = [
     else {
       // Data from form is valid
       // Get selected clauses
-      let clause_ids = []
-      if (typeof(req.body.clause) != typeof([])) {
+      let clause_ids = [];
+      if (typeof (req.body.clause) != typeof ([])) {
         req.body.clause = [req.body.clause];
       }
       for (id of req.body.clause) {
@@ -86,14 +86,14 @@ exports.create_post = [
           }).exec(callback);
         },
         intro: function (callback) {
-          Info.find({name: /^(?!Annex).*/})
-          .sort([['order', 'ascending']])
-          .exec(callback);
+          Info.find({ name: /^(?!Annex).*/ })
+            .sort([['order', 'ascending']])
+            .exec(callback);
         },
         annex: function (callback) {
-          Info.find({name: /^Annex/})
-          .sort([['order', 'ascending']])
-          .exec(callback);
+          Info.find({ name: /^Annex/ })
+            .sort([['order', 'ascending']])
+            .exec(callback);
         },
       }, function (err, results) {
         if (err) { return next(err); }

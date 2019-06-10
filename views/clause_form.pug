@@ -18,7 +18,7 @@ block form
       label.required(for='frName')
         span.field-name Nom de la clause 
         strong.required (obligatoire)
-      input#frName.form-control(type='text' placeholder='' required='required' name='name' value=(itemExists ? item.frName : ''))
+      input#frName.form-control(type='text' placeholder='' required='required' name='frName' value=(itemExists ? item.frName : ''))
     .checkbox
       label(for='informative')
         input#informative(type='checkbox' name='informative' checked=(itemExists ? item.informative : false))

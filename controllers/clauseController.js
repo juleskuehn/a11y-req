@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
 const Clause = require('../models/clauseSchema');
+const Preset = require('../models/presetSchema.js');
 
 const strings = {
   listTitle: 'Edit clauses',
@@ -173,11 +174,21 @@ exports.clause_delete_post = function (req, res, next) {
 
   async.parallel({
     clause: function (callback) {
-      Clause.findById(req.body.itemid).exec(callback)
+      Clause.findById(req.body.itemid).exec(callback);
     },
+    clause_presets: function (callback) {
+      Preset.find({
+        clauses: req.body.itemid
+      }).exec(callback);
+    }
   }, function (err, results) {
     if (err) { return next(err); }
-    // Success. Delete object and redirect to the list of clauses.
+    if (results.clause_presets.length > 0) {
+      // Clause has presets referencing it which must be deleted first
+      res.render('item_delete', { title: strings.deleteClause, item: results.clause, dependencies: results.clause_presets });
+      return;
+    }
+    // Delete object and redirect to the list of clauses
     Clause.findByIdAndRemove(req.body.itemid, function deleteClause(err) {
       if (err) { return next(err); }
       // Success - go to clause list
