@@ -2,21 +2,33 @@ extends layout
 
 block content
   h1#wb-cont(property="name")= title
-  if item_list.length > 0
-    .wb-frmvld
-      form(method='POST' action='' novalidate='novalidate')
-        fieldset
-          legend.required
-            span.field-name Select clauses to include 
-            strong.required (required)
+  form(method='POST' action='' novalidate='novalidate')
+    .form-group
+      label(for='preset') Load commodity preset
+      select#preset.form-control(name='preset')
+        option(value='') Custom (specify clauses below)
+        each preset in preset_list
+          option(value=preset.id) #{preset.name}
 
-          each item, i in item_list
-            -item.level = item.number.split(".").length - 1
-            .checkbox(class=('checkbox--level'+item.level))
-              label(for=item.id)
-                input(id=item.id type='checkbox' name='clause' value=item.id required=(i===0 ? 'required' : false))
-                | #{item.number} #{item.name}
+    fieldset#clauses
+      //- legend.required
+      legend
+        span.field-name Select clauses to include 
+        //- strong.required (required)
 
-          button.btn.btn-primary(type='submit') Submit
-  else
-    p There are no clauses to display.
+      each item, i in item_list
+        -item.level = item.number.split(".").length - 1
+        .checkbox(class=('checkbox--level'+item.level))
+          label(for=item.id)
+            //- input(id=item.id type='checkbox' name='clauses' value=item.id required=(i===0 ? 'required' : false))
+            input(id=item.id type='checkbox' name='clauses' value=item.id)
+            | #{item.number} #{item.name}
+
+    button.btn.btn-primary(type='submit') Generate requirements
+  
+  //- Hidden data (for client-side javascript)
+  .hidden#preset-data
+    each preset in preset_list
+      ul.preset(id=preset.id)
+        each clause in preset.clauses
+          li #{clause}

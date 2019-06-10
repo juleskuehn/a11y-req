@@ -1,26 +1,23 @@
-table.table.table-bordered
-  caption.wb-inv Requirements table to be completed by vendor
-  thead
-    tr.active
-      th.col-sm-6(scope='col') EN 301 549 (2018) clauses
-      th.col-sm-4(scope='col') Determination of compliance
-      th(scope='col') Clause met
-      th.col-sm-4(scope='col') Explanation
-  tbody
-    each item in item_list
-      tr
-        td
-          strong #{item.number} #{item.name}
-          | !{item.description}
-        td
-          strong C.#{item.number} #{item.name}
-          | !{item.compliance}
-        td 
-        td 
-  
-    else
-      tr
-        td There are no clauses to display.
-        td
-        td
-        td
+if item_list.length > 0
+  table.table.table-bordered
+    caption.wb-inv Requirements table to be completed by vendor
+    thead
+      tr.active
+        th.col-sm-6(scope='col') EN 301 549 (2018) clauses
+        th.col-sm-4(scope='col') Determination of compliance
+        th(scope='col') Clause met
+        th.col-sm-4(scope='col') Explanation
+    tbody
+      each item in item_list
+        tr
+          td
+            strong #{item.number} #{item.name}
+            | !{item.description}
+          td
+            strong C.#{item.number} #{item.name}
+            | !{item.compliance}
+          td 
+          td
+else
+  p
+    strong There are no functional accessibility requirements. See Part A.

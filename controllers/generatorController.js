@@ -5,6 +5,7 @@ const { sanitizeBody } = require('express-validator/filter');
 
 const Clause = require('../models/clauseSchema');
 const Info = require('../models/infoSchema');
+const Preset = require('../models/presetSchema')
 
 const strings = {
   allInfosTitle: 'All informative sections',
@@ -44,14 +45,14 @@ exports.all_clauses = function (req, res, next) {
 };
 
 exports.create_get = function (req, res, next) {
-  Clause.find()
-    .sort([['number', 'ascending']])
-    .exec(function (err, list_clauses) {
-      if (err) { return next(err); }
-
-      //Successful, so render
-      res.render('select_fps', { title: strings.createTitle, item_list: list_clauses });
-    });
+  async.parallel({
+    clauses: (callback) => Clause.find().sort([['number', 'ascending']]).exec(callback),
+    presets: (callback) => Preset.find().sort([['order', 'ascending']]).exec(callback)
+  }, function (err, results) {
+    if (err) { return next(err); }
+    //Successful, so render
+    res.render('select_fps', { title: strings.createTitle, item_list: results.clauses, preset_list: results.presets });
+  });
 };
 
 // Handle Clause create on POST
@@ -71,10 +72,14 @@ exports.create_post = [
       // Data from form is valid
       // Get selected clauses
       let clause_ids = [];
-      if (typeof (req.body.clause) != typeof ([])) {
-        req.body.clause = [req.body.clause];
+      // Edge case: < 2 clauses selected
+      if (!(req.body.clauses instanceof Array)) {
+        if (typeof req.body.clauses === 'undefined')
+          req.body.clauses = [];
+        else
+          req.body.clauses = new Array(req.body.clauses);
       }
-      for (id of req.body.clause) {
+      for (id of req.body.clauses) {
         clause_ids.push(mongoose.Types.ObjectId(id));
       }
       async.parallel({
