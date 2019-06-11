@@ -1,7 +1,5 @@
 const async = require('async');
 const mongoose = require('mongoose');
-const { body, validationResult } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
 
 const Clause = require('../models/clauseSchema');
 const Info = require('../models/infoSchema');
@@ -16,108 +14,85 @@ const strings = {
   generatedRequirementsTitle: 'Generated requirements'
 };
 
-exports.menu = function (req, res, next) {
+exports.menu = (req, res, next) => {
   res.render('generator', { title: strings.generatorTitle });
 };
 
 // Display the content of all informative sections
-exports.all_infos = function (req, res, next) {
+exports.all_infos = (req, res, next) => {
   Info.find()
     .sort([['order', 'ascending']])
-    .exec(function (err, list_infos) {
+    .exec((err, list_infos) => {
       if (err) { return next(err); }
-
-      //Successful, so render
       res.render('all_infos', { title: strings.allInfosTitle, item_list: list_infos });
     });
 };
 
 // Display the content of all informative sections
-exports.all_clauses = function (req, res, next) {
+exports.all_clauses = (req, res, next) => {
   Clause.find()
     .sort([['number', 'ascending']])
-    .exec(function (err, list_clauses) {
+    .exec((err, list_clauses) => {
       if (err) { return next(err); }
-
-      //Successful, so render
       res.render('all_clauses', { title: strings.allClausesTitle, item_list: list_clauses });
     });
 };
 
-exports.create_get = function (req, res, next) {
+exports.create_get = (req, res, next) => {
   async.parallel({
     clauses: (callback) => Clause.find().sort([['number', 'ascending']]).exec(callback),
     presets: (callback) => Preset.find().sort([['order', 'ascending']]).exec(callback)
-  }, function (err, results) {
+  }, (err, results) => {
     if (err) { return next(err); }
-    //Successful, so render
-    res.render('select_fps', { title: strings.createTitle, item_list: results.clauses, preset_list: results.presets });
+    res.render('select_fps', {
+      title: strings.createTitle,
+      item_list: results.clauses,
+      preset_list: results.presets
+    });
   });
 };
 
 // Handle Clause create on POST
-exports.create_post = [
+exports.create_post = (req, res, next) => {
 
-  (req, res, next) => {
-
-    // Extract the validation errors from a request.
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      // There are errors.
-      res.redirect('/view/create');
-      return;
-    }
-    else {
-      // Data from form is valid
-      // Get selected clauses
-      let clause_ids = [];
-      // Edge case: < 2 clauses selected
-      if (!(req.body.clauses instanceof Array)) {
-        if (typeof req.body.clauses === 'undefined')
-          req.body.clauses = [];
-        else
-          req.body.clauses = new Array(req.body.clauses);
-      }
-      for (id of req.body.clauses) {
-        clause_ids.push(mongoose.Types.ObjectId(id));
-      }
-      async.parallel({
-        fps: function (callback) {
-          Clause.find({
-            '_id': {
-              $in: clause_ids
-            }
-          }).exec(callback);
-        },
-        intro: function (callback) {
-          Info.find({ name: /^(?!Annex).*/ })
-            .sort([['order', 'ascending']])
-            .exec(callback);
-        },
-        annex: function (callback) {
-          Info.find({ name: /^Annex/ })
-            .sort([['order', 'ascending']])
-            .exec(callback);
-        },
-      }, function (err, results) {
-        if (err) { return next(err); }
-        if (results.fps == null) { // No clauses selected
-          res.redirect('/view/create');
-        }
-        // Successful, so render.
-        res.render('all_requirements', { title: strings.generatedRequirementsTitle, item_list: results.fps, intro: results.intro, annex: results.annex });
-      });
-      // Clause.find({
-      //   '_id': {
-      //     $in: clause_ids
-      //   }
-      // }, function (err, list_clauses) {
-      //   if (err) { return next(err); }
-      //   //Successful, so render
-      //   res.render('all_clauses', { title: strings.selectedClausesTitle, item_list: list_clauses });
-
-      // });
+  // Edge case: < 2 clauses selected
+  if (!(req.body.clauses instanceof Array)) {
+    if (typeof req.body.clauses === 'undefined') {
+      req.body.clauses = [];
+    } else {
+      req.body.clauses = new Array(req.body.clauses);
     }
   }
-];
+
+  let clause_ids = [];
+  for (id of req.body.clauses) {
+    clause_ids.push(mongoose.Types.ObjectId(id));
+  }
+
+  async.parallel({
+    fps: (callback) => Clause.find({ '_id': { $in: clause_ids } }).exec(callback),
+    intro: (callback) => {
+      // Find sections with names NOT starting with "Annex"
+      Info.find({ name: /^(?!Annex).*/ })
+        .sort([['order', 'ascending']])
+        .exec(callback);
+    },
+    annex: (callback) => {
+      // Find sections with names starting with "Annex"
+      Info.find({ name: /^Annex/ })
+        .sort([['order', 'ascending']])
+        .exec(callback);
+    },
+  }, (err, results) => {
+    if (err) { return next(err); }
+    if (results.fps == null) { // No clauses selected
+      res.redirect('/view/create');
+    }
+    res.render('all_requirements', {
+      title: strings.generatedRequirementsTitle,
+      item_list: results.fps,
+      intro: results.intro,
+      annex: results.annex
+    });
+  });
+};

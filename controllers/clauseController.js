@@ -1,6 +1,4 @@
 const async = require('async');
-const { body, validationResult } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
 
 const Clause = require('../models/clauseSchema');
 const Preset = require('../models/presetSchema.js');
@@ -17,182 +15,125 @@ const strings = {
 }
 
 // Display list of all Clauses
-exports.clause_list = function (req, res, next) {
+exports.clause_list = (req, res, next) => {
   Clause.find()
     .sort([['number', 'ascending']])
-    .exec(function (err, list_clauses) {
+    .exec((err, list_clauses) => {
       if (err) { return next(err); }
-      
-      //Successful, so render
       res.render('clause_list', { title: strings.listTitle, item_list: list_clauses });
     });
 };
 
 // Display clause create form on GET
-exports.clause_create_get = function (req, res, next) {
+exports.clause_create_get = (req, res, next) => {
   res.render('clause_form', { title: strings.createTitle });
 };
 
 // Handle Clause create on POST
-exports.clause_create_post = [
+exports.clause_create_post = (req, res, next) => {
 
-  // Validate that the name field is not empty.
-  body('number', strings.clauseNumberRequired).isLength({ min: 1 }).trim(),
-  body('name', strings.clauseNameRequired).isLength({ min: 1 }).trim(),
+  let clause = new Clause({
+    number: req.body.number,
+    name: req.body.name,
+    frName: req.body.frName,
+    informative: req.body.informative === 'on',
+    description: req.body.description,
+    frDescription: req.body.frDescription,
+    compliance: req.body.compliance,
+    frCompliance: req.body.frCompliance
+  });
 
-  (req, res, next) => {
-
-    // Extract the validation errors from a request.
-    const errors = validationResult(req);
-
-    var clause = new Clause({
-      number: req.body.number,
-      name: req.body.name,
-      frName: req.body.frName,
-      informative: req.body.informative === 'on',
-      description: req.body.description,
-      frDescription: req.body.frDescription,
-      compliance: req.body.compliance,
-      frCompliance: req.body.frCompliance
-    });
-
-    if (!errors.isEmpty()) {
-      // There are errors.
-      res.render('clause_form', { title: strings.createTitle, clause: clause, errors: errors.array() });
-      return;
+  // Check if Clause with same name already exists.
+  Clause.findOne({ 'number': req.body.number }).exec((err, found_clause) => {
+    if (err) { return next(err); }
+    if (found_clause) {
+      // Clause exists, redirect to its detail page.
+      res.redirect(found_clause.url);
+    } else {
+      clause.save((err) => {
+        if (err) { return next(err); }
+        // Clause saved. Redirect to clause list.
+        res.redirect('/edit/clauses');
+      });
     }
-    else {
-      // Data from form is valid.
-      // Check if Clause with same name already exists.
-      Clause.findOne({ 'number': req.body.number })
-        .exec(function (err, found_clause) {
-          if (err) { return next(err); }
-
-          if (found_clause) {
-            // Clause exists, redirect to its detail page.
-            res.redirect(found_clause.url);
-          }
-          else {
-
-            clause.save(function (err) {
-              if (err) { return next(err); }
-              // Clause saved. Redirect to clause detail page.
-              res.redirect('/edit/clauses');
-            });
-
-          }
-
-        });
-    }
-  }
-];
+  });
+};
 
 // Display clause update form on GET
-exports.clause_update_get = function (req, res, next) {
+exports.clause_update_get = (req, res, next) => {
 
   // Get clause for form
   async.parallel({
-    clause: function (callback) {
-      Clause.findById(req.params.id)
-        .exec(callback);
-    },
-  }, function (err, results) {
+    clause: (callback) => Clause.findById(req.params.id).exec(callback)
+  }, (err, results) => {
     if (err) { return next(err); }
-    if (results.clause == null) { // No results.
-      var err = new Error(strings.clauseNotFound);
+    if (results.clause == null) { // No results
+      let err = new Error(strings.clauseNotFound);
       err.status = 404;
       return next(err);
     }
     // Success.
     res.render('clause_form', { title: strings.editClause, item: results.clause });
   });
-
 };
 
 // Handle clause update on POST.
-exports.clause_update_post = [
+exports.clause_update_post = (req, res, next) => {
 
-  // Validate that the name field is not empty.
-  body('number', strings.clauseNumberRequired).isLength({ min: 1 }).trim(),
-  body('name', strings.clauseNameRequired).isLength({ min: 1 }).trim(),
-
-  (req, res, next) => {
-
-    // Extract the validation errors from a request.
-    const errors = validationResult(req);
-
-    // Create a clause object with escaped/trimmed data and old id.
-    var clause = new Clause({
-      number: req.body.number,
-      name: req.body.name,
-      frName: req.body.frName,
-      informative: req.body.informative === 'on',
-      description: req.body.description,
-      frDescription: req.body.frDescription,
-      compliance: req.body.compliance,
-      frCompliance: req.body.frCompliance,
-      _id: req.params.id //This is required, or a new ID will be assigned!
-    });
-
-    if (!errors.isEmpty()) {
-      // There are errors. 
-      res.render('clause_form', { title: strings.updateClause, clause: clause, errors: errors.array() });
-      return;
-    }
-    else {
-      // Data from form is valid. Update the record.
-      Clause.findByIdAndUpdate(req.params.id, clause, {}, function (err, theclause) {
-        if (err) { return next(err); }
-        // Successful - redirect to clause detail page.
-        res.redirect('/edit/clauses');
-      });
-    }
-  }
-];
-
-
-// Display Clause delete form on GET.
-exports.clause_delete_get = function (req, res, next) {
-
-  async.parallel({
-    clause: function (callback) {
-      Clause.findById(req.params.id).exec(callback)
-    },
-  }, function (err, results) {
-    if (err) { return next(err); }
-    if (results.clause == null) { // No results.
-      res.redirect('/edit/clauses');
-    }
-    // Successful, so render.
-    res.render('item_delete', { title: strings.deleteClause, item: results.clause });
+  // Create a clause object with old id.
+  let clause = new Clause({
+    number: req.body.number,
+    name: req.body.name,
+    frName: req.body.frName,
+    informative: req.body.informative === 'on',
+    description: req.body.description,
+    frDescription: req.body.frDescription,
+    compliance: req.body.compliance,
+    frCompliance: req.body.frCompliance,
+    _id: req.params.id // This is required, or a new ID will be assigned
   });
 
+  Clause.findByIdAndUpdate(req.params.id, clause, {}, (err, theclause) => {
+    if (err) { return next(err); }
+    res.redirect('/edit/clauses'); // Success: redirect to clause list.
+  });
+};
+
+// Display Clause delete form on GET.
+exports.clause_delete_get = (req, res, next) => {
+  async.parallel({
+    clause: (callback) => Clause.findById(req.params.id).exec(callback)
+  }, (err, results) => {
+    if (err) { return next(err); }
+    if (results.clause == null) { res.redirect('/edit/clauses'); }
+    res.render('item_delete', { title: strings.deleteClause, item: results.clause });
+  });
 };
 
 // Handle Clause delete on POST.
-exports.clause_delete_post = function (req, res, next) {
+exports.clause_delete_post = (req, res, next) => {
 
   async.parallel({
-    clause: function (callback) {
-      Clause.findById(req.body.itemid).exec(callback);
-    },
-    clause_presets: function (callback) {
-      Preset.find({
-        clauses: req.body.itemid
-      }).exec(callback);
-    }
-  }, function (err, results) {
+    clause: (callback) =>
+      Clause.findById(req.body.itemid).exec(callback),
+    clause_presets: (callback) =>
+      Preset.find({ clauses: req.body.itemid }).exec(callback)
+  }, (err, results) => {
     if (err) { return next(err); }
     if (results.clause_presets.length > 0) {
       // Clause has presets referencing it which must be deleted first
-      res.render('item_delete', { title: strings.deleteClause, item: results.clause, dependencies: results.clause_presets });
+      res.render('item_delete', {
+        title: strings.deleteClause,
+        item: results.clause,
+        dependencies: results.clause_presets
+      });
       return;
     }
+
     // Delete object and redirect to the list of clauses
-    Clause.findByIdAndRemove(req.body.itemid, function deleteClause(err) {
+    Clause.findByIdAndRemove(req.body.itemid, (err) => {
       if (err) { return next(err); }
-      // Success - go to clause list
-      res.redirect('/edit/clauses')
+      res.redirect('/edit/clauses'); // Success - go to clause list
     })
   });
 };
