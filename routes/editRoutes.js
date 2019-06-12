@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 // Require controller modules.
-const edit_controller = require('../controllers/editController');
 const clause_controller = require('../controllers/clauseController');
 const info_controller = require('../controllers/infoController');
 const preset_controller = require('../controllers/presetController');
 
 // GET edit (admin) page
-router.get('/', edit_controller.edit_list);
+router.get('/', info_controller.edit_list);
 
 
 /* Clauses */

@@ -3,8 +3,7 @@
 
 $(document).ready(() => {
   // Generator preset handling
-  let presetData = $('#preset-data');
-  if (presetData.length > 0) {
+  if ($('#preset-data').length > 0) {
     setupPresetHandler();
   }
 });
@@ -13,9 +12,7 @@ $(document).ready(() => {
 /* Generator preset handling */
 
 const setupPresetHandler = () => {
-  $('#preset').change(function () {
-    updatePresetSelections();
-  });
+  $('#preset').change(() => updatePresetSelections());
 }
 
 const updatePresetSelections = () => {

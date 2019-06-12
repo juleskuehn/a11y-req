@@ -3,10 +3,16 @@ const async = require('async');
 const Info = require('../models/infoSchema');
 
 const strings = {
+  editListTitle: 'Edit content',
   listTitle: 'Edit informative sections',
   createTitle: 'Create informative section',
   sectionTitleRequired: 'Section title required'
 }
+
+// Display edit menu
+exports.edit_list = (req, res, next) => {
+  res.render('edit', { title: strings.editListTitle });
+};
 
 // Display list of all Infos
 exports.info_list = (req, res, next) => {
