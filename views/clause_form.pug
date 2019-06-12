@@ -29,7 +29,7 @@ block form
       textarea#description.form-control(name='description' rows='10')
         if itemExists
           | #{item.description}
-    .form-group
+    .form-group(lang='fr')
       label(for='frDescription')
         span.field-name Description en français (HTML)
       textarea#description.form-control(name='frDescription' rows='10')
@@ -41,7 +41,7 @@ block form
       textarea#compliance.form-control(name='compliance' rows='10')
         if itemExists
           | #{item.compliance}
-    .form-group
+    .form-group(lang='fr')
       label(for='frCompliance')
         span.field-name Détermination de la conformité (HTML)
       textarea#compliance.form-control(name='frCompliance' rows='10')

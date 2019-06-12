@@ -36,6 +36,7 @@ const basicAuth = auth.basic(
   (user, pass, cb) => cb(user === "jules" && pass === "jules")
 );
 
+// THE IMPORTANT PART
 // Associate routes
 app.use('/', require('./routes/indexRoutes'));
 app.use('/edit', auth.connect(basicAuth), require('./routes/editRoutes'));
