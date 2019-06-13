@@ -213,7 +213,7 @@ exports.clause_populate = (req, res, next) => {
           console.log(`Inserted clause: ${clause.number} ${clause.name}`);
         });
       }
-      
+      res.redirect('/edit/clauses'); // Success - go to clause list
     });
   });
 
