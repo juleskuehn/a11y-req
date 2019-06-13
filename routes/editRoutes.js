@@ -33,6 +33,9 @@ router.get('/clause/:id/delete', clause_controller.clause_delete_get);
 // POST request to delete Clause
 router.post('/clause/:id/delete', clause_controller.clause_delete_post);
 
+// Populate database with Clauses from HTML tables
+router.get('/clauses/populate', clause_controller.clause_populate);
+
 
 /* Informative Sections */
 

@@ -40,10 +40,11 @@ exports.all_clauses = (req, res, next) => {
 
 exports.create_get = (req, res, next) => {
   async.parallel({
-    clauses: (callback) => Clause.find().sort([['number', 'ascending']]).exec(callback),
+    clauses: (callback) => Clause.find().exec(callback),
     presets: (callback) => Preset.find().sort([['order', 'ascending']]).exec(callback)
   }, (err, results) => {
     if (err) { return next(err); }
+    results.clauses = results.clauses.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
     res.render('select_fps', {
       title: strings.createTitle,
       item_list: results.clauses,

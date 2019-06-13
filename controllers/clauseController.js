@@ -1,5 +1,8 @@
 const async = require('async');
 
+const { JSDOM } = require('jsdom');
+const innertext = require('innertext');
+
 const Clause = require('../models/clauseSchema');
 const Preset = require('../models/presetSchema.js');
 
@@ -17,9 +20,9 @@ const strings = {
 // Display list of all Clauses
 exports.clause_list = (req, res, next) => {
   Clause.find()
-    .sort([['number', 'ascending']])
     .exec((err, list_clauses) => {
       if (err) { return next(err); }
+      list_clauses = list_clauses.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
       res.render('clause_list', { title: strings.listTitle, item_list: list_clauses });
     });
 };
@@ -136,4 +139,82 @@ exports.clause_delete_post = (req, res, next) => {
       res.redirect('/edit/clauses'); // Success - go to clause list
     })
   });
+};
+
+// Populate clauses from HTML files
+// Word documents were opened in LibreOffice Writer and exported to HTML
+// Then using regex, <p([\s\S]*?)> replaced with <p>
+
+exports.clause_populate = (req, res, next) => {
+
+  // Convert HTML to array of objects following database schema:
+  /* clause = {
+    number: c.number,
+    name: c.name,
+    frName: c.frName,
+    informative: c.informative === 'on',
+    description: c.description,
+    frDescription: c.frDescription,
+    compliance: c.compliance,
+    frCompliance: c.frCompliance
+  } */
+
+  
+  JSDOM.fromFile('english.html').then(dom => {
+    console.log("file loaded");
+    let document = dom.window.document;
+    let clauses = [];
+    let rows = document.querySelectorAll('tbody tr');
+    for (let i = 0; i < rows.length; i++) {
+      let clause = {};
+      let cells = rows[i].querySelectorAll('td');
+      // Extract clause information from HTML and add to clause object
+      let descriptionCell = cells[0];
+      let complianceCell = cells[1];
+      let clauseNameNumber = innertext(descriptionCell.querySelector('p').innerHTML).replace(/(\r\n|\n|\r)/gm, " ").trim();
+      clause.number = clauseNameNumber.substr(0, clauseNameNumber.indexOf(" "));
+      clause.name = clauseNameNumber.substr(clauseNameNumber.indexOf(" ") + 1);
+      clause.informative = clauseNameNumber.indexOf("nformative") > -1;
+      let descriptionHTML = descriptionCell.innerHTML;
+      clause.description = descriptionHTML.substr(descriptionHTML.indexOf('</p>') + 4).replace(/(\r\n|\n|\r)/gm, " ").trim();
+      let complianceHTML = complianceCell.innerHTML;
+      clause.compliance = complianceHTML.substr(complianceHTML.indexOf('</p>') + 4).replace(/(\r\n|\n|\r)/gm, " ").trim();
+      clauses.push(clause);
+    }
+    
+    // Add French HTML content, asserting that clause numbers are equal
+    JSDOM.fromFile('french.html').then(dom => {
+
+      let document = dom.window.document;
+      let rows = document.querySelectorAll('tbody tr');
+      console.log(`English clauses length is ${clauses.length}, french rows is ${rows.length}`);
+      for (let i = 0; i < rows.length; i++) {
+        // Get clause with English information
+        let clause = clauses[i];
+        let cells = rows[i].querySelectorAll('td');
+        // Extract clause information from HTML and add to clause object
+        let descriptionCell = cells[0];
+        let complianceCell = cells[1];
+        let clauseNameNumber = innertext(descriptionCell.querySelector('p').innerHTML).replace(/(\r\n|\n|\r)/gm, " ").trim();
+        clause.frName = clauseNameNumber.substr(clauseNameNumber.indexOf(" ") + 1);
+        let descriptionHTML = descriptionCell.innerHTML;
+        clause.frDescription = descriptionHTML.substr(descriptionHTML.indexOf('</p>') + 4).replace(/(\r\n|\n|\r)/gm, " ").trim();
+        let complianceHTML = complianceCell.innerHTML;
+        clause.frCompliance = complianceHTML.substr(complianceHTML.indexOf('</p>') + 4).replace(/(\r\n|\n|\r)/gm, " ").trim();
+      }
+
+      // Array of clauses is now populated. Insert documents in database.
+      for (c of clauses) {
+        let clause = new Clause(c);
+    
+        clause.save((err) => {
+          if (err) { return next(err); }
+          // Clause saved
+          console.log(`Inserted clause: ${clause.number} ${clause.name}`);
+        });
+      }
+      
+    });
+  });
+
 };

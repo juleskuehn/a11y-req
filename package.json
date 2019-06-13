@@ -20,7 +20,9 @@
     "mongoose": "^5.5.12",
     "morgan": "~1.9.1",
     "node-sass-middleware": "0.11.0",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "innertext": "^1.0.3",
+    "jsdom": "^15.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.1",
