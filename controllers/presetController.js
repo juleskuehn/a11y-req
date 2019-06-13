@@ -22,9 +22,9 @@ exports.preset_list = (req, res, next) => {
 // Display preset create form on GET
 exports.preset_create_get = (req, res, next) => {
   Clause.find()
-    .sort([['number', 'ascending']])
     .exec((err, list_fps) => {
       if (err) { return next(err); }
+      list_fps = list_fps.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
       res.render('preset_form', { title: strings.createTitle, item_list: list_fps });
     });
 };
@@ -71,7 +71,7 @@ exports.preset_update_get = (req, res, next) => {
   // Get preset for form
   async.parallel({
     preset: (callback) => Preset.findById(req.params.id).exec(callback),
-    clauses: (callback) => Clause.find().sort([['number', 'ascending']]).exec(callback)
+    clauses: (callback) => Clause.find().exec(callback)
   }, (err, results) => {
     if (err) { return next(err); }
     if (results.preset == null) { // No results.
@@ -79,6 +79,7 @@ exports.preset_update_get = (req, res, next) => {
       err.status = 404;
       return next(err);
     }
+    results.clauses = results.clauses.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
     res.render('preset_form', {
       title: 'Edit preset',
       item: results.preset,
