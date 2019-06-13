@@ -20,13 +20,22 @@ $(document).ready(() => {
 const setupPresetHandler = () => {
   // #preset is the <select> element (see /views/select_fps.pug)
   $('#preset').change(() => updatePresetSelections());
+  $('#selectAll').click((e) => {
+    $('#clauses input').prop('checked', true);
+    e.preventDefault();
+  });
+  $('#selectNone').click((e) => {
+    $('#clauses input').prop('checked', false)
+    e.preventDefault();
+  });
 }
 
 const updatePresetSelections = () => {
   let preset = $('#preset').val();
+  // Save existing selections
+
   // Uncheck all checkboxes
   $('#clauses input').prop('checked', false);
-  if (preset === '') return;
   // Get hidden preset data (see /views/select_fps.pug)
   $('#' + preset + ' li').each(function () {
     // Check the preset checkboxes
