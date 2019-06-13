@@ -1,3 +1,5 @@
+// NOTE: "clause" == "fps" (functional performance statement)
+
 const async = require('async');
 const mongoose = require('mongoose');
 
@@ -31,9 +33,9 @@ exports.all_infos = (req, res, next) => {
 // Display the content of all informative sections
 exports.all_clauses = (req, res, next) => {
   Clause.find()
-    .sort([['number', 'ascending']])
     .exec((err, list_clauses) => {
       if (err) { return next(err); }
+      list_clauses = list_clauses.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
       res.render('all_clauses', { title: strings.allClausesTitle, item_list: list_clauses });
     });
 };
@@ -89,6 +91,7 @@ exports.create_post = (req, res, next) => {
     if (results.fps == null) { // No clauses selected
       res.redirect('/view/create');
     }
+    results.fps = results.fps.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
     res.render('all_requirements', {
       title: strings.generatedRequirementsTitle,
       item_list: results.fps,
