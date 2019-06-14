@@ -3,3 +3,14 @@
 .form-control {
   min-width: 600px;
 }
+
+// WET Overrides
+
+.clause-tree .checkbox input[type="checkbox"] {
+  position: relative;
+  margin-right: 10px;
+}
+
+legend {
+  float: none;
+}
