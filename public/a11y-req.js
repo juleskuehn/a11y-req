@@ -48,11 +48,20 @@ const updatePresetSelections = () => {
 /* Tree menu selection */
 
 const setupTreeHandler = () => {
+  // Selection cascades down sub-clauses
   $('summary .checkbox input[type="checkbox"]').change(function() {
-    value = $(this).prop('checked');
-    // alert(value);
+    let value = $(this).prop('checked');
     $(this).closest('details')
         .find('.checkbox input[type="checkbox"]')
+        .prop('checked', value);
+  });
+
+  // Selection of a child clause forces selection of parent clause
+  $('.checkbox input[type="checkbox"]').change(function() {
+    let value = $(this).prop('checked');
+    $(this).closest('details')
+        .find('summary .checkbox input[type="checkbox"]')
+        .first()
         .prop('checked', value);
   });
 };
