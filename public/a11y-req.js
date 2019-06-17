@@ -6,6 +6,7 @@ $(document).ready(() => {
   // #preset-data is a hidden element on requirement selection page
   if ($('#preset-data').length > 0) {
     setupPresetHandler();
+    setupTreeHandler();
   }
 
   // Replace <textarea> with rich text editor (CKEditor)
@@ -28,7 +29,7 @@ const setupPresetHandler = () => {
     $('#clauses input').prop('checked', false)
     e.preventDefault();
   });
-}
+};
 
 const updatePresetSelections = () => {
   let preset = $('#preset').val();
@@ -41,8 +42,20 @@ const updatePresetSelections = () => {
     // Check the preset checkboxes
     $('#' + this.innerHTML).prop('checked', true);
   });
-}
+};
 
+
+/* Tree menu selection */
+
+const setupTreeHandler = () => {
+  $('summary .checkbox input[type="checkbox"]').change(function() {
+    value = $(this).prop('checked');
+    // alert(value);
+    $(this).closest('details')
+        .find('.checkbox input[type="checkbox"]')
+        .prop('checked', value);
+  });
+};
 
 /* CKEditor */
 
@@ -65,7 +78,7 @@ console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName));
 // https://stackoverflow.com/questions/46559354/how-to-set-the-height-of-ckeditor-5-classic-editor/56550285#56550285
 function MinHeightPlugin(editor) {
   this.editor = editor;
-}
+};
 
 MinHeightPlugin.prototype.init = function() {
   this.editor.ui.view.editable.extendTemplate({

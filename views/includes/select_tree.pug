@@ -7,7 +7,8 @@ mixin fpsCheckbox(item)
 mixin createTree(tree)
   each item in tree
     if item.children.length === 0
-      +fpsCheckbox(item.clause)
+      .leafNode
+        +fpsCheckbox(item.clause)
     else
       details
         summary
@@ -20,8 +21,8 @@ mixin createTree(tree)
 
 fieldset#clauses
   //- legend.required
-  legend
-    span.field-name Select clauses to include 
+  legend.wb-inv
+    span.field-name.wb-inv Select clauses to include 
     //- strong.required (required)
   .clause_tree
     +createTree(item_tree)

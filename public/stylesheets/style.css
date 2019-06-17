@@ -8,4 +8,23 @@
 legend {
   float: none; }
 
+details summary {
+  border: 0;
+  padding: 0;
+  color: #333; }
+
+details[open] {
+  border: 0;
+  padding-bottom: 0; }
+
+details {
+  margin-top: 10px;
+  margin-bottom: 10px; }
+
+details[open] > summary {
+  border-bottom: 0; }
+
+.leafNode {
+  margin-left: 17px; }
+
 /*# sourceMappingURL=style.css.map */
