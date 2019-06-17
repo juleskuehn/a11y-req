@@ -49,21 +49,32 @@ const updatePresetSelections = () => {
 
 const setupTreeHandler = () => {
   // Selection cascades down sub-clauses
-  $('summary .checkbox input[type="checkbox"]').change(function() {
+  $('summary .checkbox input:checkbox').change(function() {
     let value = $(this).prop('checked');
     $(this).closest('details')
         .find('.checkbox input[type="checkbox"]')
         .prop('checked', value);
   });
 
-  // Selection of a child clause forces selection of parent clause
-  $('.checkbox input[type="checkbox"]').change(function() {
-    let value = $(this).prop('checked');
-    $(this).closest('details')
-        .find('summary .checkbox input[type="checkbox"]')
-        .first()
-        .prop('checked', value);
+  // Selection of a sub-clause forces selection of parent clause
+  $('.checkbox input:checkbox').change(function() {
+    let parent = $(this).closest('details');
+    // If this sub-clause has children, the target needs adjustment
+    if ($(this).closest('div.leafNode').length === 0 ) {
+      parent = parent.parent();
+    }
+    
+    // Parents must be checked if any child is checked
+    let value = parent.find('input:checkbox:not(:first):not(.informative)').is(':checked');
+    parent.find('summary .checkbox input:checkbox')
+    .first().prop('checked', value);
+
+    // Informative clauses must be checked whenever parent is checked
+    parent.children('div.leafNode').find('input:checkbox.informative').prop('checked', value);
+
+    // TODO: Parent selections must extend to all ancestors
   });
+
 };
 
 /* CKEditor */

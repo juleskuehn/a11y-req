@@ -1,7 +1,7 @@
 mixin fpsCheckbox(item)
   .checkbox
     label(for=item.id)
-      input(id=item.id type='checkbox' name='clauses' value=item.id)
+      input(id=item.id type='checkbox' name='clauses' value=item.id class=item.informative ? 'informative' : '' disabled=item.informative)
       | #{item.number} #{item.name}
 
 mixin createTree(tree)
