@@ -1,5 +1,23 @@
 extends item_form
 
+mixin fpsCheckbox(item, selected)
+  .checkbox
+    label(for=item.id)
+      input(id=item.id type='checkbox' name='clauses' value=item.id class=item.informative ? 'informative' : '' disabled=item.informative checked=selected)
+      | #{item.number} #{item.name}
+
+mixin createTree(tree)
+  each clauseNode in tree
+    -var selected = itemExists && item.clauses.indexOf(clauseNode.clause.id) > -1 ? 'checked' : false
+    if clauseNode.children.length === 0
+      .leafNode
+        +fpsCheckbox(clauseNode.clause, selected)
+    else
+      details
+        summary
+          +fpsCheckbox(clauseNode.clause, selected)
+        +createTree(clauseNode.children)
+        
 block form
   -var itemExists = item!==undefined
 
@@ -31,17 +49,17 @@ block form
         span.field-name Order (1 comes before 2, etc.)
       input#order.form-control(type='text' placeholder='' name='order' value=(itemExists ? item.order : ''))
 
-    if item_list.length > 0
-      fieldset
-        legend
-          span.field-name Select clauses to include
 
-        each clause, i in item_list
-          -clause.level = clause.number.split(".").length - 1
-          .checkbox(class=('checkbox--level'+clause.level))
-            label(for=clause.id)
-              -var selected = itemExists && item.clauses.indexOf(clause.id) > -1 ? 'checked' : false
-              input(id=clause.id type='checkbox' name='clauses' value=clause.id checked=selected)
-              | #{clause.number} #{clause.name}
+    .btn-group
+      button.btn.btn-default#selectAll Select all 
+      button.btn.btn-default#selectNone Select none
+
+    fieldset#clauses
+      //- legend.required
+      legend.wb-inv
+        span.field-name.wb-inv Select clauses to include 
+        //- strong.required (required)
+      .clause_tree
+        +createTree(item_tree)
       
     button.btn.btn-primary(type='submit') Submit

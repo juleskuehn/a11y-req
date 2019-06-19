@@ -2,6 +2,7 @@ const async = require('async');
 
 const Preset = require('../models/presetSchema');
 const Clause = require('../models/clauseSchema');
+const toClauseTree = require('./clauseTree');
 
 const strings = {
   listTitle: 'Edit commodity presets',
@@ -24,8 +25,10 @@ exports.preset_create_get = (req, res, next) => {
   Clause.find()
     .exec((err, list_fps) => {
       if (err) { return next(err); }
-      list_fps = list_fps.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
-      res.render('preset_form', { title: strings.createTitle, item_list: list_fps });
+      res.render('preset_form', {
+        title: strings.createTitle,
+        item_tree: toClauseTree(results.clauses)
+      });
     });
 };
 
@@ -83,7 +86,7 @@ exports.preset_update_get = (req, res, next) => {
     res.render('preset_form', {
       title: 'Edit preset',
       item: results.preset,
-      item_list: results.clauses
+      item_tree: toClauseTree(results.clauses)
     });
   });
 

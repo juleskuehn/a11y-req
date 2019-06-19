@@ -6,6 +6,9 @@ $(document).ready(() => {
   // #preset-data is a hidden element on requirement selection page
   if ($('#preset-data').length > 0) {
     setupPresetHandler();
+  }
+
+  if ($('#clauses').length > 0) {
     setupTreeHandler();
   }
 

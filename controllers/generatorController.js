@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 
 const Clause = require('../models/clauseSchema');
 const Info = require('../models/infoSchema');
-const Preset = require('../models/presetSchema')
+const Preset = require('../models/presetSchema');
+const toClauseTree = require('./clauseTree');
 
 const strings = {
   allInfosTitle: 'All informative sections',
@@ -46,10 +47,9 @@ exports.create_get = (req, res, next) => {
     presets: (callback) => Preset.find().sort([['order', 'ascending']]).exec(callback)
   }, (err, results) => {
     if (err) { return next(err); }
-    results.clauses = toClauseTree(results.clauses);
     res.render('select_fps', {
       title: strings.createTitle,
-      item_tree: results.clauses,
+      item_tree: toClauseTree(results.clauses),
       preset_list: results.presets
     });
   });
@@ -99,66 +99,4 @@ exports.create_post = (req, res, next) => {
       annex: results.annex
     });
   });
-};
-
-// Reformat clause array into nested dict (nested clauses in parents)
-/*
-tree = {
-  '5': {
-    clause: { number: '5' },
-    'children': {
-      '5.1': {
-        clause: { number: '5.1' },
-        'children': {
-          '5.1.1': {
-            clause: { number: '5.1.1' },
-            children: {}
-          }
-        }
-      }
-    }
-  }
-}
-*/
-const toClauseTree = (clauses) => {
-
-  clauses = clauses.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-  let clauseTree = {};
-
-  for (clause of clauses) {
-    let ancestry = clause.number.split(".");
-    let ancestors = [];
-
-    while (ancestry.length > 0) {
-      ancestors.push(ancestry.join('.'));
-      ancestry.pop();
-    }
-
-    ancestors.reverse();
-    let treeIndex = '["' + ancestors.join('"]["children"]["') + '"]';
-    let eString = `clauseTree` + treeIndex + ` = {
-      'clause': clause,
-      'children': {}
-    }`;
-    eval(eString);
-  }
-
-  // Convert children objects to sorted arrays
-  // No need for keys as they are duplicated in clause.number
-  const sortChildren = (tree) => {
-    // Base case
-    if (Object.keys(tree).length === 0 && tree.constructor === Object) {
-      return [];
-    }
-    // Convert top level of tree to array and sort
-    tree = Object.values(tree);
-    tree.sort((a, b) => a.clause.number.localeCompare(b.clause.number, undefined, { numeric: true }));
-    // Recurse on children of top level nodes
-    for (node of tree) {
-      node.children = sortChildren(node.children);
-    }
-    return tree;
-  }
-
-  return sortChildren(clauseTree);
 };
