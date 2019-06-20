@@ -49,7 +49,7 @@ exports.create_get = (req, res, next) => {
     if (err) { return next(err); }
     res.render('select_fps', {
       title: strings.createTitle,
-      item_tree: toClauseTree(results.clauses),
+      clause_tree: toClauseTree(results.clauses),
       preset_list: results.presets
     });
   });

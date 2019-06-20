@@ -1,0 +1,29 @@
+mixin fpsCheckbox(clause, selected)
+  .checkbox
+    label(for=clause.id)
+      input(id=clause.id type='checkbox' name='clauses' value=clause.id class=clause.informative ? 'informative' : '' disabled=clause.informative checked=selected)
+      | #{clause.number} #{clause.name}
+
+mixin createTree(tree)
+  each clauseNode in tree
+    -var selected = itemExists && item.clauses.indexOf(clauseNode.clause.id) > -1 ? 'checked' : false
+    if clauseNode.children.length === 0
+      .leafNode
+        +fpsCheckbox(clauseNode.clause, selected)
+    else
+      details
+        summary
+          +fpsCheckbox(clauseNode.clause, selected)
+        +createTree(clauseNode.children)
+
+.btn-group
+  button.btn.btn-default#selectAll Select all 
+  button.btn.btn-default#selectNone Select none
+
+fieldset#clauses
+  //- legend.required
+  legend.wb-inv
+    span.field-name.wb-inv Select clauses to include 
+    //- strong.required (required)
+  .clause_tree
+    +createTree(clause_tree)

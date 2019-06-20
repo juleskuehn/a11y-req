@@ -27,7 +27,7 @@ exports.preset_create_get = (req, res, next) => {
       if (err) { return next(err); }
       res.render('preset_form', {
         title: strings.createTitle,
-        item_tree: toClauseTree(results.clauses)
+        clause_tree: toClauseTree(results.clauses)
       });
     });
 };
@@ -86,7 +86,7 @@ exports.preset_update_get = (req, res, next) => {
     res.render('preset_form', {
       title: 'Edit preset',
       item: results.preset,
-      item_tree: toClauseTree(results.clauses)
+      clause_tree: toClauseTree(results.clauses)
     });
   });
 
