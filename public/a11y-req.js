@@ -51,32 +51,42 @@ const updatePresetSelections = () => {
 /* Tree menu selection */
 
 const setupTreeHandler = () => {
-  // Selection cascades down sub-clauses
-  $('summary .checkbox input:checkbox').change(function() {
-    let value = $(this).prop('checked');
-    $(this).closest('details')
-        .find('.checkbox input[type="checkbox"]')
-        .prop('checked', value);
-  });
 
-  // Selection of a sub-clause forces selection of parent clause
+  // 1. Explicit selection of a parent clause cascades down sub-clauses
+  // 2. Any selection of a sub-clause forces selection of parent clause
+  // 3. Informative clauses must be checked whenever parent is checked
   $('.checkbox input:checkbox').change(function() {
-    let parent = $(this).closest('details');
+    let $el = $(this);
+    console.log($el);
+    
+    
+    // Handle case 1: Cascade selection change down sub-clauses
+    if ($el.closest('summary').length > 0) {
+      $el.closest('details')
+          .find('.checkbox input:checkbox')
+          .prop('checked', $el.prop('checked'));
+    }
+
+    // Handle cases 2 and 3
+    bubbleUpClause($el);
+  });
+  
+  let bubbleUpClause = ($el) => {
+
+    let parent = $el.closest('details');
     // If this sub-clause has children, the target needs adjustment
-    if ($(this).closest('div.leafNode').length === 0 ) {
+    if ($el.closest('div.leafNode').length === 0 ) {
       parent = parent.parent();
     }
-    
-    // Parents must be checked if any child is checked
-    let value = parent.find('input:checkbox:not(:first):not(.informative)').is(':checked');
-    parent.find('summary .checkbox input:checkbox')
-    .first().prop('checked', value);
 
-    // Informative clauses must be checked whenever parent is checked
+    // Parents must be checked if any child is checked
+    let value = parent.find('input:checkbox:not(:first)').is(':checked');
+    parent.find('summary .checkbox input:checkbox')
+        .first().prop('checked', value);
+
     parent.children('div.leafNode').find('input:checkbox.informative').prop('checked', value);
 
-    // TODO: Parent selections must extend to all ancestors
-  });
+  }    
 
 };
 
