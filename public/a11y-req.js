@@ -52,9 +52,9 @@ const updatePresetSelections = () => {
 
 const setupTreeHandler = () => {
 
-  // 1. Explicit selection of a parent clause cascades down sub-clauses
-  // 2. Any selection of a sub-clause forces selection of parent clause
-  // 3. Informative clauses must be checked whenever parent is checked
+  // 1. Explicit selection of a clause cascades down sub-clauses
+  // 2. Parent is checked if and only if a (non-informative) child is checked
+  // 3. Informative clause is checked if and only if parent is checked
   $('.checkbox input:checkbox').change(function () {
     let $el = $(this);
 
@@ -82,11 +82,12 @@ const setupTreeHandler = () => {
       }
     }
 
-    // Parents must be checked if any child is checked, and unchecked otherwise
+    // Handle case 2
     let value = parent.find('input:checkbox:not(:first):not(.informative)').is(':checked');
     parent.find('summary .checkbox input:checkbox')
       .first().prop('checked', value);
 
+    // Handle case 3
     parent.children('div.leafNode').find('input:checkbox.informative').prop('checked', value);
 
     // Recurse up the tree
