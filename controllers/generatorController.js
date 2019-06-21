@@ -41,6 +41,7 @@ exports.all_clauses = (req, res, next) => {
     });
 };
 
+// Select functional performance statements or preset
 exports.create_get = (req, res, next) => {
   async.parallel({
     clauses: (callback) => Clause.find().exec(callback),
@@ -55,7 +56,7 @@ exports.create_get = (req, res, next) => {
   });
 };
 
-// Handle Clause create on POST
+// Renders output based on FPS selections to browser, along with download links
 exports.create_post = (req, res, next) => {
 
   // Edge case: < 2 clauses selected
@@ -100,3 +101,97 @@ exports.create_post = (req, res, next) => {
     });
   });
 };
+
+// Renders based on user's selected FPS to a downloadable HTML file for import in Word
+exports.download_en = (req, res, next) => {
+  
+  // Edge case: < 2 clauses selected
+  if (!(req.body.clauses instanceof Array)) {
+    if (typeof req.body.clauses === 'undefined') {
+      req.body.clauses = [];
+    } else {
+      req.body.clauses = new Array(req.body.clauses);
+    }
+  }
+
+  let clause_ids = [];
+  for (id of req.body.clauses) {
+    clause_ids.push(mongoose.Types.ObjectId(id));
+  }
+
+  async.parallel({
+    fps: (callback) => Clause.find({ '_id': { $in: clause_ids } }).exec(callback),
+    intro: (callback) => {
+      // Find sections with names NOT starting with "Annex"
+      Info.find({ name: /^(?!Annex).*/ })
+        .sort([['order', 'ascending']])
+        .exec(callback);
+    },
+    annex: (callback) => {
+      // Find sections with names starting with "Annex"
+      Info.find({ name: /^Annex/ })
+        .sort([['order', 'ascending']])
+        .exec(callback);
+    },
+  }, (err, results) => {
+    if (err) { return next(err); }
+    if (results.fps == null) { // No clauses selected
+      res.redirect('/view/create');
+    }
+    results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
+    res.attachment('requirements_en.html');
+    res.render('download_en', {
+      title: strings.generatedRequirementsTitle,
+      item_list: results.fps,
+      intro: results.intro,
+      annex: results.annex
+    });
+  });
+}
+
+// Renders based on user's selected FPS to a downloadable HTML file for import in Word
+exports.download_fr = (req, res, next) => {
+  
+  // Edge case: < 2 clauses selected
+  if (!(req.body.clauses instanceof Array)) {
+    if (typeof req.body.clauses === 'undefined') {
+      req.body.clauses = [];
+    } else {
+      req.body.clauses = new Array(req.body.clauses);
+    }
+  }
+
+  let clause_ids = [];
+  for (id of req.body.clauses) {
+    clause_ids.push(mongoose.Types.ObjectId(id));
+  }
+
+  async.parallel({
+    fps: (callback) => Clause.find({ '_id': { $in: clause_ids } }).exec(callback),
+    intro: (callback) => {
+      // Find sections with names NOT starting with "Annex"
+      Info.find({ name: /^(?!Annex).*/ })
+        .sort([['order', 'ascending']])
+        .exec(callback);
+    },
+    annex: (callback) => {
+      // Find sections with names starting with "Annex"
+      Info.find({ name: /^Annex/ })
+        .sort([['order', 'ascending']])
+        .exec(callback);
+    },
+  }, (err, results) => {
+    if (err) { return next(err); }
+    if (results.fps == null) { // No clauses selected
+      res.redirect('/view/create');
+    }
+    results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
+    res.attachment('requirements_fr.html');
+    res.render('download_fr', {
+      title: 'French title',
+      item_list: results.fps,
+      intro: results.intro,
+      annex: results.annex
+    });
+  });
+}

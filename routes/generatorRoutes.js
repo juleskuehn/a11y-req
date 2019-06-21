@@ -13,4 +13,8 @@ router.get('/create', generator_controller.create_get);
 
 router.post('/create', generator_controller.create_post);
 
+router.post('/download-en', generator_controller.download_en);
+
+router.post('/download-fr', generator_controller.download_fr);
+
 module.exports = router;
