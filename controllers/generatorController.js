@@ -139,7 +139,7 @@ exports.download_en = (req, res, next) => {
       res.redirect('/view/create');
     }
     results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.attachment('requirements_en.html');
+    res.attachment('requirements_en.doc');
     res.render('download_en', {
       title: strings.generatedRequirementsTitle,
       item_list: results.fps,
@@ -186,7 +186,7 @@ exports.download_fr = (req, res, next) => {
       res.redirect('/view/create');
     }
     results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.attachment('requirements_fr.html');
+    res.attachment('requirements_fr.doc');
     res.render('download_fr', {
       title: 'French title',
       item_list: results.fps,
