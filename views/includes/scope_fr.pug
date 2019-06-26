@@ -1,0 +1,10 @@
+//- Note that it is impossible to select only 1 clause, so the grammar below will not break.
+if item_list.length > 0
+  h3 Portée
+  p
+    | La solution proposée doit respecter les clauses 
+    each item, i in item_list
+      if i < item_list.length - 1
+        | #{item.number}, 
+      else
+        | et #{item.number}.

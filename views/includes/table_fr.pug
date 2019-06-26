@@ -9,10 +9,10 @@ if item_list.length > 0
     tbody
       each item in item_list
         tr
-          td
+          td(valign='top')
             strong #{item.number} #{item.frName}
             | !{item.frDescription}
-          td
+          td(valign='top')
             strong C.#{item.number} #{item.frName}
             | !{item.frCompliance}
           td 

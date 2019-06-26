@@ -1,5 +1,4 @@
 body {
-  background: #eee;
   font-family: sans-serif;
   font-size: 10pt;
 }
@@ -15,7 +14,20 @@ td {
 }
 
 th {
-  background: #ddd;
+  background: #eeeeee;
+}
+
+table td, table td * {
+  vertical-align: top;
+}
+
+h1,
+h2 {
+  font-size: 18pt;
+}
+
+a {
+  color: rgb(5,99,193);
 }
 
 /* MS Word specific CSS to force landscape orientation, correct styles, etc */
