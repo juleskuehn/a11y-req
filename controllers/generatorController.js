@@ -139,9 +139,9 @@ exports.download_en = (req, res, next) => {
       res.redirect('/view/create');
     }
     results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.attachment('requirements_en.doc');
+    res.attachment('ICT Accessibility Requirements.doc');
     res.render('download_en', {
-      title: strings.generatedRequirementsTitle,
+      title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)',
       item_list: results.fps,
       intro: results.intro,
       annex: results.annex
@@ -186,9 +186,9 @@ exports.download_fr = (req, res, next) => {
       res.redirect('/view/create');
     }
     results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.attachment('requirements_fr.doc');
+    res.attachment('Exigences en matière de TIC accessibles.doc');
     res.render('download_fr', {
-      title: 'French title',
+      title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)',
       item_list: results.fps,
       intro: results.intro,
       annex: results.annex

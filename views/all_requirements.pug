@@ -3,17 +3,13 @@ extends layout
 block content
   h1#wb-cont(property="name")= title
 
-  form(method='POST' action='download-en')
+  form(method='POST')
     .saved-form-input(style='display:none')
       each clause in item_list
         input(id=clause.id type='checkbox' name='clauses' value=clause.id checked=true)
-    button.btn.btn-primary(type='submit') Download (English)
-
-  form(method='POST' action='download-fr')
-    .saved-form-input(style='display:none')
-      each clause in item_list
-        input(id=clause.id type='checkbox' name='clauses' value=clause.id checked=true)
-    button.btn.btn-primary(type='submit') Download (French)
+    .btn-group
+      button.btn.btn-primary(type='submit' formaction='download-en') Download (English)
+      button.btn.btn-primary(type='submit' formaction='download-fr') Download (French)
   
   include includes/intro
   include includes/table
