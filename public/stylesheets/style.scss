@@ -21,12 +21,13 @@ legend {
 
 fieldset {
   border-top: 0;
+  padding-top: 0;
 }
 
 // Clause tree (from ARIA example with minor edits)
 
 ul[role="tree"] {
-  margin: 0;
+  margin: 10px 0;
   padding: 0;
   list-style: none;
 }
@@ -73,6 +74,11 @@ ul[role="tree"] {
 [role="treeitem"].hover,
 [role="treeitem"] div:hover {
   background-color: #ddd;
+}
+
+.clause-tree .checkbox {
+  margin: 0;
+  padding: 5px 0;
 }
 
 .clause-tree .checkbox input[type="checkbox"] {

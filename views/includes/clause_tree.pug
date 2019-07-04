@@ -15,6 +15,7 @@ mixin createTree(tree)
         +fpsCheckbox(clauseNode.clause, selected)
     else
       li.parentNode(role='treeitem' aria-expanded='false')
+        //- Should parent checkboxes have aria-controls attribute?
         +fpsCheckbox(clauseNode.clause, selected)
         ul(role='group')
           +createTree(clauseNode.children)
@@ -33,5 +34,5 @@ fieldset#clauses
   //- aria-labelledby is not be necessary due to the fieldset legend
   //- aria-selectable='false' is not ideal, but the treeitems need aria-checked
   //- property rather than aria-selected (to express 'mixed' state)
-  ul.clause_tree(role='tree' aria-selectable='false')
+  ul.clause-tree(role='tree' aria-selectable='false')
     +createTree(clause_tree)

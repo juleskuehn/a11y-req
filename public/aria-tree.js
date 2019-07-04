@@ -524,7 +524,7 @@ Treeitem.prototype.handleMouseOut = function (event) {
 
 
 /*
-New code
+Application-specific code
 */
 window.addEventListener('load', function () {
 
@@ -545,10 +545,64 @@ window.addEventListener('load', function () {
 
 });
 
+// {checkboxId: true/false, checkbox2Id: true/false, ...}
+const selectionStates = {};
+
+// Cycles state of checkboxes, acting on <input> elements only
+// Calls updateAriaChecked to clean up aria properties / indeterminate states
 const cycleSelect = ($node) => {
-  
+  let state = getState($node);
+  console.log(state);
+  if (state === 'mixed') {
+    // If clearing a mixed state, save the state for later
+    // Then, the next state is 'checked'
+    $node.find('input').each(function () {
+      let id = $(this).attr('id');
+      selectionStates[id] = $(this).is(':checked');
+      $(this).prop('checked', true);
+    });
+  }
+  else if (state === 'true') {
+    // Next state is off
+    $node.find('input').each(function () {
+      $(this).prop('checked', false);
+    });
+  }
+  else if (state === 'false') {
+    // Next state is restoring the mixed state
+    $node.find('input').each(function () {
+      let id = $(this).attr('id');
+      let oldState = selectionStates[id];
+      if (oldState === undefined) {
+        oldState = true;
+      }
+      $(this).prop('checked', oldState);
+    });
+  }
+
+  // TODO: Updating all items is inefficient; update only necessary items
+  $('[role="treeitem"]').each(function () {
+    updateAriaChecked($(this));
+  });
 };
 
+const getState = ($node) => {
+  return $node[0].getAttribute('aria-checked');
+}
+
+/* 
+// Gets state from value of descendant <input> elements
+// Returns one of [true, false, 'mixed']
+const getState = ($node) => {
+  let numChecked = $node.find('input:checked').length;
+  let state = numChecked > 0;
+  // Check for mixed state
+  if (state && $node.find('input').length !== numChecked) {
+    state = 'mixed';
+  }
+  return state;
+}
+ */
 const updateAriaChecked = ($node) => {
   let checked = false;
   if ($node.is('.endNode')) {
