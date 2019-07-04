@@ -1,7 +1,7 @@
-
-// Reformat clause array into nested dict (nested clauses in parents)
 /*
-tree = {
+Reformat clause array into nested dict (nested clauses in parents)
+
+example_tree = {
   '5': {
     clause: { number: '5' },
     'children': {
@@ -18,6 +18,7 @@ tree = {
   }
 }
 */
+
 module.exports = (clauses) => {
 
   clauses = clauses.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));

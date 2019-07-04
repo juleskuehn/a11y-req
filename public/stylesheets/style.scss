@@ -1,20 +1,26 @@
 // Make changes in style.scss (not style.css)
 
 .form-control {
-  min-width: 60%;
-  height: auto;
-  min-height: 37px; // Hard-coded height fails Resize Text criterion
+  width: 100%;
+}
+
+main {
+  padding-bottom: 30px;
 }
 
 // WET Overrides
 
-.clause-tree .checkbox input[type="checkbox"] {
-  position: relative;
-  margin-right: 10px;
+.form-control {
+  height: auto;
+  min-height: 37px; // Hard-coded height fails Resize Text criterion
 }
 
 legend {
   float: none;
+}
+
+fieldset {
+  border-top: 0;
 }
 
 // Clause tree (from ARIA example with minor edits)
@@ -67,4 +73,9 @@ ul[role="tree"] {
 [role="treeitem"].hover,
 [role="treeitem"] div:hover {
   background-color: #ddd;
+}
+
+.clause-tree .checkbox input[type="checkbox"] {
+  position: relative;
+  margin-right: 10px;
 }

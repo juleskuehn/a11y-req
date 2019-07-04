@@ -1,12 +1,15 @@
 @charset "UTF-8";
 .form-control {
+<<<<<<< HEAD
   min-width: 60%;
   height: auto;
   min-height: 37px; }
+=======
+  width: 100%; }
+>>>>>>> master
 
-.clause-tree .checkbox input[type="checkbox"] {
-  position: relative;
-  margin-right: 10px; }
+main {
+  padding-bottom: 30px; }
 
 legend {
   float: none; }
@@ -25,6 +28,7 @@ ul[role="tree"] {
 [role="treeitem"][aria-expanded="false"] > ul {
   display: none; }
 
+<<<<<<< HEAD
 [role="treeitem"][aria-expanded="true"] > ul {
   display: block; }
 
@@ -49,5 +53,16 @@ ul[role="tree"] {
 [role="treeitem"].hover,
 [role="treeitem"] div:hover {
   background-color: #ddd; }
+=======
+fieldset {
+  border-top: 0; }
+
+.leafNode {
+  margin-left: 17px; }
+>>>>>>> master
+
+.clause-tree .checkbox input[type="checkbox"] {
+  position: relative;
+  margin-right: 10px; }
 
 /*# sourceMappingURL=style.css.map */

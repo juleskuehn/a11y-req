@@ -16,7 +16,15 @@ exports.preset_list = (req, res, next) => {
     .sort([['order', 'ascending']])
     .exec((err, list_presets) => {
       if (err) { return next(err); }
-      res.render('item_list', { title: strings.listTitle, item_list: list_presets, type: 'preset' });
+      res.render('item_list', {
+        title: strings.listTitle,
+        item_list: list_presets,
+        type: 'preset',
+        breadcrumbs: [
+          { url: '/', text: 'Home' },
+          { url: '/edit', text: 'Edit content' }
+        ]
+      });
     });
 };
 
@@ -27,7 +35,12 @@ exports.preset_create_get = (req, res, next) => {
       if (err) { return next(err); }
       res.render('preset_form', {
         title: strings.createTitle,
-        clause_tree: toClauseTree(results.clauses)
+        clause_tree: toClauseTree(results.clauses),
+        breadcrumbs: [
+          { url: '/', text: 'Home' },
+          { url: '/edit', text: 'Edit content' },
+          { url: '/edit/presets', text: 'Edit presets' },
+        ]
       });
     });
 };
@@ -82,11 +95,16 @@ exports.preset_update_get = (req, res, next) => {
       err.status = 404;
       return next(err);
     }
-    results.clauses = results.clauses.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
+    results.clauses = results.clauses.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
     res.render('preset_form', {
       title: 'Edit preset',
       item: results.preset,
-      clause_tree: toClauseTree(results.clauses)
+      clause_tree: toClauseTree(results.clauses),
+      breadcrumbs: [
+        { url: '/', text: 'Home' },
+        { url: '/edit', text: 'Edit content' },
+        { url: '/edit/presets', text: 'Edit presets' },
+      ]
     });
   });
 
@@ -132,7 +150,16 @@ exports.preset_delete_get = (req, res, next) => {
     if (results.preset == null) { // No results.
       res.redirect('/edit/presets');
     }
-    res.render('item_delete', { title: 'Delete Preset', item: results.preset });
+    res.render('item_delete', {
+      title: 'Delete Preset',
+      item: results.preset,
+      breadcrumbs: [
+        { url: '/', text: 'Home' },
+        { url: '/edit', text: 'Edit content' },
+        { url: '/edit/presets', text: 'Edit presets' },
+        { url: results.preset.url, text: results.preset.name }
+      ]
+    });
   });
 };
 

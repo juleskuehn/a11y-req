@@ -11,23 +11,41 @@ const strings = {
 
 // Display edit menu
 exports.edit_list = (req, res, next) => {
-  res.render('edit', { title: strings.editListTitle });
+  res.render('edit', {
+    title: strings.editListTitle,
+    breadcrumbs: [{ url: '/', text: 'Home' }]
+  });
 };
 
 // Display list of all Infos
 exports.info_list = (req, res, next) => {
-  
+
   Info.find()
     .sort([['order', 'ascending']])
     .exec((err, list_infos) => {
       if (err) { return next(err); }
-      res.render('item_list', { title: strings.listTitle, item_list: list_infos, type: 'info' });
+      res.render('item_list', {
+        title: strings.listTitle,
+        item_list: list_infos,
+        type: 'info',
+        breadcrumbs: [
+          { url: '/', text: 'Home' },
+          { url: '/edit', text: 'Edit content' }
+        ]
+      });
     });
 };
 
 // Display info create form on GET
 exports.info_create_get = (req, res, next) => {
-  res.render('info_form', { title: strings.createTitle });
+  res.render('info_form', {
+    title: strings.createTitle,
+    breadcrumbs: [
+      { url: '/', text: 'Home' },
+      { url: '/edit', text: 'Edit content' },
+      { url: '/edit/infos', text: 'Edit informative sections' }
+    ]
+  });
 };
 
 // Handle Info create on POST
@@ -71,7 +89,15 @@ exports.info_update_get = (req, res, next) => {
       err.status = 404;
       return next(err);
     }
-    res.render('info_form', { title: 'Edit info', item: results.info });
+    res.render('info_form', {
+      title: 'Edit info',
+      item: results.info,
+      breadcrumbs: [
+        { url: '/', text: 'Home' },
+        { url: '/edit', text: 'Edit content' },
+        { url: '/edit/infos', text: 'Edit informative sections' }
+      ]
+    });
   });
 };
 
@@ -107,7 +133,16 @@ exports.info_delete_get = (req, res, next) => {
       res.redirect('/edit/infos');
     }
     // Successful, so render.
-    res.render('item_delete', { title: 'Delete Info', item: results.info });
+    res.render('item_delete', {
+      title: 'Delete Info',
+      item: results.info,
+      breadcrumbs: [
+        { url: '/', text: 'Home' },
+        { url: '/edit', text: 'Edit content' },
+        { url: '/edit/infos', text: 'Edit informative sections' },
+        { url: results.info.url, text: results.info.name }
+      ]
+    });
   });
 };
 

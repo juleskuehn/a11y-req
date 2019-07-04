@@ -18,13 +18,7 @@ html(lang='en')
 
     header
       include includes/header.pug
-      
-      nav#wb-bc(property='breadcrumb')
-        h2 You are here:
-        .container
-          ol.breadcrumb
-            li
-              a(href='/') Home
+      include includes/breadcrumbs.pug
 
     main(property="mainContentOfPage" class="container")
       block content
