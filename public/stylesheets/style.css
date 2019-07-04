@@ -1,9 +1,8 @@
 .form-control {
-  min-width: 600px; }
+  width: 100%; }
 
-.clause-tree .checkbox input[type="checkbox"] {
-  position: relative;
-  margin-right: 10px; }
+main {
+  padding-bottom: 30px; }
 
 legend {
   float: none; }
@@ -24,7 +23,14 @@ details {
 details[open] > summary {
   border-bottom: 0; }
 
+fieldset {
+  border-top: 0; }
+
 .leafNode {
   margin-left: 17px; }
+
+.clause-tree .checkbox input[type="checkbox"] {
+  position: relative;
+  margin-right: 10px; }
 
 /*# sourceMappingURL=style.css.map */

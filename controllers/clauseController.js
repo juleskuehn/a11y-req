@@ -22,14 +22,28 @@ exports.clause_list = (req, res, next) => {
   Clause.find()
     .exec((err, list_clauses) => {
       if (err) { return next(err); }
-      list_clauses = list_clauses.sort( (a, b) => a.number.localeCompare(b.number, undefined, { numeric:true }) );
-      res.render('clause_list', { title: strings.listTitle, item_list: list_clauses });
+      list_clauses = list_clauses.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
+      res.render('clause_list', {
+        title: strings.listTitle,
+        item_list: list_clauses,
+        breadcrumbs: [
+          { url: '/', text: 'Home' },
+          { url: '/edit', text: 'Edit content' }
+        ]
+      });
     });
 };
 
 // Display clause create form on GET
 exports.clause_create_get = (req, res, next) => {
-  res.render('clause_form', { title: strings.createTitle });
+  res.render('clause_form', {
+    title: strings.createTitle,
+    breadcrumbs: [
+      { url: '/', text: 'Home' },
+      { url: '/edit', text: 'Edit content' },
+      { url: '/edit/presets', text: 'Edit clauses' }
+    ]
+  });
 };
 
 // Handle Clause create on POST
@@ -76,7 +90,15 @@ exports.clause_update_get = (req, res, next) => {
       return next(err);
     }
     // Success.
-    res.render('clause_form', { title: strings.editClause, item: results.clause });
+    res.render('clause_form', {
+      title: strings.editClause,
+      item: results.clause,
+      breadcrumbs: [
+        { url: '/', text: 'Home' },
+        { url: '/edit', text: 'Edit content' },
+        { url: '/edit/presets', text: 'Edit clauses' }
+      ]
+    });
   });
 };
 
@@ -109,7 +131,16 @@ exports.clause_delete_get = (req, res, next) => {
   }, (err, results) => {
     if (err) { return next(err); }
     if (results.clause == null) { res.redirect('/edit/clauses'); }
-    res.render('item_delete', { title: strings.deleteClause, item: results.clause });
+    res.render('item_delete', {
+      title: strings.deleteClause,
+      item: results.clause,
+      breadcrumbs: [
+        { url: '/', text: 'Home' },
+        { url: '/edit', text: 'Edit content' },
+        { url: '/edit/presets', text: 'Edit clauses' },
+        { url: results.clause.url, text: results.clause.name }
+      ]
+    });
   });
 };
 
@@ -128,7 +159,13 @@ exports.clause_delete_post = (req, res, next) => {
       res.render('item_delete', {
         title: strings.deleteClause,
         item: results.clause,
-        dependencies: results.clause_presets
+        dependencies: results.clause_presets,
+        breadcrumbs: [
+          { url: '/', text: 'Home' },
+          { url: '/edit', text: 'Edit content' },
+          { url: '/edit/presets', text: 'Edit clauses' },
+          { url: results.clause.url, text: results.clause.name }
+        ]
       });
       return;
     }
@@ -159,7 +196,7 @@ exports.clause_populate = (req, res, next) => {
     frCompliance: c.frCompliance
   } */
 
-  
+
   JSDOM.fromFile('english.html').then(dom => {
     console.log("file loaded");
     let document = dom.window.document;
@@ -181,7 +218,7 @@ exports.clause_populate = (req, res, next) => {
       clause.compliance = complianceHTML.substr(complianceHTML.indexOf('</p>') + 4).replace(/(\r\n|\n|\r)/gm, " ").trim();
       clauses.push(clause);
     }
-    
+
     // Add French HTML content, asserting that clause numbers are equal
     JSDOM.fromFile('french.html').then(dom => {
 
@@ -206,7 +243,7 @@ exports.clause_populate = (req, res, next) => {
       // Array of clauses is now populated. Insert documents in database.
       for (c of clauses) {
         let clause = new Clause(c);
-    
+
         clause.save((err) => {
           if (err) { return next(err); }
           // Clause saved

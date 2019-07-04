@@ -1,3 +1,5 @@
+//- Functions to generate clause tree
+
 mixin fpsCheckbox(clause, selected)
   .checkbox
     label(for=clause.id)
@@ -15,6 +17,10 @@ mixin createTree(tree)
         summary
           +fpsCheckbox(clauseNode.clause, selected)
         +createTree(clauseNode.children)
+
+
+//- Passed argument is tree-like JS object 'clause_tree'
+//- See /controllers/clauseTree.js for details
 
 .btn-group
   button.btn.btn-default#selectAll Select all 

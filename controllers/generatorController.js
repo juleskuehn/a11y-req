@@ -17,8 +17,17 @@ const strings = {
   generatedRequirementsTitle: 'Generated requirements'
 };
 
+const breadcrumbs = [
+  { url: '/', text: 'Home' }
+];
+
 exports.menu = (req, res, next) => {
-  res.render('generator', { title: strings.generatorTitle });
+  res.render('generator', {
+    title: strings.generatorTitle,
+    breadcrumbs: [
+      { url: '/', text: 'Home' }
+    ]
+  });
 };
 
 // Display the content of all informative sections
@@ -27,7 +36,11 @@ exports.all_infos = (req, res, next) => {
     .sort([['order', 'ascending']])
     .exec((err, list_infos) => {
       if (err) { return next(err); }
-      res.render('all_infos', { title: strings.allInfosTitle, item_list: list_infos });
+      res.render('all_infos', {
+        title: strings.allInfosTitle,
+        item_list: list_infos,
+        breadcrumbs: breadcrumbs
+      });
     });
 };
 
@@ -37,7 +50,11 @@ exports.all_clauses = (req, res, next) => {
     .exec((err, list_clauses) => {
       if (err) { return next(err); }
       list_clauses = list_clauses.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-      res.render('all_clauses', { title: strings.allClausesTitle, item_list: list_clauses });
+      res.render('all_clauses', {
+        title: strings.allClausesTitle,
+        item_list: list_clauses,
+        breadcrumbs: breadcrumbs
+      });
     });
 };
 
@@ -51,7 +68,8 @@ exports.create_get = (req, res, next) => {
     res.render('select_fps', {
       title: strings.createTitle,
       clause_tree: toClauseTree(results.clauses),
-      preset_list: results.presets
+      preset_list: results.presets,
+      breadcrumbs: breadcrumbs
     });
   });
 };
@@ -97,14 +115,18 @@ exports.create_post = (req, res, next) => {
       title: strings.generatedRequirementsTitle,
       item_list: results.fps,
       intro: results.intro,
-      annex: results.annex
+      annex: results.annex,
+      breadcrumbs: [
+        { url: '/', text: 'Home' },
+        { url: '/view/create', text: 'Select functional performance statements'}
+      ]
     });
   });
 };
 
 // Renders based on user's selected FPS to a downloadable HTML file for import in Word
 exports.download_en = (req, res, next) => {
-  
+
   // Edge case: < 2 clauses selected
   if (!(req.body.clauses instanceof Array)) {
     if (typeof req.body.clauses === 'undefined') {
@@ -139,7 +161,7 @@ exports.download_en = (req, res, next) => {
       res.redirect('/view/create');
     }
     results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.attachment('ICT Accessibility Requirements.doc');
+    res.attachment('ICT Accessibility Requirements.html');
     res.render('download_en', {
       title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)',
       item_list: results.fps,
@@ -151,7 +173,7 @@ exports.download_en = (req, res, next) => {
 
 // Renders based on user's selected FPS to a downloadable HTML file for import in Word
 exports.download_fr = (req, res, next) => {
-  
+
   // Edge case: < 2 clauses selected
   if (!(req.body.clauses instanceof Array)) {
     if (typeof req.body.clauses === 'undefined') {
@@ -186,7 +208,7 @@ exports.download_fr = (req, res, next) => {
       res.redirect('/view/create');
     }
     results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.attachment('Exigences en matière de TIC accessibles.doc');
+    res.attachment('Exigences en matière de TIC accessibles.html');
     res.render('download_fr', {
       title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)',
       item_list: results.fps,
