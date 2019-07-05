@@ -552,7 +552,7 @@ const selectionStates = {};
 // Calls updateAriaChecked to clean up aria properties / indeterminate states
 const cycleSelect = ($node) => {
   let state = getState($node);
-  console.log(state);
+  console.log($node);
   if (state === 'mixed') {
     // If clearing a mixed state, save the state for later
     // Then, the next state is 'checked'
@@ -578,6 +578,15 @@ const cycleSelect = ($node) => {
       }
       $(this).prop('checked', oldState);
     });
+    // If all children remain unchecked, toggle to 'checked'
+    if ($node.find('input:checked').not(':first').length === 0) {
+      $node.find('input').each(function () {
+        let id = $(this).attr('id');
+        selectionStates[id] = undefined;
+        $(this).prop('checked', true);
+      });
+    }
+
   }
 
   // TODO: Updating all items is inefficient; update only necessary items
@@ -603,6 +612,10 @@ const getState = ($node) => {
   return state;
 }
  */
+
+// Define the expected boolean behaviour of mixed checkboxes
+const checkIfMixed = true;
+
 const updateAriaChecked = ($node) => {
   let checked = false;
   if ($node.is('.endNode')) {
@@ -612,12 +625,20 @@ const updateAriaChecked = ($node) => {
     // For a parent node, only checked if all children are checked
     checked = true;
     // Update indeterminate property to match
-    $node.find('input:checkbox:checked').first().prop('indeterminate', false);
-  } else if ($node.find('input:checkbox:checked').length > 0) {
-    // For a parent node, mixed state if some but not all children are checked
+    $node.find('input:checkbox:checked:first').prop('indeterminate', false);
+  } else if ($node.find('input:checkbox:checked').not(':first').length > 0) {
+    // Parent node has "mixed" state if some but not all children are checked
     checked = 'mixed';
     // Update indeterminate property to match
-    $node.find('input:checkbox:checked').first().prop('indeterminate', true);
+    let parentNode = $node.find('input:checkbox:first');
+    parentNode.prop('indeterminate', true);
+    parentNode.prop('checked', checkIfMixed);
+  } else {
+    // When no children are checked, parent cannot be checked either
+    checked = false;
+    let parentNode = $node.find('input:checkbox:first');
+    parentNode.prop('indeterminate', false);
+    parentNode.prop('checked', false);
   }
   $node[0].setAttribute('aria-checked', checked);
 };
