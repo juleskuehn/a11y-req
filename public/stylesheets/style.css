@@ -1,33 +1,63 @@
+@charset "UTF-8";
 .form-control {
   width: 100%; }
 
 main {
   padding-bottom: 30px; }
 
+.form-control {
+  height: auto;
+  min-height: 37px; }
+
 legend {
   float: none; }
 
-details summary {
-  border: 0;
-  padding: 0;
-  color: #333; }
-
-details[open] {
-  border: 0;
-  padding-bottom: 0; }
-
-details {
-  margin-top: 10px;
-  margin-bottom: 10px; }
-
-details[open] > summary {
-  border-bottom: 0; }
-
 fieldset {
-  border-top: 0; }
+  border-top: 0;
+  padding-top: 0; }
 
-.leafNode {
-  margin-left: 17px; }
+ul[role="tree"] {
+  margin: 10px 0;
+  padding: 0;
+  list-style: none; }
+
+[role='treeitem'] {
+  list-style: none; }
+
+[role='treeitem'].endNode {
+  margin-left: 20px; }
+
+[role="treeitem"][aria-expanded="false"] > ul {
+  display: none; }
+
+[role="treeitem"][aria-expanded="true"] > ul {
+  display: block; }
+
+[role="treeitem"] > div.checkbox::before {
+  display: inline-block;
+  width: 20px; }
+
+[role="treeitem"][aria-expanded="false"] > div.checkbox::before {
+  content: '⯈'; }
+
+[role="treeitem"][aria-expanded="true"] > div.checkbox::before {
+  content: '⯆'; }
+
+[role="treeitem"]:focus {
+  outline: 0; }
+
+[role="treeitem"].focus,
+[role="treeitem"] div.focus {
+  border-color: black;
+  background-color: #eee; }
+
+[role="treeitem"].hover,
+[role="treeitem"] div:hover {
+  background-color: #ddd; }
+
+.clause-tree .checkbox {
+  margin: 0;
+  padding: 5px 0; }
 
 .clause-tree .checkbox input[type="checkbox"] {
   position: relative;

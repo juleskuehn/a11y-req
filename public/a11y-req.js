@@ -9,7 +9,7 @@ $(document).ready(() => {
   }
 
   if ($('#clauses').length > 0) {
-    setupTreeHandler();
+    // setupTreeHandler();
   }
 
   // Replace <textarea> with rich text editor (CKEditor)
@@ -44,6 +44,9 @@ const updatePresetSelections = () => {
   $('#' + preset + ' li').each(function () {
     // Check the preset checkboxes
     $('#' + this.innerHTML).prop('checked', true);
+  });
+  $('[role="treeitem"]').each(function () {
+    updateAriaChecked($(this));
   });
 };
 
