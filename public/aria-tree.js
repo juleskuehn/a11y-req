@@ -586,36 +586,43 @@ const cycleSelect = ($node) => {
         $(this).prop('checked', true);
       });
     }
-
   }
 
-  // TODO: Updating all items is inefficient; update only necessary items
-  $('[role="treeitem"]').each(function () {
+  updateAriaChecked($node);
+
+  // Update children to match rules
+  $node.find('li').each(function () {
     updateAriaChecked($(this));
   });
+
+  // Updating parents to match rules, walking the tree to the root node
+  while (!$node.parent('ul').is('[role="tree"]')) {
+    $node = $node.parent('ul').closest('[role="treeitem"]');
+    updateAriaChecked($node);
+  }
 };
 
 const getState = ($node) => {
   return $node[0].getAttribute('aria-checked');
 }
 
-/* 
-// Gets state from value of descendant <input> elements
-// Returns one of [true, false, 'mixed']
-const getState = ($node) => {
-  let numChecked = $node.find('input:checked').length;
-  let state = numChecked > 0;
-  // Check for mixed state
-  if (state && $node.find('input').length !== numChecked) {
-    state = 'mixed';
-  }
-  return state;
-}
- */
-
 // Define the expected boolean behaviour of mixed checkboxes
 const checkIfMixed = true;
 
+// Application specific: Select child informative clauses automatically
+const selectInformative = ($node) => {
+  let $informative = $node.find('input.informative');
+  if ($informative.length > 0) {
+    let checked = (getState($node) !== 'false');
+    $informative.prop('checked', checked);
+    $informative.each(function() {
+      $(this).closest('li')[0].setAttribute('aria-checked', checked);
+    });
+  }
+}
+
+// Updates aria-checked property of treeitems to follow checkboxes
+// and sets indeterminate state of checkboxes
 const updateAriaChecked = ($node) => {
   let checked = false;
   if ($node.is('.endNode')) {
@@ -626,7 +633,7 @@ const updateAriaChecked = ($node) => {
     checked = true;
     // Update indeterminate property to match
     $node.find('input:checkbox:checked:first').prop('indeterminate', false);
-  } else if ($node.find('input:checkbox:checked').not(':first').length > 0) {
+  } else if ($node.find('input:checkbox').not(':first').not('.informative').is(':checked')) {
     // Parent node has "mixed" state if some but not all children are checked
     checked = 'mixed';
     // Update indeterminate property to match
@@ -641,4 +648,8 @@ const updateAriaChecked = ($node) => {
     parentNode.prop('checked', false);
   }
   $node[0].setAttribute('aria-checked', checked);
+  // Application specific: Parent node might have an informative child
+  if ($node.is('.parentNode')) {
+    selectInformative($node);
+  }
 };
