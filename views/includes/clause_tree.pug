@@ -3,7 +3,7 @@
 mixin fpsCheckbox(clause, selected)
   .checkbox
     label(for=clause.id)
-      input(id=clause.id type='checkbox' name='clauses' value=clause.id class=clause.informative ? 'informative' : '' disabled=clause.informative checked=selected tabindex='-1' aria-hidden='true')
+      input(id=clause.id type='checkbox' name='clauses' value=clause.id class=clause.informative ? 'informative' : '' checked=selected tabindex='-1' aria-hidden='true')
       | #{clause.number} #{clause.name}
 
 mixin createTree(tree)

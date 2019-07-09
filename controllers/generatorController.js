@@ -114,11 +114,12 @@ exports.create_post = (req, res, next) => {
     res.render('all_requirements', {
       title: strings.generatedRequirementsTitle,
       item_list: results.fps,
+      test_list: getTestableClauses(results.fps),
       intro: results.intro,
       annex: results.annex,
       breadcrumbs: [
         { url: '/', text: 'Home' },
-        { url: '/view/create', text: 'Select functional performance statements'}
+        { url: '/view/create', text: 'Select functional performance statements' }
       ]
     });
   });
@@ -165,6 +166,7 @@ exports.download_en = (req, res, next) => {
     res.render('download_en', {
       title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)',
       item_list: results.fps,
+      test_list: getTestableClauses(results.fps),
       intro: results.intro,
       annex: results.annex
     });
@@ -212,8 +214,13 @@ exports.download_fr = (req, res, next) => {
     res.render('download_fr', {
       title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)',
       item_list: results.fps,
+      test_list: getTestableClauses(results.fps),
       intro: results.intro,
       annex: results.annex
     });
   });
 }
+
+const getTestableClauses = (clauses) => 
+  clauses.filter((clause) =>
+    !clause.informative && clause.description.length > 0);
