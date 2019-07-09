@@ -76,6 +76,15 @@ ul[role="tree"] {
   background-color: #ddd;
 }
 
+[role="treeitem"].informative {
+  opacity: 0.5;
+}
+
+[role="treeitem"].informative label,
+[role="treeitem"].informative input {
+  cursor: not-allowed;
+}
+
 .clause-tree .checkbox {
   margin: 0;
   padding: 5px 0;

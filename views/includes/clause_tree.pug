@@ -11,7 +11,7 @@ mixin createTree(tree)
     -var selected = itemExists && item.clauses.indexOf(clauseNode.clause.id) > -1 ? 'checked' : false
     if clauseNode.children.length === 0
       //- Add aria-checked properties via javascript (need to check for mixed state)
-      li.endNode(role='treeitem' class=clause.informative ? 'informative' : '')
+      li.endNode(role='treeitem' class=clauseNode.clause.informative ? 'informative' : '')
         +fpsCheckbox(clauseNode.clause, selected)
     else
       li.parentNode(role='treeitem' aria-expanded='false')
