@@ -15,5 +15,6 @@ The code is based on:
 
 ## Usage
 - Run `mongod` to start the database server
+- Run `mongorestore dump` to populate the database
 - Run `npm run devstart` to start the node.js server
 - Visit [localhost:3000](http://localhost:3000)
