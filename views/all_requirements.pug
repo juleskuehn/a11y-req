@@ -7,9 +7,14 @@ block content
     .saved-form-input(style='display:none')
       each clause in item_list
         input(id=clause.id type='checkbox' name='clauses' value=clause.id checked=true)
+    h2 Full requirements table with informative sections
     .btn-group
       button.btn.btn-primary(type='submit' formaction='download-en') Download (English)
       button.btn.btn-primary(type='submit' formaction='download-fr') Download (French)
+    h2 Only testable clauses and determination of compliance
+    .btn-group
+      button.btn.btn-primary(type='submit' formaction='onlyClauses-en') Download (English)
+      button.btn.btn-primary(type='submit' formaction='onlyClauses-fr') Download (French)
   
   include includes/intro
   include includes/scope

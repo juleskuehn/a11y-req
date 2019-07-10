@@ -1,0 +1,14 @@
+doctype html
+html(lang='en')
+  head
+    title= title
+    meta(charset='utf-8')
+    style
+      include download.css
+
+  body(vocab='http://schema.org/' typeof='WebPage')
+    .WordSection1
+      h1= title
+      
+      include includes/scope
+      include includes/onlyClauses

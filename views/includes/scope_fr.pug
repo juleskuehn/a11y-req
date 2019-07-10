@@ -1,10 +1,12 @@
-//- Note that it is impossible to select only 1 clause, so the grammar below will not break.
-if test_list.length > 0
-  h3 Portée
+if test_list.length === 1
+  p La solution proposée devrait respecter la clause #{test_list[0].number}.
+else
   p
     | La solution proposée devrait respecter les clauses 
     each item, i in test_list
-      if i < test_list.length - 1
+      if i < test_list.length - 2
         | #{item.number}, 
+      else if i == test_list.length - 2
+        | #{item.number} 
       else
         | et #{item.number}.

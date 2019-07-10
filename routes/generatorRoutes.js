@@ -17,4 +17,8 @@ router.post('/download-en', generator_controller.download_en);
 
 router.post('/download-fr', generator_controller.download_fr);
 
+router.post('/onlyClauses-en', generator_controller.onlyClauses_en);
+
+router.post('/onlyClauses-fr', generator_controller.onlyClauses_fr);
+
 module.exports = router;

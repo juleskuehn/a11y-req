@@ -127,55 +127,39 @@ exports.create_post = (req, res, next) => {
 
 // Renders based on user's selected FPS to a downloadable HTML file for import in Word
 exports.download_en = (req, res, next) => {
+  download_full(req, res, next, {
+    filename: 'ICT Accessibility Requirements.html',
+    template: 'download_en',
+    title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)'
+  });
+}
 
-  // Edge case: < 2 clauses selected
-  if (!(req.body.clauses instanceof Array)) {
-    if (typeof req.body.clauses === 'undefined') {
-      req.body.clauses = [];
-    } else {
-      req.body.clauses = new Array(req.body.clauses);
-    }
-  }
-
-  let clause_ids = [];
-  for (id of req.body.clauses) {
-    clause_ids.push(mongoose.Types.ObjectId(id));
-  }
-
-  async.parallel({
-    fps: (callback) => Clause.find({ '_id': { $in: clause_ids } }).exec(callback),
-    intro: (callback) => {
-      // Find sections with names NOT starting with "Annex"
-      Info.find({ name: /^(?!Annex).*/ })
-        .sort([['order', 'ascending']])
-        .exec(callback);
-    },
-    annex: (callback) => {
-      // Find sections with names starting with "Annex"
-      Info.find({ name: /^Annex/ })
-        .sort([['order', 'ascending']])
-        .exec(callback);
-    },
-  }, (err, results) => {
-    if (err) { return next(err); }
-    if (results.fps == null) { // No clauses selected
-      res.redirect('/view/create');
-    }
-    results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.attachment('ICT Accessibility Requirements.html');
-    res.render('download_en', {
-      title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)',
-      item_list: results.fps,
-      test_list: getTestableClauses(results.fps),
-      intro: results.intro,
-      annex: results.annex
-    });
+exports.download_fr = (req, res, next) => {
+  download_full(req, res, next, {
+    filename: 'Exigences en matière de TIC accessibles.html',
+    template: 'download_fr',
+    title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)'
   });
 }
 
 // Renders based on user's selected FPS to a downloadable HTML file for import in Word
-exports.download_fr = (req, res, next) => {
+exports.onlyClauses_en = (req, res, next) => {
+  download_full(req, res, next, {
+    filename: 'ICT Accessibility Requirements - Short.html',
+    template: 'onlyClauses_en',
+    title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)'
+  });
+}
 
+exports.onlyClauses_fr = (req, res, next) => {
+  download_full(req, res, next, {
+    filename: 'Exigences en matière de TIC accessibles - brève.html',
+    template: 'onlyClauses_fr',
+    title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)'
+  });
+}
+
+const download_full = (req, res, next, strings) => {
   // Edge case: < 2 clauses selected
   if (!(req.body.clauses instanceof Array)) {
     if (typeof req.body.clauses === 'undefined') {
@@ -210,9 +194,9 @@ exports.download_fr = (req, res, next) => {
       res.redirect('/view/create');
     }
     results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.attachment('Exigences en matière de TIC accessibles.html');
-    res.render('download_fr', {
-      title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)',
+    res.attachment(strings.filename);
+    res.render(strings.template, {
+      title: strings.title,
       item_list: results.fps,
       test_list: getTestableClauses(results.fps),
       intro: results.intro,
