@@ -416,8 +416,11 @@ Treeitem.prototype.handleKeydown = function (event) {
         }
 
         /* Edit to ARIA code: handle this event through "cycleSelect()"
-           defined near the bottom of this file */
+        defined near the bottom of this file */
         // tgt.dispatchEvent(clickEvent);
+        if ($(document.activeElement).is('input:checkbox')) {
+          break;
+        }
         cycleSelect($(tgt));
 
         flag = true;
@@ -533,7 +536,17 @@ window.addEventListener('load', function () {
     updateAriaChecked($(this));
   });
 
-  $('div.checkbox label').click(function () {
+  $('div.checkbox input:checkbox').change(function () {
+    $node = $(this).closest('li');
+    cycleSelect($node);
+  });
+
+  $('div.checkbox input:checkbox').click(function (event) {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+  });
+
+  $('div.checkbox label').click(function (event) {
     // State of the checkbox must be handled through JS to match
     // aria-checked property of parent
     event.preventDefault();
@@ -552,7 +565,7 @@ const selectionStates = {};
 // Calls updateAriaChecked to clean up aria properties / indeterminate states
 const cycleSelect = ($node) => {
   let state = getState($node);
-  console.log($node);
+  // console.log($node);
   if (state === 'mixed') {
     // If clearing a mixed state, save the state for later
     // Then, the next state is 'checked'
@@ -615,7 +628,7 @@ const selectInformative = ($node) => {
   if ($informative.length > 0) {
     let checked = (getState($node) !== 'false');
     $informative.prop('checked', checked);
-    $informative.each(function() {
+    $informative.each(function () {
       $(this).closest('li')[0].setAttribute('aria-checked', checked);
     });
   }
