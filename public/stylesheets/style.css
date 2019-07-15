@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .form-control {
   width: 100%; }
 
@@ -33,15 +32,15 @@ ul[role="tree"] {
 [role="treeitem"][aria-expanded="true"] > ul {
   display: block; }
 
-[role="treeitem"] > div.checkbox::before {
-  display: inline-block;
+[role="treeitem"] > div.checkbox > i {
+  display: none;
   width: 20px; }
 
-[role="treeitem"][aria-expanded="false"] > div.checkbox::before {
-  content: '⯈'; }
+[role="treeitem"][aria-expanded="false"] > div.checkbox > i.expand {
+  display: inline-block; }
 
-[role="treeitem"][aria-expanded="true"] > div.checkbox::before {
-  content: '⯆'; }
+[role="treeitem"][aria-expanded="true"] > div.checkbox > i.collapse {
+  display: inline-block; }
 
 [role="treeitem"]:focus {
   outline: 0; }
