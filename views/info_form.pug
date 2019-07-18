@@ -6,28 +6,28 @@ block form
   form(method='POST' action='')
     .form-group
       label.required(for='name')
-        span.field-name Section title 
+        span.field-name Section title (English) 
         strong.required (required)
       input#name.form-control(type='text' placeholder='' required='required' name='name' value=(itemExists ? item.name : ''))
-    .form-group(lang='fr')
+    .form-group
       label.required(for='frName')
-        span.field-name Titre de section 
-        strong.required (obligatoire)
-      input#frName.form-control(type='text' placeholder='' required='required' name='frName' value=(itemExists ? item.frName : ''))
+        span.field-name Section title (French) 
+        strong.required (required)
+      input#frName.form-control(lang='fr' type='text' placeholder='' required='required' name='frName' value=(itemExists ? item.frName : ''))
     .checkbox
       label(for='showHeading')
         input#showHeading(type='checkbox' name='showHeading' checked=(itemExists ? item.showHeading : 'checked'))
         | Display section title as a heading
     .form-group
       label(for='bodyHtml')
-        span.field-name Content (HTML)
+        span.field-name Content (English) 
       textarea#bodyHtml.form-control(name='bodyHtml' rows='10')
         if itemExists
           | #{item.bodyHtml}
-    .form-group(lang='fr')
+    .form-group
       label(for='frBodyHtml')
-        span.field-name Contenu (HTML)
-      textarea#frBodyHtml.form-control(name='frBodyHtml' rows='10')
+        span.field-name Content (French) 
+      textarea#frBodyHtml.form-control(lang='fr' name='frBodyHtml' rows='10')
         if itemExists
           | #{item.frBodyHtml}
     .form-group

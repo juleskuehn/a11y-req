@@ -10,10 +10,10 @@ const toClauseTree = require('./clauseTree');
 
 const strings = {
   allInfosTitle: 'All informative sections',
-  allClausesTitle: 'All functional performance statements',
+  allClausesTitle: 'All functional accessibility requirements',
   generatorTitle: 'Generate requirements',
-  createTitle: 'Select functional performance statements',
-  selectedClausesTitle: 'Selected functional performance statements',
+  createTitle: 'Select functional accessibility requirements',
+  selectedClausesTitle: 'Selected functional accessibility requirements',
   generatedRequirementsTitle: 'Generated requirements'
 };
 
@@ -58,7 +58,7 @@ exports.all_clauses = (req, res, next) => {
     });
 };
 
-// Select functional performance statements or preset
+// Select functional accessibility requirements or preset
 exports.create_get = (req, res, next) => {
   async.parallel({
     clauses: (callback) => Clause.find().exec(callback),
@@ -119,7 +119,7 @@ exports.create_post = (req, res, next) => {
       annex: results.annex,
       breadcrumbs: [
         { url: '/', text: 'Home' },
-        { url: '/view/create', text: 'Select functional performance statements' }
+        { url: '/view/create', text: 'Select functional accessibility requirements' }
       ]
     });
   });

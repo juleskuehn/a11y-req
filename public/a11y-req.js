@@ -25,11 +25,13 @@ var setupPresetHandler = function () {
   // #preset is the <select> element (see /views/select_fps.pug)
   $('#preset').change(function () { updatePresetSelections(); });
   $('#selectAll').click(function (e) {
-    $('#clauses input').prop('checked', true);
+    $('#clauses input').prop('checked', true).prop('indeterminate', false);
+    $('[role="treeitem"]').attr('aria-checked', true);
     e.preventDefault();
   });
   $('#selectNone').click(function (e) {
-    $('#clauses input').prop('checked', false)
+    $('#clauses input').prop('checked', false).prop('indeterminate', false);
+    $('[role="treeitem"]').attr('aria-checked', false);
     e.preventDefault();
   });
 };
