@@ -34,6 +34,14 @@ var setupPresetHandler = function () {
     $('[role="treeitem"]').attr('aria-checked', false);
     e.preventDefault();
   });
+  $('#expandAll').click(function (e) {
+    $('li.parentNode').attr('aria-expanded', true);
+    e.preventDefault();
+  });
+  $('#collapseAll').click(function (e) {
+    $('li.parentNode').attr('aria-expanded', false);
+    e.preventDefault();
+  });
 };
 
 var updatePresetSelections = function () {

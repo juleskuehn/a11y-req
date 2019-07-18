@@ -624,7 +624,7 @@ var checkIfMixed = true;
 
 // Application specific: Select child informative clauses automatically
 var selectInformative = function ($node) {
-  var $informative = $node.find('input.informative');
+  var $informative = $node.children('ul').children('li.informative').find('input.informative');
   if ($informative.length > 0) {
     var checked = (getState($node) !== 'false');
     $informative.prop('checked', checked);

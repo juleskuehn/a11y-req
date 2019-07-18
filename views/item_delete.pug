@@ -16,4 +16,6 @@ block content
     div.form-group
       input#itemid.form-control(type='hidden', name='itemid', required='true', value=item._id )
 
-    button.btn.btn-primary(type='submit') Delete
+    a.btn.btn-primary(href=item.url) Cancel
+    if !dependencies
+      button.btn.btn-danger(type='submit') Delete

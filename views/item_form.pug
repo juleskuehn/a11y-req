@@ -7,12 +7,13 @@ block content
     block form
       p Form not implemented
 
-  if errors 
-   ul
-    for error in errors
-     li!= error.msg
+  if errors
+    ul
+      for error in errors
+        li!= error.msg
+    a.btn.btn-primary(href=item.url) Cancel
 
-  if item
+  if item && !errors
     hr
     p
       a(href=item.url+'/delete') Delete
