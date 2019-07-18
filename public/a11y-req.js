@@ -1,7 +1,7 @@
 // Client side scripts for a11y-req
 // NOT FOR WET OVERRIDES
 
-$(document).ready(() => {
+$(document).ready(function () {
 
   // #preset-data is a hidden element on requirement selection page
   if ($('#preset-data').length > 0) {
@@ -21,21 +21,21 @@ $(document).ready(() => {
 
 /* Generator preset handling */
 
-const setupPresetHandler = () => {
+var setupPresetHandler = function () {
   // #preset is the <select> element (see /views/select_fps.pug)
-  $('#preset').change(() => updatePresetSelections());
-  $('#selectAll').click((e) => {
+  $('#preset').change(function () { updatePresetSelections(); });
+  $('#selectAll').click(function (e) {
     $('#clauses input').prop('checked', true);
     e.preventDefault();
   });
-  $('#selectNone').click((e) => {
+  $('#selectNone').click(function (e) {
     $('#clauses input').prop('checked', false)
     e.preventDefault();
   });
 };
 
-const updatePresetSelections = () => {
-  let preset = $('#preset').val();
+var updatePresetSelections = function () {
+  var preset = $('#preset').val();
   // Save existing selections
 
   // Uncheck all checkboxes
@@ -53,13 +53,13 @@ const updatePresetSelections = () => {
 
 /* Tree menu selection */
 
-const setupTreeHandler = () => {
+var setupTreeHandler = function () {
 
   // 1. Explicit selection of a clause cascades down sub-clauses
   // 2. Parent is checked if and only if a (non-informative) child is checked
   // 3. Informative clause is checked if and only if parent is checked
   $('.checkbox input:checkbox').change(function () {
-    let $el = $(this);
+    var $el = $(this);
 
     // Handle case 1: Cascade selection change down sub-clauses
     if ($el.closest('summary').length > 0) {
@@ -72,10 +72,10 @@ const setupTreeHandler = () => {
     bubbleUpClause($el);
   });
 
-  let bubbleUpClause = ($el) => {
+  var bubbleUpClause = function ($el) {
 
     // Get parent clause, if there is one
-    let parent = $el.closest('details');
+    var parent = $el.closest('details');
     // If this sub-clause has children, the target needs adjustment
     if ($el.closest('div.leafNode').length === 0) {
       parent = parent.parent();
@@ -86,7 +86,7 @@ const setupTreeHandler = () => {
     }
 
     // Handle case 2
-    let value = parent.find('input:checkbox:not(:first):not(.informative)').is(':checked');
+    var value = parent.find('input:checkbox:not(:first):not(.informative)').is(':checked');
     parent.find('summary .checkbox input:checkbox')
       .first().prop('checked', value);
 
@@ -101,35 +101,35 @@ const setupTreeHandler = () => {
 
 /* CKEditor */
 
-const initCK = (element) => {
+var initCK = function (element) {
   ClassicEditor
     .create(element, {
       language: 'en',
       removePlugins: [],
       toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'link', 'undo', 'redo']
     })
-    .then(editor => {
+    .then(function (editor) {
       console.log(editor);
       console.log(Array.from(editor.ui.componentFactory.names()));
     })
-    .catch(error => console.error(error));
+    .catch(function (error) { console.error(error); });
+    
+    // console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName));
+    
+    // https://stackoverflow.com/questions/46559354/how-to-set-the-height-of-ckeditor-5-classic-editor/56550285#56550285
+    function MinHeightPlugin(editor) {
+      this.editor = editor;
+    };
+    
+    MinHeightPlugin.prototype.init = function () {
+      this.editor.ui.view.editable.extendTemplate({
+        attributes: {
+          style: {
+            maxHeight: '400px'
+          }
+        }
+      });
+    };
+    
+    ClassicEditor.builtinPlugins.push(MinHeightPlugin);
 };
-
-console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName));
-
-// https://stackoverflow.com/questions/46559354/how-to-set-the-height-of-ckeditor-5-classic-editor/56550285#56550285
-function MinHeightPlugin(editor) {
-  this.editor = editor;
-};
-
-MinHeightPlugin.prototype.init = function () {
-  this.editor.ui.view.editable.extendTemplate({
-    attributes: {
-      style: {
-        maxHeight: '400px'
-      }
-    }
-  });
-};
-
-ClassicEditor.builtinPlugins.push(MinHeightPlugin);

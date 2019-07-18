@@ -26,7 +26,7 @@ window.addEventListener('load', function () {
 });
 
 /*
-*   @constructor
+*   @varructor
 *
 *   @desc
 *       Tree item object for representing the state and user interactions for a
@@ -83,7 +83,7 @@ Tree.prototype.init = function () {
 
   findTreeitems(this.domNode, this, false);
 
-  this.updateVisibleTreeitems();
+  this.updateVisibvarreeitems();
 
   this.firstTreeitem.domNode.tabIndex = 0;
 
@@ -163,7 +163,7 @@ Tree.prototype.expandTreeitem = function (currentItem) {
 
   if (currentItem.isExpandable) {
     currentItem.domNode.setAttribute('aria-expanded', true);
-    this.updateVisibleTreeitems();
+    this.updateVisibvarreeitems();
   }
 
 };
@@ -192,13 +192,13 @@ Tree.prototype.collapseTreeitem = function (currentItem) {
 
   if (groupTreeitem) {
     groupTreeitem.domNode.setAttribute('aria-expanded', false);
-    this.updateVisibleTreeitems();
+    this.updateVisibvarreeitems();
     this.setFocusToItem(groupTreeitem);
   }
 
 };
 
-Tree.prototype.updateVisibleTreeitems = function () {
+Tree.prototype.updateVisibvarreeitems = function () {
 
   this.firstTreeitem = this.treeitems[0];
 
@@ -269,7 +269,7 @@ Tree.prototype.getIndexFirstChars = function (startIndex, char) {
 */
 
 /*
-*   @constructor
+*   @varructor
 *
 *   @desc
 *       Treeitem object for representing the state and user interactions for a
@@ -399,7 +399,7 @@ Treeitem.prototype.handleKeydown = function (event) {
       case this.keyCode.SPACE:
       case this.keyCode.RETURN:
         // Create simulated mouse event to mimic the behavior of ATs
-        // and let the event handler handleClick do the housekeeping.
+        // and var the event handler handleClick do the housekeeping.
         try {
           clickEvent = new MouseEvent('click', {
             'view': window,
@@ -536,7 +536,7 @@ window.addEventListener('load', function () {
     updateAriaChecked($(this));
   });
 
-  $('div.checkbox input:checkbox').change(function () {
+  $('div.checkbox input:checkbox').click(function () {
     $node = $(this).closest('li');
     cycleSelect($node);
   });
@@ -559,18 +559,18 @@ window.addEventListener('load', function () {
 });
 
 // {checkboxId: true/false, checkbox2Id: true/false, ...}
-const selectionStates = {};
+var selectionStates = {};
 
 // Cycles state of checkboxes, acting on <input> elements only
 // Calls updateAriaChecked to clean up aria properties / indeterminate states
-const cycleSelect = ($node) => {
-  let state = getState($node);
+var cycleSelect = function ($node) {
+  var state = getState($node);
   // console.log($node);
   if (state === 'mixed') {
     // If clearing a mixed state, save the state for later
     // Then, the next state is 'checked'
     $node.find('input').each(function () {
-      let id = $(this).attr('id');
+      var id = $(this).attr('id');
       selectionStates[id] = $(this).is(':checked');
       $(this).prop('checked', true);
     });
@@ -584,8 +584,8 @@ const cycleSelect = ($node) => {
   else if (state === 'false') {
     // Next state is restoring the mixed state
     $node.find('input').each(function () {
-      let id = $(this).attr('id');
-      let oldState = selectionStates[id];
+      var id = $(this).attr('id');
+      var oldState = selectionStates[id];
       if (oldState === undefined) {
         oldState = true;
       }
@@ -594,7 +594,7 @@ const cycleSelect = ($node) => {
     // If all children remain unchecked, toggle to 'checked'
     if ($node.find('input:checked').not(':first').length === 0) {
       $node.find('input').each(function () {
-        let id = $(this).attr('id');
+        var id = $(this).attr('id');
         selectionStates[id] = undefined;
         $(this).prop('checked', true);
       });
@@ -615,18 +615,18 @@ const cycleSelect = ($node) => {
   }
 };
 
-const getState = ($node) => {
+var getState = function ($node) {
   return $node[0].getAttribute('aria-checked');
 }
 
 // Define the expected boolean behaviour of mixed checkboxes
-const checkIfMixed = true;
+var checkIfMixed = true;
 
 // Application specific: Select child informative clauses automatically
-const selectInformative = ($node) => {
-  let $informative = $node.find('input.informative');
+var selectInformative = function ($node) {
+  var $informative = $node.find('input.informative');
   if ($informative.length > 0) {
-    let checked = (getState($node) !== 'false');
+    var checked = (getState($node) !== 'false');
     $informative.prop('checked', checked);
     $informative.each(function () {
       $(this).closest('li')[0].setAttribute('aria-checked', checked);
@@ -636,8 +636,8 @@ const selectInformative = ($node) => {
 
 // Updates aria-checked property of treeitems to follow checkboxes
 // and sets indeterminate state of checkboxes
-const updateAriaChecked = ($node) => {
-  let checked = false;
+var updateAriaChecked = function ($node) {
+  var checked = false;
   if ($node.is('.endNode')) {
     // For an end node, follow the state of its (sole) checkbox input
     checked = $node.find('input:checkbox:checked').length > 0;
@@ -650,13 +650,13 @@ const updateAriaChecked = ($node) => {
     // Parent node has "mixed" state if some but not all children are checked
     checked = 'mixed';
     // Update indeterminate property to match
-    let parentNode = $node.find('input:checkbox:first');
+    var parentNode = $node.find('input:checkbox:first');
     parentNode.prop('indeterminate', true);
     parentNode.prop('checked', checkIfMixed);
   } else {
     // When no children are checked, parent cannot be checked either
     checked = false;
-    let parentNode = $node.find('input:checkbox:first');
+    var parentNode = $node.find('input:checkbox:first');
     parentNode.prop('indeterminate', false);
     parentNode.prop('checked', false);
   }
