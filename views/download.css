@@ -32,7 +32,7 @@ a {
 
 /* MS Word specific CSS to force landscape orientation, correct styles, etc */
 
-@page WordSection1 {
+/* @page WordSection1 {
   size: 792.0pt 612.0pt;
   mso-page-orientation: landscape;
   margin: 72.0pt 72.0pt 72.0pt 72.0pt;
@@ -43,4 +43,4 @@ a {
 
 div.WordSection1 {
   page: WordSection1;
-}
+} */

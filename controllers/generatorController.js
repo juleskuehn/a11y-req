@@ -2,6 +2,7 @@
 
 const async = require('async');
 const mongoose = require('mongoose');
+const HtmlDocx = require('html-docx-js');
 
 const Clause = require('../models/clauseSchema');
 const Info = require('../models/infoSchema');
@@ -125,41 +126,41 @@ exports.create_post = (req, res, next) => {
   });
 };
 
-// Renders based on user's selected FPS to a downloadable HTML file for import in Word
+// Renders based on user's selected FPS to a downloadable Word file
 exports.download_en = (req, res, next) => {
-  download_full(req, res, next, {
-    filename: 'ICT Accessibility Requirements.html',
+  download(req, res, next, {
+    filename: 'ICT Accessibility Requirements.docx',
     template: 'download_en',
     title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)'
   });
 }
 
 exports.download_fr = (req, res, next) => {
-  download_full(req, res, next, {
-    filename: 'Exigences en matière de TIC accessibles.html',
+  download(req, res, next, {
+    filename: 'Exigences en matière de TIC accessibles.docx',
     template: 'download_fr',
     title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)'
   });
 }
 
-// Renders based on user's selected FPS to a downloadable HTML file for import in Word
+// Renders based on user's selected FPS to a downloadable Word file
 exports.onlyClauses_en = (req, res, next) => {
-  download_full(req, res, next, {
-    filename: 'ICT Accessibility Requirements - Short.html',
+  download(req, res, next, {
+    filename: 'ICT Accessibility Requirements - Short.docx',
     template: 'onlyClauses_en',
     title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)'
   });
 }
 
 exports.onlyClauses_fr = (req, res, next) => {
-  download_full(req, res, next, {
-    filename: 'Exigences en matière de TIC accessibles - brève.html',
+  download(req, res, next, {
+    filename: 'Exigences en matière de TIC accessibles - brève.docx',
     template: 'onlyClauses_fr',
     title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)'
   });
 }
 
-const download_full = (req, res, next, strings) => {
+const download = (req, res, next, strings) => {
   // Edge case: < 2 clauses selected
   if (!(req.body.clauses instanceof Array)) {
     if (typeof req.body.clauses === 'undefined') {
@@ -201,6 +202,12 @@ const download_full = (req, res, next, strings) => {
       test_list: getTestableClauses(results.fps),
       intro: results.intro,
       annex: results.annex
+    },
+    (err, output) => {
+      res.send(HtmlDocx.asBlob(output, {
+        orientation: 'landscape',
+        margins: {}
+      }));
     });
   });
 }

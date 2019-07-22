@@ -73,7 +73,8 @@ var initCK = function (element) {
     .create(element, {
       language: 'en',
       removePlugins: [],
-      toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'link', 'undo', 'redo']
+      // plugins: [ 'Base64UploadAdapter' ],
+      toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'link', 'undo', 'redo', 'imageUpload', 'imageTextAlternative', 'insertTable']
     })
     .then(function (editor) {
       console.log(editor);
