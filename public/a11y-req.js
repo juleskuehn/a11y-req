@@ -9,7 +9,7 @@ $(document).ready(function () {
   }
 
   if ($('#clauses').length > 0) {
-    // setupTreeHandler();
+    setupTreeHandler();
   }
 
   // Replace <textarea> with rich text editor (CKEditor)
@@ -24,24 +24,6 @@ $(document).ready(function () {
 var setupPresetHandler = function () {
   // #preset is the <select> element (see /views/select_fps.pug)
   $('#preset').change(function () { updatePresetSelections(); });
-  $('#selectAll').click(function (e) {
-    $('#clauses input').prop('checked', true).prop('indeterminate', false);
-    $('[role="treeitem"]').attr('aria-checked', true);
-    e.preventDefault();
-  });
-  $('#selectNone').click(function (e) {
-    $('#clauses input').prop('checked', false).prop('indeterminate', false);
-    $('[role="treeitem"]').attr('aria-checked', false);
-    e.preventDefault();
-  });
-  $('#expandAll').click(function (e) {
-    $('li.parentNode').attr('aria-expanded', true);
-    e.preventDefault();
-  });
-  $('#collapseAll').click(function (e) {
-    $('li.parentNode').attr('aria-expanded', false);
-    e.preventDefault();
-  });
 };
 
 var updatePresetSelections = function () {
@@ -64,49 +46,24 @@ var updatePresetSelections = function () {
 /* Tree menu selection */
 
 var setupTreeHandler = function () {
-
-  // 1. Explicit selection of a clause cascades down sub-clauses
-  // 2. Parent is checked if and only if a (non-informative) child is checked
-  // 3. Informative clause is checked if and only if parent is checked
-  $('.checkbox input:checkbox').change(function () {
-    var $el = $(this);
-
-    // Handle case 1: Cascade selection change down sub-clauses
-    if ($el.closest('summary').length > 0) {
-      $el.closest('details')
-        .find('.checkbox input:checkbox')
-        .prop('checked', $el.is(':checked'));
-    }
-
-    // Handle cases 2 and 3
-    bubbleUpClause($el);
+  $('#selectAll').click(function (e) {
+    $('#clauses input').prop('checked', true).prop('indeterminate', false);
+    $('[role="treeitem"]').attr('aria-checked', true);
+    e.preventDefault();
   });
-
-  var bubbleUpClause = function ($el) {
-
-    // Get parent clause, if there is one
-    var parent = $el.closest('details');
-    // If this sub-clause has children, the target needs adjustment
-    if ($el.closest('div.leafNode').length === 0) {
-      parent = parent.parent();
-      // Reached the top of the clause tree. Nothing to do.
-      if (!parent.is('details')) {
-        return;
-      }
-    }
-
-    // Handle case 2
-    var value = parent.find('input:checkbox:not(:first):not(.informative)').is(':checked');
-    parent.find('summary .checkbox input:checkbox')
-      .first().prop('checked', value);
-
-    // Handle case 3
-    parent.children('div.leafNode').find('input:checkbox.informative').prop('checked', value);
-
-    // Recurse up the tree
-    bubbleUpClause(parent);
-  }
-
+  $('#selectNone').click(function (e) {
+    $('#clauses input').prop('checked', false).prop('indeterminate', false);
+    $('[role="treeitem"]').attr('aria-checked', false);
+    e.preventDefault();
+  });
+  $('#expandAll').click(function (e) {
+    $('li.parentNode').attr('aria-expanded', true);
+    e.preventDefault();
+  });
+  $('#collapseAll').click(function (e) {
+    $('li.parentNode').attr('aria-expanded', false);
+    e.preventDefault();
+  });
 };
 
 /* CKEditor */

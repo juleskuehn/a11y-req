@@ -536,17 +536,15 @@ window.addEventListener('load', function () {
     updateAriaChecked($(this));
   });
 
-  $('div.checkbox input:checkbox').click(function () {
+  $('[role="treeitem"] input:checkbox').click(function () {
+    console.log('tree checkbox clicked');
     $node = $(this).closest('li');
     cycleSelect($node);
-  });
-
-  $('div.checkbox input:checkbox').click(function (event) {
     event.stopImmediatePropagation();
     event.stopPropagation();
   });
 
-  $('div.checkbox label').click(function (event) {
+  $('[role="treeitem"] label').click(function (event) {
     // State of the checkbox must be handled through JS to match
     // aria-checked property of parent
     event.preventDefault();
