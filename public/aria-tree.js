@@ -61,7 +61,7 @@ Tree.prototype.init = function () {
 
     while (elem) {
 
-      if (elem.tagName.toLowerCase() === 'li') {
+      if (elem.tagName.toLowerCase() === 'li' && ($(elem).is('.parentNode') || $(elem).is('.endNode'))) {
         ti = new Treeitem(elem, tree, group);
         ti.init();
         tree.treeitems.push(ti);

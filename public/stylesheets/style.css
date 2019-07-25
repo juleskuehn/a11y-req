@@ -42,24 +42,36 @@ ul[role="tree"] {
 [role="treeitem"][aria-expanded="true"] > div.checkbox > i.collapse {
   display: inline-block; }
 
-[role="treeitem"]:focus {
-  outline: 0; }
-
 [role="treeitem"].focus,
 [role="treeitem"] div.focus {
-  border-color: black;
-  background-color: #eee; }
+  outline: solid 2px #666; }
 
-[role="treeitem"].hover,
-[role="treeitem"] div:hover {
-  background-color: #ddd; }
+[role="treeitem"] .detail-inner p:last-child {
+  margin: 0; }
 
-[role="treeitem"].informative {
-  opacity: 0.5; }
+[role="treeitem"] .detail-inner {
+  margin: 0 43px;
+  padding: 0 5px 0 10px;
+  background: #fff;
+  max-height: 0;
+  overflow: hidden;
+  font-size: 14px;
+  border-left: solid 3px #666;
+  transition: all 0.05s ease-out;
+  transition-delay: 0.5s; }
+
+[role="treeitem"].focus > .checkbox > .detail-inner,
+[role="treeitem"] div:focus > .checkbox > .detail-inner {
+  margin: 10px 43px;
+  padding: 5px 5px 5px 10px;
+  max-height: 3000px;
+  transition: all 0.05s ease-in;
+  transition-delay: 0.5s; }
 
 [role="treeitem"].informative label,
 [role="treeitem"].informative input {
-  cursor: not-allowed; }
+  cursor: not-allowed;
+  opacity: 0.7; }
 
 .clause-tree .checkbox {
   margin: 0;
