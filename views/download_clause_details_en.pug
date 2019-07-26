@@ -1,5 +1,5 @@
 doctype html
-html(lang='fr')
+html(lang='en')
   head
     title= title
     meta(charset='utf-8')
@@ -10,5 +10,8 @@ html(lang='fr')
     .WordSection1
       h1= title
       
-      include includes/scope_fr
-      include includes/onlyClauses_fr
+      include includes/scope
+      
+      each item in item_list
+        h2 #{item.number} #{item.name}
+        p !{item.description}

@@ -38,9 +38,8 @@ const basicAuth = auth.basic(
 
 // THE IMPORTANT PART
 // Associate routes
-app.use('/', require('./routes/indexRoutes'));
+app.use('/', require('./routes/generatorRoutes'));
 app.use('/edit', auth.connect(basicAuth), require('./routes/editRoutes'));
-app.use('/view', require('./routes/generatorRoutes'));
 
 // Error handling
 app.use((req, res, next) => next(createError(404)));

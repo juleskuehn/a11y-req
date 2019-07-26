@@ -22,43 +22,6 @@ const breadcrumbs = [
   { url: '/', text: 'Home' }
 ];
 
-exports.menu = (req, res, next) => {
-  res.render('generator', {
-    title: strings.generatorTitle,
-    breadcrumbs: [
-      { url: '/', text: 'Home' }
-    ]
-  });
-};
-
-// Display the content of all informative sections
-exports.all_infos = (req, res, next) => {
-  Info.find()
-    .sort([['order', 'ascending']])
-    .exec((err, list_infos) => {
-      if (err) { return next(err); }
-      res.render('all_infos', {
-        title: strings.allInfosTitle,
-        item_list: list_infos,
-        breadcrumbs: breadcrumbs
-      });
-    });
-};
-
-// Display the content of all clauses
-exports.all_clauses = (req, res, next) => {
-  Clause.find()
-    .exec((err, list_clauses) => {
-      if (err) { return next(err); }
-      list_clauses = list_clauses.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-      res.render('all_clauses', {
-        title: strings.allClausesTitle,
-        item_list: list_clauses,
-        breadcrumbs: breadcrumbs
-      });
-    });
-};
-
 // Select functional accessibility requirements or preset
 exports.create_get = (req, res, next) => {
   async.parallel({
@@ -69,13 +32,12 @@ exports.create_get = (req, res, next) => {
     res.render('select_fps', {
       title: strings.createTitle,
       clause_tree: toClauseTree(results.clauses),
-      preset_list: results.presets,
-      breadcrumbs: breadcrumbs
+      preset_list: results.presets
     });
   });
 };
 
-// Renders output based on FPS selections to browser, along with download links
+// Renders download links for various output formats
 exports.create_post = (req, res, next) => {
 
   // Edge case: < 2 clauses selected
@@ -87,80 +49,91 @@ exports.create_post = (req, res, next) => {
     }
   }
 
-  let clause_ids = [];
-  for (id of req.body.clauses) {
-    clause_ids.push(mongoose.Types.ObjectId(id));
-  }
-
-  async.parallel({
-    fps: (callback) => Clause.find({ '_id': { $in: clause_ids } }).exec(callback),
-    intro: (callback) => {
-      // Find sections with names NOT starting with "Annex"
-      Info.find({ name: /^(?!Annex).*/ })
-        .sort([['order', 'ascending']])
-        .exec(callback);
-    },
-    annex: (callback) => {
-      // Find sections with names starting with "Annex"
-      Info.find({ name: /^Annex/ })
-        .sort([['order', 'ascending']])
-        .exec(callback);
-    },
-  }, (err, results) => {
-    if (err) { return next(err); }
-    if (results.fps == null) { // No clauses selected
-      res.redirect('/view/create');
-    }
-    results.fps = results.fps.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-    res.render('all_requirements', {
-      title: strings.generatedRequirementsTitle,
-      item_list: results.fps,
-      test_list: getTestableClauses(results.fps),
-      intro: results.intro,
-      annex: results.annex,
-      breadcrumbs: [
-        { url: '/', text: 'Home' },
-        { url: '/view/create', text: 'Select functional accessibility requirements' }
-      ]
-    });
+  res.render('download_chooser', {
+    title: strings.generatedRequirementsTitle,
+    clause_list: req.body.clauses,
+    breadcrumbs: breadcrumbs
   });
+
 };
 
 // Renders based on user's selected FPS to a downloadable Word file
-exports.download_en = (req, res, next) => {
+exports.download_full_en = (req, res, next) => {
   download(req, res, next, {
     filename: 'ICT Accessibility Requirements.docx',
-    template: 'download_en',
+    template: 'download_full_en',
     title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)'
   });
 }
 
-exports.download_fr = (req, res, next) => {
+exports.download_full_fr = (req, res, next) => {
   download(req, res, next, {
     filename: 'Exigences en matière de TIC accessibles.docx',
-    template: 'download_fr',
+    template: 'download_full_fr',
     title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)'
   });
 }
 
 // Renders based on user's selected FPS to a downloadable Word file
-exports.onlyClauses_en = (req, res, next) => {
+exports.download_test_table_en = (req, res, next) => {
   download(req, res, next, {
-    filename: 'ICT Accessibility Requirements - Short.docx',
-    template: 'onlyClauses_en',
+    filename: 'ICT Accessibility Requirements.docx',
+    template: 'download_test_table_en',
     title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)'
   });
 }
 
-exports.onlyClauses_fr = (req, res, next) => {
+exports.download_test_table_fr = (req, res, next) => {
   download(req, res, next, {
-    filename: 'Exigences en matière de TIC accessibles - brève.docx',
-    template: 'onlyClauses_fr',
+    filename: 'Exigences en matière de TIC accessibles.docx',
+    template: 'download_test_table_fr',
     title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)'
   });
 }
 
-const download = (req, res, next, strings) => {
+// Renders based on user's selected FPS to a downloadable Word file
+exports.download_clause_details_en = (req, res, next) => {
+  download(req, res, next, {
+    filename: 'ICT Accessibility Requirements.docx',
+    template: 'download_clause_details_en',
+    title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)'
+  });
+}
+
+exports.download_clause_details_fr = (req, res, next) => {
+  download(req, res, next, {
+    filename: 'Exigences en matière de TIC accessibles.docx',
+    template: 'download_clause_details_fr',
+    title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)'
+  });
+}
+
+// Renders based on user's selected FPS to a downloadable Word file
+exports.download_clause_list_en = (req, res, next) => {
+  download(req, res, next, {
+    filename: 'ICT Accessibility Requirements.docx',
+    template: 'download_clause_list_en',
+    title: 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)'
+  });
+}
+
+exports.download_clause_list_fr = (req, res, next) => {
+  download(req, res, next, {
+    filename: 'Exigences en matière de TIC accessibles.docx',
+    template: 'download_clause_list_fr',
+    title: 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)'
+  });
+}
+
+exports.download = (req, res, next) => {
+  let strings = { template: req.params.template };
+  if (req.params.template.slice(-2) === 'fr') {
+    strings.filename = 'Exigences en matière de TIC accessibles.docx';
+    strings.title = 'Exigences en matière de TIC accessibles (basées sur la norme EN 301 549 – 2018)';
+  } else {
+    strings.filename = 'ICT Accessibility Requirements.docx';
+    strings.title = 'ICT Accessibility Requirements (Based on EN 301 549 – 2018)';
+  }
   // Edge case: < 2 clauses selected
   if (!(req.body.clauses instanceof Array)) {
     if (typeof req.body.clauses === 'undefined') {

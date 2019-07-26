@@ -3,22 +3,9 @@ const router = express.Router();
 
 const generator_controller = require('../controllers/generatorController');
 
-router.get('/', generator_controller.menu);
+router.get('/', generator_controller.create_get);
+router.post('/', generator_controller.create_post);
 
-router.get('/infos', generator_controller.all_infos);
-
-router.get('/clauses', generator_controller.all_clauses);
-
-router.get('/create', generator_controller.create_get);
-
-router.post('/create', generator_controller.create_post);
-
-router.post('/download-en', generator_controller.download_en);
-
-router.post('/download-fr', generator_controller.download_fr);
-
-router.post('/onlyClauses-en', generator_controller.onlyClauses_en);
-
-router.post('/onlyClauses-fr', generator_controller.onlyClauses_fr);
+router.post('/:template', generator_controller.download);
 
 module.exports = router;
