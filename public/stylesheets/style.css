@@ -44,7 +44,7 @@ ul[role="tree"] {
 
 [role="treeitem"].focus,
 [role="treeitem"] div.focus {
-  outline: solid 2px #666; }
+  background-color: #eee; }
 
 [role="treeitem"] .detail-inner p:last-child {
   margin: 0; }
