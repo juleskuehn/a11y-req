@@ -507,6 +507,13 @@ Treeitem.prototype.handleFocus = function (event) {
     node = node.firstElementChild;
   }
   node.classList.add('focus');
+  /* Edit to ARIA code */
+  var clauseId = $(node).find('input:checkbox:first').attr('id');
+  var $container = $('#clause-list');
+  var $scrollTo = $('#detail_' + clauseId);
+  $('#clause-list').animate({
+    scrollTop: $scrollTo.offset().top - $container.offset().top + $container.scrollTop()
+  }, 100);
 };
 
 Treeitem.prototype.handleBlur = function (event) {
@@ -537,7 +544,6 @@ window.addEventListener('load', function () {
   });
 
   $('[role="treeitem"] input:checkbox').click(function () {
-    console.log('tree checkbox clicked');
     $node = $(this).closest('li');
     cycleSelect($node);
     event.stopImmediatePropagation();

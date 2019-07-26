@@ -44,7 +44,7 @@ ul[role="tree"] {
 
 [role="treeitem"].focus,
 [role="treeitem"] div.focus {
-  outline: solid 2px #666; }
+  background-color: #eee; }
 
 [role="treeitem"] .detail-inner p:last-child {
   margin: 0; }
@@ -56,17 +56,13 @@ ul[role="tree"] {
   max-height: 0;
   overflow: hidden;
   font-size: 14px;
-  border-left: solid 3px #666;
-  transition: all 0.05s ease-out;
-  transition-delay: 0.5s; }
+  border-left: solid 3px #666; }
 
 [role="treeitem"].focus > .checkbox > .detail-inner,
 [role="treeitem"] div:focus > .checkbox > .detail-inner {
   margin: 10px 43px;
   padding: 5px 5px 5px 10px;
-  max-height: 3000px;
-  transition: all 0.05s ease-in;
-  transition-delay: 0.5s; }
+  max-height: 3000px; }
 
 [role="treeitem"].informative label,
 [role="treeitem"].informative input {
@@ -80,5 +76,14 @@ ul[role="tree"] {
 .clause-tree .checkbox input[type="checkbox"] {
   position: relative;
   margin-right: 10px; }
+
+#clause-list {
+  position: fixed;
+  right: 0;
+  top: 0;
+  background: whitesmoke;
+  font-size: 14px;
+  overflow-y: scroll;
+  height: 100%; }
 
 /*# sourceMappingURL=style.css.map */

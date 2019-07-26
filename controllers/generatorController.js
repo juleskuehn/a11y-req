@@ -69,6 +69,7 @@ exports.create_get = (req, res, next) => {
     res.render('select_fps', {
       title: strings.createTitle,
       clause_tree: toClauseTree(results.clauses),
+      clauses: results.clauses,
       preset_list: results.presets,
       breadcrumbs: breadcrumbs
     });
