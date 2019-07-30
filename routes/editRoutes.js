@@ -35,7 +35,7 @@ router.post('/clause/:id/delete', clause_controller.clause_delete_post);
 
 // Populate database with Clauses from HTML tables
 // (Uncomment if necessary to re-populate the database)
-// router.get('/clauses/populate', clause_controller.clause_populate);
+router.get('/clauses/populate', clause_controller.clause_populate);
 
 
 /* Informative Sections */

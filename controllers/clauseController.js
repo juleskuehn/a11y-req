@@ -180,8 +180,22 @@ exports.clause_delete_post = (req, res, next) => {
 
 // Populate clauses from HTML files
 // Word documents were opened in LibreOffice Writer and exported to HTML
-// Then using regex, <p([\s\S]*?)> replaced with <p>
-
+// Clause table is now in <filename>7.htm
+// Then using regex:
+// <td[^>]*> replaced with <td>
+// <p[^>]*> replaced with <p>
+// <font[^>]*> replaced with (nothing)
+// </font> replaced with (nothing)
+// <span[^>]*> replaced with (nothing)
+// </span> replaced with (nothing)
+// <u[^>]*> replaced with (nothing)
+// </u> replaced with (nothing)
+// <b> replaced with <strong>
+// </b> replaced with </strong>
+// \n and \t replaced with " "
+// "  " replaced with " " until none left
+// </ol> <ol type[^>]*> replaced with (nothing)
+// <li> <p>(.+?)</p> replaced with <li>$1</li>
 exports.clause_populate = (req, res, next) => {
 
   // Convert HTML to array of objects following database schema:
