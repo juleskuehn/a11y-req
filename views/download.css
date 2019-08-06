@@ -17,7 +17,8 @@ th {
   background: #eeeeee;
 }
 
-table td, table td * {
+table td,
+table td * {
   vertical-align: top;
 }
 
@@ -27,7 +28,12 @@ h2 {
 }
 
 a {
-  color: rgb(5,99,193);
+  color: rgb(5, 99, 193);
+}
+
+th,
+td {
+  margin: 5px;
 }
 
 /* MS Word specific CSS to force landscape orientation, correct styles, etc */

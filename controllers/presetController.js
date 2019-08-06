@@ -31,11 +31,11 @@ exports.preset_list = (req, res, next) => {
 // Display preset create form on GET
 exports.preset_create_get = (req, res, next) => {
   Clause.find()
-    .exec((err, list_fps) => {
+    .exec((err, results) => {
       if (err) { return next(err); }
       res.render('preset_form', {
         title: strings.createTitle,
-        clause_tree: toClauseTree(results.clauses),
+        clause_tree: toClauseTree(results),
         breadcrumbs: [
           { url: '/', text: 'Home' },
           { url: '/edit', text: 'Edit content' },

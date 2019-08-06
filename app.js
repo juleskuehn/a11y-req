@@ -10,7 +10,7 @@ const auth = require('http-auth');
 const app = express();
 
 // Database connection
-const mongoDB = process.env.MONGODB_URI || 'mongodb://127.0.0.1/wet-mongoose';
+const mongoDB = process.env.MONGODB_URI || 'mongodb://127.0.0.1/a11y-req';
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
