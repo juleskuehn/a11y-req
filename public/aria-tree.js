@@ -445,11 +445,20 @@ Treeitem.prototype.handleKeydown = function (event) {
             this.tree.expandTreeitem(this);
           }
         }
+        /* Edit to ARIA code: expand text of clauses */
+        else {
+          $(document.activeElement).addClass('expanded');
+        }
         flag = true;
         break;
 
       case this.keyCode.LEFT:
-        if (this.isExpandable && this.isExpanded()) {
+        /* Edit to ARIA code: collapse text of clauses */
+        if ($(document.activeElement).is('.expanded')) {
+          $(document.activeElement).removeClass('expanded');
+          flag = true;
+        }
+        else if (this.isExpandable && this.isExpanded()) {
           this.tree.collapseTreeitem(this);
           flag = true;
         }
@@ -487,7 +496,15 @@ Treeitem.prototype.handleKeydown = function (event) {
 };
 
 Treeitem.prototype.handleClick = function (event) {
-  if (this.isExpandable) {
+  console.log("clicked tree item");
+  /* Edit to ARIA code: expand or collapse text of clauses */
+  if ($(document.activeElement).is('.expanded')) {
+    $(document.activeElement).removeClass('expanded');
+  }
+  else if ($(document.activeElement).is('.endNode')) {
+    $(document.activeElement).addClass('expanded');
+  }
+  else if (this.isExpandable) {
     if (this.isExpanded()) {
       this.tree.collapseTreeitem(this);
     }
@@ -620,18 +637,6 @@ var getState = function ($node) {
 // Define the expected boolean behaviour of mixed checkboxes
 var checkIfMixed = true;
 
-// Application specific: Select child informative clauses automatically
-var selectInformative = function ($node) {
-  var $informative = $node.children('ul').children('li.informative').find('input.informative');
-  if ($informative.length > 0) {
-    var checked = (getState($node) !== 'false');
-    $informative.prop('checked', checked);
-    $informative.each(function () {
-      $(this).closest('li')[0].setAttribute('aria-checked', checked);
-    });
-  }
-}
-
 // Updates aria-checked property of treeitems to follow checkboxes
 // and sets indeterminate state of checkboxes
 var updateAriaChecked = function ($node) {
@@ -664,3 +669,17 @@ var updateAriaChecked = function ($node) {
     selectInformative($node);
   }
 };
+
+// Application specific: Select child informative clauses automatically
+var selectInformative = function ($node) {
+  var $informative = $node.children('ul').children('li.informative').find('input.informative');
+  if ($informative.length > 0) {
+    var checked = (getState($node) !== 'false');
+    $informative.prop('checked', checked);
+    $informative.each(function () {
+      $(this).closest('li')[0].setAttribute('aria-checked', checked);
+    });
+  }
+}
+
+// Expand text of child clauses

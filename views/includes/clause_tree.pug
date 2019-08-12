@@ -4,9 +4,10 @@ mixin fpsCheckbox(clause, selected)
   .checkbox
     i.fas.fa-chevron-right.expand
     i.fas.fa-chevron-down.collapse
+    i.fas.fa-info-circle.info
     label(for=clause.id)
       input(id=clause.id type='checkbox' name='clauses' value=clause.id class=clause.informative ? 'informative' : '' checked=selected tabindex='-1' aria-hidden='true')
-      | #{clause.number} #{clause.name}
+      | #{clause.number} #{clause.name} 
     .detail-inner
       | !{clause.description}
 
