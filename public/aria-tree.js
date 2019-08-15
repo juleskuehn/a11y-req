@@ -164,6 +164,7 @@ Tree.prototype.expandTreeitem = function (currentItem) {
   if (currentItem.isExpandable) {
     currentItem.domNode.setAttribute('aria-expanded', true);
     this.updateVisibvarreeitems();
+    scrollIntoView($(document.activeElement));
   }
 
 };
@@ -195,7 +196,6 @@ Tree.prototype.collapseTreeitem = function (currentItem) {
     this.updateVisibvarreeitems();
     this.setFocusToItem(groupTreeitem);
   }
-
 };
 
 Tree.prototype.updateVisibvarreeitems = function () {
@@ -690,4 +690,42 @@ var selectInformative = function ($node) {
 var toggleClauseText = function ($node, value) {
   $node.attr('aria-expanded', value);
   $node.find('.detail-inner').attr('aria-hidden', !value);
+  scrollIntoView($node);
 }
+
+var alignToTop = function ($node) {
+  window.scrollTo({
+    top: $node.offset().top,
+    left: $node.offset().left,
+    behavior: 'smooth'
+  });
+}
+
+var alignToBottom = function ($node) {
+  window.scrollTo({
+    top: $node.offset().top + $node.height() - $(window).height(),
+    left: $node.offset().left,
+    behavior: 'smooth'
+  });
+}
+
+var scrollIntoView = function ($node) {
+  // When clause expands below the fold, scroll down to show
+  // (align bottom of clause with bottom of viewport)
+  var rect = $node[0].getBoundingClientRect();
+  if (rect.bottom > $(window).height() && $node.height() <= $(window).height()) {
+    alignToBottom($node);
+  }
+  // If clause is too long to show on one screen, scroll somewhat
+  // (align top of clause with top of viewport)
+  else if ($node.height() > $(window).height()) {
+    alignToTop($node);
+  }
+}
+
+// Ensure that focused treeitem is visible
+$('[role="treeitem"]').focus(function () {
+  if ($(this).offset().top < $(window).scrollTop()) {
+    alignToTop($(this));
+  }
+});
