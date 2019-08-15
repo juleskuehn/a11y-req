@@ -496,9 +496,11 @@ Treeitem.prototype.handleKeydown = function (event) {
 };
 
 Treeitem.prototype.handleClick = function (event) {
-  console.log("clicked tree item");
   /* Edit to ARIA code: expand or collapse text of clauses */
   if ($(document.activeElement).is('.endNode[aria-expanded="true"]')) {
+    if (!$(event.target).is('.checkbox') && !$(event.target).is('i')) {
+      return;
+    }
     toggleClauseText($(document.activeElement), false);
     event.stopPropagation();
   }
