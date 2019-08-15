@@ -58,10 +58,20 @@ var setupTreeHandler = function () {
   });
   $('#expandAll').click(function (e) {
     $('li.parentNode').attr('aria-expanded', true);
+    $('li.endNode').each(function () {
+      toggleClauseText($(this), true);
+    });
+    e.preventDefault();
+  });
+  $('#expandTree').click(function (e) {
+    $('li.parentNode').attr('aria-expanded', true);
     e.preventDefault();
   });
   $('#collapseAll').click(function (e) {
     $('li.parentNode').attr('aria-expanded', false);
+    $('li.endNode').each(function () {
+      toggleClauseText($(this), false);
+    });
     e.preventDefault();
   });
 };

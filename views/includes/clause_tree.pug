@@ -1,25 +1,25 @@
 //- Functions to generate clause tree
 
 mixin fpsCheckbox(clause, selected, endNode)
-  #{endNode ? 'detail' : 'div'}.checkbox
+  .checkbox
     if endNode
       i.fas.fa-info-circle.info
     else
       i.fas.fa-chevron-right.expand
       i.fas.fa-chevron-down.collapse
-    #{endNode ? 'summary' : 'span'}
-      label(for=clause.id)
-        input(id=clause.id type='checkbox' name='clauses' value=clause.id class=clause.informative ? 'informative' : '' checked=selected tabindex='-1' aria-hidden='true')
-        | #{clause.number} #{clause.name} 
-    .detail-inner
-      | !{clause.description}
+    label(for=clause.id)
+      input(id=clause.id type='checkbox' name='clauses' value=clause.id class=clause.informative ? 'informative' : '' checked=selected tabindex='-1' aria-hidden='true')
+      | #{clause.number} #{clause.name}
+    if endNode
+      .detail-inner(aria-hidden='true')
+        | !{clause.description}
 
 mixin createTree(tree)
   each clauseNode in tree
     -var selected = itemExists && item.clauses.indexOf(clauseNode.clause.id) > -1 ? 'checked' : false
     if clauseNode.children.length === 0
       //- Add aria-checked properties via javascript (need to check for mixed state)
-      li.endNode(role='treeitem' class=clauseNode.clause.informative ? 'informative' : '')
+      li.endNode(role='treeitem' class=clauseNode.clause.informative ? 'informative' : '' aria-expanded='false')
         +fpsCheckbox(clauseNode.clause, selected, true)
     else
       li.parentNode(role='treeitem' aria-expanded='false')
@@ -35,6 +35,7 @@ mixin createTree(tree)
 .btn-group
   //- button.btn.btn-default#selectAll Select all 
   //- button.btn.btn-default#selectNone Select none
+  button.btn.btn-default#expandTree Expand tree
   button.btn.btn-default#expandAll Expand all
   button.btn.btn-default#collapseAll Collapse all
 

@@ -32,6 +32,10 @@ ul[role="tree"] {
   list-style: none;
 }
 
+ul[role='group'] {
+  margin-left: -20px;
+}
+
 [role='treeitem'] {
   list-style: none;
 }
@@ -64,7 +68,7 @@ ul[role="tree"] {
   color: inherit;
 }
 
-[role="treeitem"].endNode > detail.checkbox > i.info {
+[role="treeitem"].endNode > .checkbox > i.info {
   position: absolute;
   right: 0;
 }
@@ -97,20 +101,20 @@ ul[role="tree"] {
 }
 
 [role="treeitem"] .detail-inner {
-  margin: 0 43px;
+  margin: 0 22px;
   padding: 0 5px 0 10px;
   background: #fff;
   max-height: 0;
   overflow: hidden;
   font-size: 14px;
-  border-left: solid 3px #666;
+  border-left: solid 2px #666;
   transition: all 0.05s ease-out;
 }
 
 
-[role="treeitem"].expanded > .checkbox > .detail-inner {
-  margin: 10px 43px;
-  padding: 5px 5px 5px 10px;
+[role="treeitem"][aria-expanded='true'] > .checkbox > .detail-inner {
+  margin: 10px 22px;
+  padding: 3px 5px 3px 10px;
   max-height: 3000px;
   transition: all 0.05s ease-in;
 }

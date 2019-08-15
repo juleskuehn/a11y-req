@@ -447,15 +447,15 @@ Treeitem.prototype.handleKeydown = function (event) {
         }
         /* Edit to ARIA code: expand text of clauses */
         else {
-          $(document.activeElement).addClass('expanded');
+          toggleClauseText($(document.activeElement), true);
         }
         flag = true;
         break;
 
       case this.keyCode.LEFT:
         /* Edit to ARIA code: collapse text of clauses */
-        if ($(document.activeElement).is('.expanded')) {
-          $(document.activeElement).removeClass('expanded');
+        if ($(document.activeElement).is('.endNode[aria-expanded="true"]')) {
+          toggleClauseText($(document.activeElement), false);
           flag = true;
         }
         else if (this.isExpandable && this.isExpanded()) {
@@ -498,12 +498,12 @@ Treeitem.prototype.handleKeydown = function (event) {
 Treeitem.prototype.handleClick = function (event) {
   console.log("clicked tree item");
   /* Edit to ARIA code: expand or collapse text of clauses */
-  if ($(document.activeElement).is('.expanded')) {
-    $(document.activeElement).removeClass('expanded');
+  if ($(document.activeElement).is('.endNode[aria-expanded="true"]')) {
+    toggleClauseText($(document.activeElement), false);
     event.stopPropagation();
   }
-  else if ($(document.activeElement).is('.endNode')) {
-    $(document.activeElement).addClass('expanded');
+  else if ($(document.activeElement).is('.endNode[aria-expanded="false"]')) {
+    toggleClauseText($(document.activeElement), true);
     event.stopPropagation();
   }
   else if (this.isExpandable) {
@@ -685,3 +685,7 @@ var selectInformative = function ($node) {
 }
 
 // Expand text of child clauses
+var toggleClauseText = function ($node, value) {
+  $node.attr('aria-expanded', value);
+  $node.find('.detail-inner').attr('aria-hidden', !value);
+}
