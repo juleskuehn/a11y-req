@@ -40,10 +40,6 @@ ul[role='group'] {
   list-style: none;
 }
 
-[role='treeitem'].endNode {
-  margin-left: 20px;
-}
-
 [role="treeitem"][aria-expanded="false"] > ul {
   display: none;
 }
@@ -55,6 +51,25 @@ ul[role='group'] {
 [role="treeitem"] i {
   display: none;
   width: 20px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  position: absolute;
+  top: 9px;
+  left: 0;
+}
+
+i.expand {
+  background-image: url('data:image/svg+xml;utf8,<svg width="2048" height="2048" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg"><path d="M1491 1005l-742 742q-19 19-45 19t-45-19l-166-166q-19-19-19-45t19-45l531-531-531-531q-19-19-19-45t19-45l166-166q19-19 45-19t45 19l742 742q19 19 19 45t-19 45z"/></svg>');
+}
+
+i.collapse {
+  background-image: url('data:image/svg+xml;utf8,<svg width="2048" height="2048" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg"><path d="M1811 936l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z"/></svg>');
+}
+
+i.info {
+  background-image: url('data:image/svg+xml;utf8,<svg width="2048" height="2048" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg"><path d="M1280 1504v-160q0-14-9-23t-23-9h-96v-512q0-14-9-23t-23-9h-320q-14 0-23 9t-9 23v160q0 14 9 23t23 9h96v320h-96q-14 0-23 9t-9 23v160q0 14 9 23t23 9h448q14 0 23-9t9-23zm-128-896v-160q0-14-9-23t-23-9h-192q-14 0-23 9t-9 23v160q0 14 9 23t23 9h192q14 0 23-9t9-23zm640 416q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>');
 }
 
 [role="treeitem"] summary {
@@ -70,7 +85,10 @@ ul[role='group'] {
 
 [role="treeitem"].endNode > .checkbox > i.info {
   position: absolute;
-  right: 0;
+  left: auto;
+  right: 3px;
+  top: 8px;
+  height: 18px;
 }
 
 [role="treeitem"].endNode.hover > .checkbox > i.info,
@@ -127,7 +145,7 @@ ul[role='group'] {
 
 .clause-tree .checkbox {
   margin: 0;
-  padding: 5px 0;
+  padding: 5px 0 5px 20px;
 }
 
 .clause-tree .checkbox input[type="checkbox"] {
