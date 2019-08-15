@@ -728,4 +728,7 @@ $('[role="treeitem"]').focus(function () {
   if ($(this).offset().top < $(window).scrollTop()) {
     alignToTop($(this));
   }
+  else if ($(this).is('.endNode') || $(this).is('[aria-expanded="false"]')) {
+    scrollIntoView($(this));
+  }
 });
