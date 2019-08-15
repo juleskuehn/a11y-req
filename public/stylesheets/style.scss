@@ -48,20 +48,31 @@ ul[role="tree"] {
   display: block;
 }
 
-[role="treeitem"] > div.checkbox > i {
+[role="treeitem"] i {
   display: none;
   width: 20px;
 }
 
-[role="treeitem"].endNode > div.checkbox > i.info {
+[role="treeitem"] summary {
+  display: inline-block;
+  list-style-type: none;
+}
+
+[role="treeitem"] summary:focus,
+[role="treeitem"] summary:hover {
+  background: inherit;
+  color: inherit;
+}
+
+[role="treeitem"].endNode > detail.checkbox > i.info {
   position: absolute;
   right: 0;
 }
 
-[role="treeitem"].endNode.hover > div.checkbox > i.info,
-[role="treeitem"].endNode > div.checkbox:hover > i.info,
-[role="treeitem"].endNode.focus > div.checkbox > i.info,
-[role="treeitem"].endNode > div.checkbox:focus > i.info, {
+[role="treeitem"].endNode.hover > .checkbox > i.info,
+[role="treeitem"].endNode > .checkbox:hover > i.info,
+[role="treeitem"].endNode.focus > .checkbox > i.info,
+[role="treeitem"].endNode > .checkbox:focus > i.info {
   display: inline-block;
 }
 

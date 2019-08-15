@@ -500,9 +500,11 @@ Treeitem.prototype.handleClick = function (event) {
   /* Edit to ARIA code: expand or collapse text of clauses */
   if ($(document.activeElement).is('.expanded')) {
     $(document.activeElement).removeClass('expanded');
+    event.stopPropagation();
   }
   else if ($(document.activeElement).is('.endNode')) {
     $(document.activeElement).addClass('expanded');
+    event.stopPropagation();
   }
   else if (this.isExpandable) {
     if (this.isExpanded()) {
