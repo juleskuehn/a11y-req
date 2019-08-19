@@ -689,7 +689,6 @@ var selectInformative = function ($node) {
 // Expand text of child clauses
 var toggleClauseText = function ($node, value) {
   $node.attr('aria-expanded', value);
-  $node.find('.detail-inner').attr('aria-hidden', !value);
   scrollIntoView($node);
 }
 

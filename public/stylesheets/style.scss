@@ -125,22 +125,18 @@ i.info {
 }
 
 [role="treeitem"] .detail-inner {
-  margin: 0 22px;
-  padding: 0 5px 0 10px;
   background: #fff;
-  max-height: 0;
   overflow: hidden;
   font-size: 14px;
   border-left: solid 2px #666;
-  // transition: all 0.05s ease-out;
+  margin: 10px 22px;
+  padding: 3px 5px 3px 10px;
+  display: none;
 }
 
 
 [role="treeitem"][aria-expanded='true'] > .checkbox > .detail-inner {
-  margin: 10px 22px;
-  padding: 3px 5px 3px 10px;
-  max-height: 3000px;
-  // transition: all 0.05s ease-in;
+  display: block;
 }
 
 [role="treeitem"].informative label,
