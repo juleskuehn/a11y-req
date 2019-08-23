@@ -12,6 +12,10 @@ $(document).ready(function () {
     setupTreeHandler();
   }
 
+  if ($('#wizard').length > 0) {
+    setupWizardHandler();
+  }
+
   // Replace <textarea> with rich text editor (CKEditor)
   $('textarea').each(function () {
     initCK(this);
@@ -52,8 +56,7 @@ var setupTreeHandler = function () {
     e.preventDefault();
   });
   $('#selectNone').click(function (e) {
-    $('#clauses input').prop('checked', false).prop('indeterminate', false);
-    $('[role="treeitem"]').attr('aria-checked', false);
+    selectNone();
     e.preventDefault();
   });
   $('#expandAll').click(function (e) {
@@ -74,6 +77,11 @@ var setupTreeHandler = function () {
     });
     e.preventDefault();
   });
+};
+
+var selectNone = function() {
+  $('#clauses input').prop('checked', false).prop('indeterminate', false);
+  $('[role="treeitem"]').attr('aria-checked', false);
 };
 
 /* CKEditor */
@@ -110,4 +118,48 @@ var initCK = function (element) {
     };
     
     ClassicEditor.builtinPlugins.push(MinHeightPlugin);
+};
+
+/* Wizard questions */
+
+var setupWizardHandler = function () {
+  // #preset is the <select> element (see /views/select_fps.pug)
+  $('#wizard input').change(function () { updateWizard(); });
+};
+
+var allChecked = function(ids) {
+  for (id of ids) {
+    if (!$('#'+id).is(':checked')) {
+      return false;
+    }
+  }
+  return true;
+}
+
+var selectClauses = function(clauses) {
+  $clauses = $('#clauses')
+  for (clauseNum of clauses) {
+    // Find the id of the clause checkbox
+    $clause = $clauses.find('input[data-number=' + clauseNum + ']')
+    if (!$clause.is(':checked')) {
+      $clause.click();
+    }
+  }
+}
+
+// Rules for selecting clauses based on answers to wizard questions
+var wizardMappings = [
+  {
+    questions: ['hardware'],
+    clauses: ['5', '8']
+  }
+];
+
+var updateWizard = function() {
+  selectNone();
+  for (mapping of wizardMappings) {
+    if (allChecked(mapping.questions)) {
+      selectClauses(mapping.clauses);
+    }
+  }
 };

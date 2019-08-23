@@ -15,12 +15,26 @@ const strings = {
   generatorTitle: 'Generate requirements',
   createTitle: 'Select functional accessibility requirements',
   selectedClausesTitle: 'Selected functional accessibility requirements',
-  generatedRequirementsTitle: 'Generated requirements'
+  generatedRequirementsTitle: 'Generated requirements',
+  wizardTitle: 'Requirement selection wizard'
 };
 
 const breadcrumbs = [
   { url: '/', text: 'Home' }
 ];
+
+// Select functional accessibility requirements or preset
+exports.wizard_get = (req, res, next) => {
+  async.parallel({
+    clauses: (callback) => Clause.find().exec(callback)
+  }, (err, results) => {
+    if (err) { return next(err); }
+    res.render('wizard', {
+      title: strings.wizardTitle,
+      clause_tree: toClauseTree(results.clauses)
+    });
+  });
+};
 
 // Select functional accessibility requirements or preset
 exports.create_get = (req, res, next) => {

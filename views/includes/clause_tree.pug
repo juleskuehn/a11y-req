@@ -8,8 +8,9 @@ mixin fpsCheckbox(clause, selected, endNode)
       i.expand
       i.collapse
     label(for=clause.id)
-      input(id=clause.id type='checkbox' name='clauses' value=clause.id class=clause.informative ? 'informative' : '' checked=selected tabindex='-1' aria-hidden='true')
-      | #{clause.number} #{clause.name}
+      input(id=clause.id type='checkbox' name='clauses' data-number=clause.number value=clause.id class=clause.informative ? 'informative' : '' checked=selected tabindex='-1' aria-hidden='true')
+      span.number #{clause.number} 
+      span.name #{clause.name}
     if endNode
       .detail-inner
         | !{clause.description}
