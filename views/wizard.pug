@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1#wb-cont(property="name")= title
+  include includes/wizard_form
+
+  form(method='POST' action='' novalidate='novalidate' style='float:right;width:50%')
+    include includes/clause_tree
+
+    button.btn.btn-primary(type='submit') Generate requirements
