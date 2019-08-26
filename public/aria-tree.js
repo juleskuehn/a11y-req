@@ -558,7 +558,7 @@ window.addEventListener('load', function () {
   });
 
   $('[role="treeitem"] input:checkbox').click(function () {
-    console.log('tree checkbox clicked');
+    // console.log('tree checkbox clicked');
     $node = $(this).closest('li');
     cycleSelect($node);
     event.stopImmediatePropagation();
