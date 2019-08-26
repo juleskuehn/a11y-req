@@ -9,7 +9,7 @@ mixin checkbox(label, name)
         | !{label}
 
 p
-  strong Use this form to select relevant requirements for the ICT.
+  strong Use this form to select relevant requirements for the <abbr title="Information Communication Technology">ICT</abbr>.
 p Answer the following questions in order.
 p Based on your responses, the relevant requirements will be selected.
 
@@ -19,7 +19,7 @@ section(style='float:left;width:50%')
   form#wizard(action="#")
     fieldset
       legend
-        span.field-name Does the ICT include:
+        span.field-name Does the <abbr title="Information Communication Technology">ICT</abbr> include:
       +checkbox('Physical/hardware components', 'hardware')
       +checkbox('Hardware that is integrated into the environment (eg. permanently installed self-service kiosk or large, immovable photocopier)', 'integrated')
       +checkbox('Websites, web applications, or HTML documents', 'web')
