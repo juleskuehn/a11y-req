@@ -9,13 +9,14 @@ block content
 
   -// Wizard logic is contained in a11y-req.js
   hr
-  
+
   .row
     .col-md-6
       include includes/wizard_form
 
     .col-md-6
-      form(method='POST' action='/' novalidate='novalidate')
-        include includes/clause_tree
+      section
+        form(method='POST' action='/' novalidate='novalidate')
+          include includes/clause_tree
 
-        button.btn.btn-primary(type='submit') Generate requirements
+          button.btn.btn-primary(type='submit') Generate requirements

@@ -62,7 +62,7 @@ var setupTreeHandler = function () {
   $('#expandAll').click(function (e) {
     $('li.parentNode').attr('aria-expanded', true);
     $('li.endNode').each(function () {
-      toggleClauseText($(this), true);
+      toggleClauseText($(this), true, true);
     });
     e.preventDefault();
   });
@@ -125,6 +125,10 @@ var initCK = function (element) {
 var setupWizardHandler = function () {
   // #preset is the <select> element (see /views/select_fps.pug)
   $('#wizard input').change(function () { updateWizard(); });
+
+  // Focus highlighting
+  $('#wizard input').focus(function () { $(this).closest('.checkbox').addClass('focus'); });
+  $('#wizard input').blur(function () { $(this).closest('.checkbox').removeClass('focus'); });
 };
 
 var allChecked = function(ids) {
@@ -278,7 +282,15 @@ var negativeMappings = [
   {
     questions: ['closed'],
     clauses: ['11.5.1','11.1.1.1.2','11.1.2.1.2','11.1.2.3.2','11.1.3.1.2','11.1.3.2.2','11.1.4.4.2','11.1.4.5.2','11.1.4.10.2','11.2.1.1.2','11.2.1.4.2','11.3.1.1.2','11.3.3.1.2','11.4.1.1.2','11.4.1.2.2']
-  }
+  },
+  {
+    questions: ['platform'],
+    clauses: ['11.5.2.1','11.5.2.2']
+  },
+  {
+    questions: ['at'],
+    clauses: ['11.5.2.4']
+  },
 ];
 
 var updateWizard = function() {

@@ -687,9 +687,11 @@ var selectInformative = function ($node) {
 }
 
 // Expand text of child clauses
-var toggleClauseText = function ($node, value) {
+var toggleClauseText = function ($node, value, noScroll) {
   $node.attr('aria-expanded', value);
-  scrollIntoView($node);
+  if (!noScroll) {
+    scrollIntoView($node);
+  }
 }
 
 var alignToTop = function ($node) {

@@ -155,3 +155,19 @@ i.info {
   position: relative;
   margin-right: 10px;
 }
+
+// Wizard styling
+
+$color-focus: #1c578a;
+
+#wizard label {
+  padding: 2px 5px 2px 25px;
+}
+
+// #wizard .checkbox.focus {
+//   outline: solid 2px $color-focus;
+// }
+
+// #wizard input:focus {
+//   outline: none;
+// }
