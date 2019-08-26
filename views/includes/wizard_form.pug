@@ -8,15 +8,8 @@ mixin checkbox(label, name)
         input(id=name type='checkbox' name=name)
         | !{label}
 
-p
-  strong Use this form to select relevant requirements for the <abbr title="Information Communication Technology">ICT</abbr>.
-p Answer the following questions in order.
-p Based on your responses, the relevant requirements will be selected.
-
--// Wizard logic is contained in a11y-req.js
-hr
-section(style='float:left;width:50%')
-  form#wizard(action="#")
+section
+  form#wizard
     fieldset
       legend
         span.field-name Does the <abbr title="Information Communication Technology">ICT</abbr> include:

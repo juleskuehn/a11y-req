@@ -2,9 +2,20 @@ extends layout
 
 block content
   h1#wb-cont(property="name")= title
-  include includes/wizard_form
+  p
+    strong Use this form to select relevant requirements for the <abbr title="Information Communication Technology">ICT</abbr>.
+  p Answer the following questions in order.
+  p Based on your responses, the relevant requirements will be selected.
 
-  form(method='POST' action='' novalidate='novalidate' style='float:right;width:50%')
-    include includes/clause_tree
+  -// Wizard logic is contained in a11y-req.js
+  hr
+  
+  .row
+    .col-md-6
+      include includes/wizard_form
 
-    button.btn.btn-primary(type='submit') Generate requirements
+    .col-md-6
+      form(method='POST' action='/' novalidate='novalidate')
+        include includes/clause_tree
+
+        button.btn.btn-primary(type='submit') Generate requirements
