@@ -132,7 +132,8 @@ var setupWizardHandler = function () {
 };
 
 var allChecked = function(ids) {
-  for (id of ids) {
+  for (var i = 0; i < ids.length; i++) {
+    id = ids[i];
     if (!$('#'+id).is(':checked')) {
       return false;
     }
@@ -141,7 +142,8 @@ var allChecked = function(ids) {
 }
 
 var noneChecked = function(ids) {
-  for (id of ids) {
+  for (var i = 0; i < ids.length; i++) {
+    var id = ids[i];
     if ($('#'+id).is(':checked')) {
       return false;
     }
@@ -151,7 +153,8 @@ var noneChecked = function(ids) {
 
 var selectClauses = function(clauses, select) {
   $clauses = $('#clauses')
-  for (clauseNum of clauses) {
+  for (var i = 0; i < clauses.length; i++) {
+    var clauseNum = clauses[i];
     // Find the id of the clause checkbox
     $clause = $clauses.find('input[data-number="' + clauseNum + '"]')
     if (select) {
@@ -295,12 +298,14 @@ var negativeMappings = [
 
 var updateWizard = function() {
   selectNone();
-  for (mapping of positiveMappings) {
+  for (var i = 0; i < positiveMappings.length; i++) {
+    var mapping = positiveMappings[i];
     if (allChecked(mapping.questions)) {
       selectClauses(mapping.clauses, true);
     }
   }
-  for (mapping of negativeMappings) {
+  for (var i = 0; i < positiveMappings.length; i++) {
+    var mapping = positiveMappings[i];
     if (noneChecked(mapping.questions)) {
       selectClauses(mapping.clauses, false);
     }
