@@ -14,7 +14,8 @@
  * @desc  after page has loaded initialize all treeitems based on the role=treeitem
  */
 
-window.addEventListener('load', function () {
+// EDIT: Use WET init function
+$(document).on("wb-ready.wb", function (event) {
 
   var trees = document.querySelectorAll('[role="tree"]');
 
@@ -550,19 +551,20 @@ Treeitem.prototype.handleMouseOut = function (event) {
 /*
 Application-specific code
 */
-window.addEventListener('load', function () {
+$(document).on("wb-ready.wb", function (event) {
 
   // Set aria-checked state on <li> based on 'checked' state of child <input>
   $('[role="treeitem"]').each(function () {
     updateAriaChecked($(this));
   });
 
-  $('[role="treeitem"] input:checkbox').click(function () {
+  $('[role="treeitem"] input:checkbox').click(function (event) {
     // console.log('tree checkbox clicked');
+    // event.preventDefault();
     $node = $(this).closest('li');
     cycleSelect($node);
     event.stopImmediatePropagation();
-    event.stopPropagation();
+    // event.stopPropagation();
   });
 
   $('[role="treeitem"] label').click(function (event) {
@@ -573,6 +575,16 @@ window.addEventListener('load', function () {
     cycleSelect($node);
     event.stopImmediatePropagation();
     event.stopPropagation();
+  });
+
+  // Ensure that focused treeitem is visible
+  $('[role="treeitem"]').focus(function () {
+    if ($(this).offset().top < $(window).scrollTop()) {
+      alignToTop($(this));
+    }
+    else if ($(this).is('.endNode') || $(this).is('[aria-expanded="false"]')) {
+      scrollIntoView($(this));
+    }
   });
 
 });
@@ -723,13 +735,3 @@ var scrollIntoView = function ($node) {
     alignToTop($node);
   }
 }
-
-// Ensure that focused treeitem is visible
-$('[role="treeitem"]').focus(function () {
-  if ($(this).offset().top < $(window).scrollTop()) {
-    alignToTop($(this));
-  }
-  else if ($(this).is('.endNode') || $(this).is('[aria-expanded="false"]')) {
-    scrollIntoView($(this));
-  }
-});

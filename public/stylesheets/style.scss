@@ -8,6 +8,10 @@ main {
   padding-bottom: 30px;
 }
 
+.btn-next {
+  float: right;
+}
+
 // WET Overrides
 
 .form-control {
@@ -23,6 +27,14 @@ legend {
 fieldset {
   border-top: 0;
   padding-top: 0;
+}
+
+.btn-group {
+  margin-top: 15px;
+}
+
+.tgl-panel {
+  overflow: hidden;
 }
 
 // Clause tree (from ARIA example with minor edits)
@@ -164,10 +176,11 @@ $color-focus: #1c578a;
   padding: 2px 5px 2px 25px;
 }
 
-// #wizard .checkbox.focus {
-//   outline: solid 2px $color-focus;
-// }
+#wizard .checkbox.focus,
+#wizard .checkbox:focus {
+  background-color: #eee;
+}
 
-// #wizard input:focus {
-//   outline: none;
-// }
+#wizard input:focus {
+  background-color: none;
+}

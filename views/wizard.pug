@@ -2,8 +2,8 @@ extends layout
 
 block content
   h1#wb-cont(property="name")= title
-  h3 About
-  p Use this tool to generate requirements documents specific to the Information Communication Technology (ICT) you are procuring. Requirements are based on the EN 301 549 (2018).
+  //- h3 About
+  p Use this tool to generate requirements documents specific to the Information Communication Technology (ICT) you are procuring. Requirements are based on the  EN 301 549 V2.1.2 (2018-08).
   //- h3 Instructions
   //- ol
   //-   li Answer questions under "Does the ICT include:" in the order they are listed.
@@ -19,17 +19,18 @@ block content
   -// Wizard logic is contained in a11y-req.js
   hr
 
-  .row
-    .wb-tabs
-      .tabpanels
-        details#details-step1
-          summary Step 1: Define ICT functionality
-          include includes/wizard_form
-          button.btn.btn-default Next
-        details#details-step2
-          summary Step 2: Refine clause selection
-          form(method='POST' action='/' novalidate='novalidate')
+  form(novalidate='novalidate' method='POST' action='')
+    .row
+      .wb-tabs
+        .tabpanels
+          details#details-step1
+            summary Step 1: Define ICT functionality
+            include includes/wizard_form
+            a.btn.btn-default.btn-next.wb-tabs-ext(href='#details-step2') Next
+          details#details-step2
+            summary Step 2: Refine clause selection
             include includes/clause_tree
-            button.btn.btn-primary(type='submit') Generate requirements
-        details#details-step3
-          summary Step 3: Generate requirements documents
+            a.btn.btn-default.btn-next.wb-tabs-ext(href='#details-step3') Next
+          details#details-step3
+            summary Step 3: Generate requirements documents
+            include includes/download_chooser

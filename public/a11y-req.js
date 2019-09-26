@@ -140,11 +140,11 @@ var noneChecked = function (ids) {
 }
 
 var selectClauses = function (clauses, select) {
-  $clauses = $('#clauses')
+  $clauses = $('#clauses');
   for (var i = 0; i < clauses.length; i++) {
     var clauseNum = clauses[i];
     // Find the id of the clause checkbox
-    $clause = $clauses.find('input[data-number="' + clauseNum + '"]')
+    $clause = $clauses.find('input[data-number="' + clauseNum + '"]');
     if (select) {
       if (!$clause.is(':checked')) {
         $clause.click();
