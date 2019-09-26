@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const auth = require('http-auth');
 
 const app = express();
+app.locals.moment = require('moment');
 
 // Database connection
 const mongoDB = process.env.MONGODB_URI || 'mongodb://127.0.0.1/a11y-req';

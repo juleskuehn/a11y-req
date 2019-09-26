@@ -192,8 +192,13 @@ exports.download = (req, res, next) => {
     },
     (err, output) => {
       res.send(HtmlDocx.asBlob(output, {
-        orientation: 'landscape',
-        margins: {}
+        orientation: req.body.orientation,
+        margins: {
+          top: 1304,
+          bottom: 1304,
+          left: 1134,
+          right: 1134
+        }
       }));
     });
   });

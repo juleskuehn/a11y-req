@@ -8,8 +8,8 @@ html(lang='en')
 
   body(vocab='http://schema.org/' typeof='WebPage')
     .WordSection1
+      p Generated #{moment().format('YYYY-MM-DD')}
       h1= title
-      
       include includes/intro
       include includes/scope
       include includes/table

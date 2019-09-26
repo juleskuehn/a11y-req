@@ -1,5 +1,5 @@
 body {
-  font-family: sans-serif;
+  font-family: 'Arial', sans-serif;
   font-size: 10pt;
 }
 
@@ -33,7 +33,16 @@ a {
 
 th,
 td {
-  margin: 5px;
+  margin: 2px;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 6pt;
+}
+
+th p {
+  margin-bottom: 0;
 }
 
 /* MS Word specific CSS to force landscape orientation, correct styles, etc */
@@ -41,7 +50,7 @@ td {
 /* @page WordSection1 {
   size: 792.0pt 612.0pt;
   mso-page-orientation: landscape;
-  margin: 72.0pt 72.0pt 72.0pt 72.0pt;
+  margin: 65.0pt 57.0pt .0pt 57.0pt;
   mso-header-margin: 35.4pt;
   mso-footer-margin: 35.4pt;
   mso-paper-source: 0;
