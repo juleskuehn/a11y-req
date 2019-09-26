@@ -2,21 +2,34 @@ extends layout
 
 block content
   h1#wb-cont(property="name")= title
-  p
-    strong Use this form to select relevant requirements for the <abbr title="Information Communication Technology">ICT</abbr>.
-  p Answer the following questions in order.
-  p Based on your responses, the relevant requirements will be selected.
+  h3 About
+  p Use this tool to generate requirements documents specific to the Information Communication Technology (ICT) you are procuring. Requirements are based on the EN 301 549 (2018).
+  //- h3 Instructions
+  //- ol
+  //-   li Answer questions under "Does the ICT include:" in the order they are listed.
+  //-   ul
+  //-     li Based on your responses, relevant requirements from the EN 301 549 will automatically be selected.
+  //-   li If necessary, fine tune the requirements by manually selecting "Required clauses".
+  //-   li Click the "Generate requirements" button.
+  //-   ul
+  //-     li Documents will be generated which include only the required clauses.
+  //-   li On the next page, download the generated ICT accessibility requirements documents.
+  //-   li Give the requirements documents unique names and append them to your RFx.
 
   -// Wizard logic is contained in a11y-req.js
   hr
 
   .row
-    .col-md-6
-      include includes/wizard_form
-
-    .col-md-6
-      section
-        form(method='POST' action='/' novalidate='novalidate')
-          include includes/clause_tree
-
-          button.btn.btn-primary(type='submit') Generate requirements
+    .wb-tabs
+      .tabpanels
+        details#details-step1
+          summary Step 1: Define ICT functionality
+          include includes/wizard_form
+          button.btn.btn-default Next
+        details#details-step2
+          summary Step 2: Refine clause selection
+          form(method='POST' action='/' novalidate='novalidate')
+            include includes/clause_tree
+            button.btn.btn-primary(type='submit') Generate requirements
+        details#details-step3
+          summary Step 3: Generate requirements documents

@@ -15,8 +15,8 @@ const strings = {
   generatorTitle: 'Generate requirements',
   createTitle: 'Select functional accessibility requirements',
   selectedClausesTitle: 'Selected functional accessibility requirements',
-  generatedRequirementsTitle: 'Generated requirements',
-  wizardTitle: 'Requirement selection wizard'
+  generatedRequirementsTitle: 'Download generated requirements documents',
+  wizardTitle: 'ICT accessibility requirements wizard'
 };
 
 const breadcrumbs = [

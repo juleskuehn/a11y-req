@@ -1,20 +1,13 @@
 // Client side scripts for a11y-req
 // NOT FOR WET OVERRIDES
 
-$(document).ready(function () {
+$(document).on("wb-ready.wb", function (event) {
 
-  // #preset-data is a hidden element on requirement selection page
-  if ($('#preset-data').length > 0) {
-    setupPresetHandler();
-  }
+  setupPresetHandler();
 
-  if ($('#clauses').length > 0) {
-    setupTreeHandler();
-  }
+  setupTreeHandler();
 
-  if ($('#wizard').length > 0) {
-    setupWizardHandler();
-  }
+  setupWizardHandler();
 
   // Replace <textarea> with rich text editor (CKEditor)
   $('textarea').each(function () {
@@ -79,11 +72,6 @@ var setupTreeHandler = function () {
   });
 };
 
-var selectNone = function() {
-  $('#clauses input').prop('checked', false).prop('indeterminate', false);
-  $('[role="treeitem"]').attr('aria-checked', false);
-};
-
 /* CKEditor */
 
 var initCK = function (element) {
@@ -99,25 +87,25 @@ var initCK = function (element) {
       console.log(Array.from(editor.ui.componentFactory.names()));
     })
     .catch(function (error) { console.error(error); });
-    
-    // console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName));
-    
-    // https://stackoverflow.com/questions/46559354/how-to-set-the-height-of-ckeditor-5-classic-editor/56550285#56550285
-    function MinHeightPlugin(editor) {
-      this.editor = editor;
-    };
-    
-    MinHeightPlugin.prototype.init = function () {
-      this.editor.ui.view.editable.extendTemplate({
-        attributes: {
-          style: {
-            maxHeight: '400px'
-          }
+
+  // console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName));
+
+  // https://stackoverflow.com/questions/46559354/how-to-set-the-height-of-ckeditor-5-classic-editor/56550285#56550285
+  function MinHeightPlugin(editor) {
+    this.editor = editor;
+  };
+
+  MinHeightPlugin.prototype.init = function () {
+    this.editor.ui.view.editable.extendTemplate({
+      attributes: {
+        style: {
+          maxHeight: '400px'
         }
-      });
-    };
-    
-    ClassicEditor.builtinPlugins.push(MinHeightPlugin);
+      }
+    });
+  };
+
+  ClassicEditor.builtinPlugins.push(MinHeightPlugin);
 };
 
 /* Wizard questions */
@@ -131,27 +119,27 @@ var setupWizardHandler = function () {
   $('#wizard input').blur(function () { $(this).closest('.checkbox').removeClass('focus'); });
 };
 
-var allChecked = function(ids) {
+var allChecked = function (ids) {
   for (var i = 0; i < ids.length; i++) {
     id = ids[i];
-    if (!$('#'+id).is(':checked')) {
+    if (!$('#' + id).is(':checked')) {
       return false;
     }
   }
   return true;
 }
 
-var noneChecked = function(ids) {
+var noneChecked = function (ids) {
   for (var i = 0; i < ids.length; i++) {
     var id = ids[i];
-    if ($('#'+id).is(':checked')) {
+    if ($('#' + id).is(':checked')) {
       return false;
     }
   }
   return true;
 }
 
-var selectClauses = function(clauses, select) {
+var selectClauses = function (clauses, select) {
   $clauses = $('#clauses')
   for (var i = 0; i < clauses.length; i++) {
     var clauseNum = clauses[i];
@@ -169,11 +157,16 @@ var selectClauses = function(clauses, select) {
   }
 }
 
+var selectNone = function () {
+  $('#clauses input').prop('checked', false).prop('indeterminate', false);
+  $('[role="treeitem"]').attr('aria-checked', false);
+};
+
 // Rules for selecting clauses based on answers to wizard questions
 var positiveMappings = [
   {
     questions: ['hardware'],
-    clauses: ['5.5','5.6','5.7','5.8','5.9','8.1','8.4']
+    clauses: ['5.5', '5.6', '5.7', '5.8', '5.9', '8.1', '8.4']
   },
   {
     questions: ['shared'],
@@ -205,11 +198,11 @@ var positiveMappings = [
   },
   {
     questions: ['comm'],
-    clauses: ['13.2','13.3']
+    clauses: ['13.2', '13.3']
   },
   {
     questions: ['video-sync'],
-    clauses: ['7.1','7.2']
+    clauses: ['7.1', '7.2']
   },
   {
     questions: ['video-player'],
@@ -221,18 +214,18 @@ var positiveMappings = [
   },
   {
     questions: ['ui'],
-    clauses: ['11.1','11.2','11.3','11.4','11.5','11.6.2','11.7']
+    clauses: ['11.1', '11.2', '11.3', '11.4', '11.5', '11.6.2', '11.7']
   },
   {
     questions: ['platform'],
-    clauses: ['11.5.2.1','11.5.2.2']
+    clauses: ['11.5.2.1', '11.5.2.2']
   },
   {
     questions: ['a11y'],
     clauses: ['5.2']
   },
   {
-    questions: ['a11y','documentation'],
+    questions: ['a11y', 'documentation'],
     clauses: ['12.1.1']
   },
   {
@@ -244,7 +237,7 @@ var positiveMappings = [
     clauses: ['11.8']
   },
   {
-    questions: ['a11y','platform'],
+    questions: ['a11y', 'platform'],
     clauses: ['11.6.1']
   },
   {
@@ -276,7 +269,7 @@ var positiveMappings = [
 var negativeMappings = [
   {
     questions: ['video-comm'],
-    clauses: ['6.5','6.6']
+    clauses: ['6.5', '6.6']
   },
   {
     questions: ['keys'],
@@ -284,11 +277,11 @@ var negativeMappings = [
   },
   {
     questions: ['closed'],
-    clauses: ['11.5.1','11.1.1.1.2','11.1.2.1.2','11.1.2.3.2','11.1.3.1.2','11.1.3.2.2','11.1.4.4.2','11.1.4.5.2','11.1.4.10.2','11.2.1.1.2','11.2.1.4.2','11.3.1.1.2','11.3.3.1.2','11.4.1.1.2','11.4.1.2.2']
+    clauses: ['11.5.1', '11.1.1.1.2', '11.1.2.1.2', '11.1.2.3.2', '11.1.3.1.2', '11.1.3.2.2', '11.1.4.4.2', '11.1.4.5.2', '11.1.4.10.2', '11.2.1.1.2', '11.2.1.4.2', '11.3.1.1.2', '11.3.3.1.2', '11.4.1.1.2', '11.4.1.2.2']
   },
   {
     questions: ['platform'],
-    clauses: ['11.5.2.1','11.5.2.2']
+    clauses: ['11.5.2.1', '11.5.2.2']
   },
   {
     questions: ['at'],
@@ -296,7 +289,7 @@ var negativeMappings = [
   },
 ];
 
-var updateWizard = function() {
+var updateWizard = function () {
   selectNone();
   for (var i = 0; i < positiveMappings.length; i++) {
     var mapping = positiveMappings[i];
@@ -304,8 +297,8 @@ var updateWizard = function() {
       selectClauses(mapping.clauses, true);
     }
   }
-  for (var i = 0; i < positiveMappings.length; i++) {
-    var mapping = positiveMappings[i];
+  for (var i = 0; i < negativeMappings.length; i++) {
+    var mapping = negativeMappings[i];
     if (noneChecked(mapping.questions)) {
       selectClauses(mapping.clauses, false);
     }
