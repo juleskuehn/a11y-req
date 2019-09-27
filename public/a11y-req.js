@@ -9,9 +9,13 @@ $(document).on("wb-ready.wb", function (event) {
 
   setupWizardHandler();
 
+  setupClauseListHandler();
+
   // Replace <textarea> with rich text editor (CKEditor)
   $('textarea').each(function () {
-    initCK(this);
+    if (!$(this).hasClass('no-editor')) {
+      initCK(this);
+    }
   });
 });
 
@@ -34,6 +38,35 @@ var updatePresetSelections = function () {
     // Check the preset checkboxes
     $('#' + this.innerHTML).prop('checked', true);
   });
+  $('[role="treeitem"]').each(function () {
+    updateAriaChecked($(this));
+  });
+};
+
+
+/* Manual clause list handling */
+
+var setupClauseListHandler = function () {
+  // #clauseList is the <textarea> element (see /views/wizard.pug)
+  $('#clauseList').change(function () { updateClauseSelections(); });
+};
+
+var updateClauseSelections = function () {
+  var clauseList = $('#clauseList').val();
+  // Uncheck all checkboxes
+  $('#clauses input').prop('checked', false);
+  // Clean up clause list text
+  clauseList = clauseList.replace(/[a-z]|,/gi, '');
+  var clauses = clauseList.split(' ');
+  console.log(clauses);
+  for (var i = 0; i < clauses.length; i++) {
+    var clause = clauses[i];
+    if (clause.length < 1) {
+      continue;
+    }
+    $('input[data-number="'+clause+'"]').prop('checked', true);
+  }
+
   $('[role="treeitem"]').each(function () {
     updateAriaChecked($(this));
   });
@@ -67,6 +100,13 @@ var setupTreeHandler = function () {
     $('li.parentNode').attr('aria-expanded', false);
     $('li.endNode').each(function () {
       toggleClauseText($(this), false);
+    });
+    e.preventDefault();
+  });
+  $('#openClauseList').click(function (e) {
+    $('li.parentNode').attr('aria-expanded', true);
+    $('li.endNode').each(function () {
+      toggleClauseText($(this), true, true);
     });
     e.preventDefault();
   });

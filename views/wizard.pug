@@ -1,16 +1,16 @@
 extends layout
 
 block content
-  h1#wb-cont(property="name")= title
+  h1#wb-cont(property='name')= title
   //- h3 About
   p Use this tool to generate requirements documents specific to the Information Communication Technology (ICT) you are procuring. Requirements are based on the  EN 301 549 V2.1.2 (2018-08).
   //- h3 Instructions
   //- ol
-  //-   li Answer questions under "Does the ICT include:" in the order they are listed.
+  //-   li Answer questions under 'Does the ICT include:' in the order they are listed.
   //-   ul
   //-     li Based on your responses, relevant requirements from the EN 301 549 will automatically be selected.
-  //-   li If necessary, fine tune the requirements by manually selecting "Required clauses".
-  //-   li Click the "Generate requirements" button.
+  //-   li If necessary, fine tune the requirements by manually selecting 'Required clauses'.
+  //-   li Click the 'Generate requirements' button.
   //-   ul
   //-     li Documents will be generated which include only the required clauses.
   //-   li On the next page, download the generated ICT accessibility requirements documents.
@@ -30,7 +30,15 @@ block content
           details#details-step2
             summary Step 2: Refine clause selection
             include includes/clause_tree
+            a.btn.btn-default.overlay-lnk(href='#clauseListModal' aria-controls='clauseListModal' role='button') Enter clause list
             a.btn.btn-default.btn-next.wb-tabs-ext(href='#details-step3') Next
           details#details-step3
             summary Step 3: Generate requirements documents
             include includes/download_chooser
+
+    section.wb-overlay.modal-content.overlay-def.wb-popup-mid#clauseListModal
+      header.modal-header
+        h2.modal-title Enter clause list
+      .modal-body
+        p Paste the clause list from a previously generated document to resume.
+        textarea.no-editor#clauseList
