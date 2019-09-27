@@ -70,6 +70,10 @@ var updateClauseSelections = function () {
   $('[role="treeitem"]').each(function () {
     updateAriaChecked($(this));
   });
+
+  $('[role="treeitem"]').each(function () {
+    updateAriaChecked($(this));
+  });
 };
 
 
