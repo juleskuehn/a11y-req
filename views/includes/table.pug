@@ -10,13 +10,15 @@ if item_list.length > 0
       each item in item_list
         tr
           td(valign='top')
-            strong #{item.number} #{item.name}
+            p
+              strong #{item.number} #{item.name}
             | !{item.description}
           td(valign='top')
-            strong C.#{item.number} #{item.name}
+            p
+              strong C.#{item.number} #{item.name}
             | !{item.compliance}
-          td 
-          td
+          td(valign='top') &nbsp;
+          td(valign='top') &nbsp;
 else
   p
     strong There are no functional accessibility requirements.

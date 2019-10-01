@@ -41,7 +41,7 @@ exports.clause_create_get = (req, res, next) => {
     breadcrumbs: [
       { url: '/', text: 'Home' },
       { url: '/edit', text: 'Edit content' },
-      { url: '/edit/presets', text: 'Edit clauses' }
+      { url: '/edit/clauses', text: 'Edit clauses' }
     ]
   });
 };
@@ -96,7 +96,7 @@ exports.clause_update_get = (req, res, next) => {
       breadcrumbs: [
         { url: '/', text: 'Home' },
         { url: '/edit', text: 'Edit content' },
-        { url: '/edit/presets', text: 'Edit clauses' }
+        { url: '/edit/clauses', text: 'Edit clauses' }
       ]
     });
   });
@@ -137,7 +137,7 @@ exports.clause_delete_get = (req, res, next) => {
       breadcrumbs: [
         { url: '/', text: 'Home' },
         { url: '/edit', text: 'Edit content' },
-        { url: '/edit/presets', text: 'Edit clauses' },
+        { url: '/edit/clauses', text: 'Edit clauses' },
         { url: results.clause.url, text: results.clause.name }
       ]
     });
@@ -163,7 +163,7 @@ exports.clause_delete_post = (req, res, next) => {
         breadcrumbs: [
           { url: '/', text: 'Home' },
           { url: '/edit', text: 'Edit content' },
-          { url: '/edit/presets', text: 'Edit clauses' },
+          { url: '/edit/clauses', text: 'Edit clauses' },
           { url: results.clause.url, text: results.clause.name }
         ]
       });
@@ -179,23 +179,7 @@ exports.clause_delete_post = (req, res, next) => {
 };
 
 // Populate clauses from HTML files
-// Word documents were opened in LibreOffice Writer and exported to HTML
-// Clause table is now in <filename>7.htm
-// Then using regex:
-// <td[^>]*> replaced with <td>
-// <p[^>]*> replaced with <p>
-// <font[^>]*> replaced with (nothing)
-// </font> replaced with (nothing)
-// <span[^>]*> replaced with (nothing)
-// </span> replaced with (nothing)
-// <u[^>]*> replaced with (nothing)
-// </u> replaced with (nothing)
-// <b> replaced with <strong>
-// </b> replaced with </strong>
-// \n and \t replaced with " "
-// "  " replaced with " " until none left
-// </ol> <ol type[^>]*> replaced with (nothing)
-// <li> <p>(.+?)</p> replaced with <li>$1</li>
+// HTML converted from Word at docconverter.pro
 exports.clause_populate = (req, res, next) => {
 
   // Convert HTML to array of objects following database schema:
@@ -210,10 +194,15 @@ exports.clause_populate = (req, res, next) => {
     frCompliance: c.frCompliance
   } */
 
-
   JSDOM.fromFile('english.html').then(dom => {
     console.log("file loaded");
     let document = dom.window.document;
+
+    // Replace DOM body with modified htmlString
+    let htmlString = document.querySelector('body').innerHTML;
+    document.querySelector('body').innerHTML = regexHtml(htmlString);
+
+    // Extract clauses
     let clauses = [];
     let rows = document.querySelectorAll('tbody tr');
     for (let i = 0; i < rows.length; i++) {
@@ -235,8 +224,13 @@ exports.clause_populate = (req, res, next) => {
 
     // Add French HTML content, asserting that clause numbers are equal
     JSDOM.fromFile('french.html').then(dom => {
-
       let document = dom.window.document;
+
+      // Replace DOM body with modified htmlString
+      let htmlString = document.querySelector('body').innerHTML;
+      document.querySelector('body').innerHTML = regexHtml(htmlString);
+
+      // Extract clauses
       let rows = document.querySelectorAll('tbody tr');
       console.log(`English clauses length is ${clauses.length}, french rows is ${rows.length}`);
       for (let i = 0; i < rows.length; i++) {
@@ -261,7 +255,7 @@ exports.clause_populate = (req, res, next) => {
         clause.save((err) => {
           if (err) { return next(err); }
           // Clause saved
-          console.log(`Inserted clause: ${clause.number} ${clause.name}`);
+          // console.log(`Inserted clause: ${clause.number} ${clause.name}`);
         });
       }
       res.redirect('/edit/clauses'); // Success - go to clause list
@@ -269,3 +263,41 @@ exports.clause_populate = (req, res, next) => {
   });
 
 };
+
+// Replaces:
+
+// <p class="NormalBOLD"(.*?)>\n(.*?)\n(.*?)</p>
+// <p><strong>$2</strong></p>
+
+// <td[^>]*> replaced with <td>
+// <p[^>]*> replaced with <p>
+// <ul[^>]*> replaced with <ul>
+// <li[^>]*> replaced with <li>
+// <span[^>]*> replaced with (nothing)
+// </span> replaced with (nothing)
+
+// <ol style="margin:0pt; padding-left:0pt; list-style-type:lower-latin">
+// <ol style="list-style-type:lower-latin">
+
+// \n and \t replaced with " "
+// "  " replaced with " " until none left
+// </ol> <ol(.*?)> replaced with (nothing)
+// <li> <p>(.+?)</p> replaced with <li>$1</li>
+const regexHtml = function(htmlString) {
+  // Perform string replaces as described above on htmlString
+  htmlString = htmlString.replace(/\s\s+/gm, ' ');
+  htmlString = htmlString.replace(/<p class="NormalBOLD"(.*?)> (.*?) <\/p>/gm, '<p><strong>$2</strong></p>');
+  htmlString = htmlString.replace(/<td(.*?)>/gm, '<td>');
+  htmlString = htmlString.replace(/<p(.*?)>/gm, '<p>');
+  htmlString = htmlString.replace(/<ul(.*?)>/gm, '<ul>');
+  htmlString = htmlString.replace(/<li(.*?)>/gm, '<li>');
+  htmlString = htmlString.replace(/<span(.*?)>/gm, '');
+  htmlString = htmlString.replace(/<\/span>/gm, '');
+  htmlString = htmlString.replace(/<ol style="margin:0pt; padding-left:0pt; list-style-type:lower-latin">/gm, '<ol style="list-style-type:lower-alpha">');
+  htmlString = htmlString.replace(/<\/ol> <ol(.*?)>/gm, '');
+  htmlString = htmlString.replace(/<a(.*?)style="(.*?)"/gm, '<a$1');
+  htmlString = htmlString.replace(/\.<\/a>/gm, '</a>.');
+  htmlString = htmlString.replace(/\. <\/a>/gm, '</a>.');
+  console.log(htmlString.substring(0,1000));
+  return htmlString;
+}
