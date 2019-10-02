@@ -32,7 +32,7 @@ block form
     .form-group
       label(for='frDescription')
         span.field-name Description (French) 
-      textarea#description.form-control(lang='fr' name='frDescription' rows='10')
+      textarea#frDescription.form-control(lang='fr' name='frDescription' rows='10')
         if itemExists
           | #{item.frDescription}
     .form-group
@@ -44,7 +44,7 @@ block form
     .form-group
       label(for='frCompliance')
         span.field-name Determination of compliance (French) 
-      textarea#compliance.form-control(lang='fr' name='frCompliance' rows='10')
+      textarea#frCompliance.form-control(lang='fr' name='frCompliance' rows='10')
         if itemExists
           | #{item.frCompliance}
       

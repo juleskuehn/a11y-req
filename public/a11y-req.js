@@ -12,9 +12,26 @@ $(document).on("wb-ready.wb", function (event) {
   setupClauseListHandler();
 
   // Replace <textarea> with rich text editor (CKEditor)
+  // https://stackoverflow.com/questions/46559354/how-to-set-the-height-of-ckeditor-5-classic-editor/56550285#56550285
+  function MinHeightPlugin(editor) {
+    this.editor = editor;
+  };
+
+  MinHeightPlugin.prototype.init = function () {
+    this.editor.ui.view.editable.extendTemplate({
+      attributes: {
+        style: {
+          maxHeight: '400px'
+        }
+      }
+    });
+  };
+
+  ClassicEditor.builtinPlugins.push(MinHeightPlugin);
+  
   $('textarea').each(function () {
     if (!$(this).hasClass('no-editor')) {
-      initCK(this);
+      initCK(this, $(this).attr('lang') === 'fr' ? 'fr' : 'en');
     }
   });
 });
@@ -118,10 +135,13 @@ var setupTreeHandler = function () {
 
 /* CKEditor */
 
-var initCK = function (element) {
+var initCK = function (element, lang) {
   ClassicEditor
     .create(element, {
-      language: 'en',
+      language: {
+        ui: 'en',
+        content: lang
+      },
       removePlugins: [],
       // plugins: [ 'Base64UploadAdapter' ],
       toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'link', 'undo', 'redo', 'imageUpload', 'imageTextAlternative', 'insertTable']
@@ -133,23 +153,6 @@ var initCK = function (element) {
     .catch(function (error) { console.error(error); });
 
   // console.log(ClassicEditor.builtinPlugins.map(plugin => plugin.pluginName));
-
-  // https://stackoverflow.com/questions/46559354/how-to-set-the-height-of-ckeditor-5-classic-editor/56550285#56550285
-  function MinHeightPlugin(editor) {
-    this.editor = editor;
-  };
-
-  MinHeightPlugin.prototype.init = function () {
-    this.editor.ui.view.editable.extendTemplate({
-      attributes: {
-        style: {
-          maxHeight: '400px'
-        }
-      }
-    });
-  };
-
-  ClassicEditor.builtinPlugins.push(MinHeightPlugin);
 };
 
 /* Wizard questions */
