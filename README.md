@@ -28,8 +28,7 @@ This application should be considered a prototype. While the documents generated
     - English sections - such as references to English documents - are tagged as French.
 - Language of French content within rich text editors is tagged as English (despite setting CKEditor 5 content language to French).
 - Alphabetical list styles are not visible in the rich text editor, though present in the HTML of the clauses (which was generated outside of CKEditor).
-- Mapping between wizard questions and clauses is imperfect. This can be resolved simply with adjustment of the mappings in `a11y-req.js`.
-- CKEditor 5 is incompatible with Internet Explorer 11. Content remains editable as raw HTML.
+- CKEditor 5 is incompatible with Internet Explorer 11. Content remains editable as raw HTML in IE11.
 
 ### Resolving issues
 The above issues are primarily due to the requirement of generating Word documents and the limitations of the html-docx-js and CKEditor 5 libraries. Returning to using HTML as the output format would resolve some of these issues. Alternately, modifying the html-docx-js library could improve the generation of Word documents. Other issues can be resolved by switching to CKEditor 4 and using the Language and List-styles plugins. (An inelegant workaround is simply editing the HTML manually in IE11, bypassing rich text editor issues.)
@@ -58,6 +57,10 @@ It also depends on the following libraries:
 - [CKEditor 5](https://ckeditor.com/ckeditor-5/) (rich text editor)
 
 Images are stored in the database inline (base64 encoded).
+
+## Editing the code
+The files most likely to require editing are:
+- `/public/mappings.js` 
 
 ## Support
 [jules.kuehn@canada.ca](mailto:jules.kuehn@canada.ca)

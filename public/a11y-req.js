@@ -75,11 +75,14 @@ var updateClauseSelections = function () {
   // Clean up clause list text
   clauseList = clauseList.replace(/[a-z]|,/gi, '');
   var clauses = clauseList.split(' ');
-  console.log(clauses);
+  // console.log(clauses);
   for (var i = 0; i < clauses.length; i++) {
     var clause = clauses[i];
     if (clause.length < 1) {
       continue;
+    }
+    if (clause[clause.length - 1] === '.') {
+      clause = clause.substr(0, clause.length - 1);
     }
     $('input[data-number="'+clause+'"]').prop('checked', true);
   }
@@ -147,8 +150,8 @@ var initCK = function (element, lang) {
       toolbar: ['heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'link', 'undo', 'redo', 'imageUpload', 'imageTextAlternative', 'insertTable']
     })
     .then(function (editor) {
-      console.log(editor);
-      console.log(Array.from(editor.ui.componentFactory.names()));
+      // console.log(editor);
+      // console.log(Array.from(editor.ui.componentFactory.names()));
     })
     .catch(function (error) { console.error(error); });
 
@@ -208,133 +211,6 @@ var selectNone = function () {
   $('#clauses input').prop('checked', false).prop('indeterminate', false);
   $('[role="treeitem"]').attr('aria-checked', false);
 };
-
-// Rules for selecting clauses based on answers to wizard questions
-var positiveMappings = [
-  {
-    questions: ['hardware'],
-    clauses: ['5.5', '5.6', '5.7', '5.8', '5.9', '8.1', '8.4']
-  },
-  {
-    questions: ['shared'],
-    clauses: ['8.5']
-  },
-  {
-    questions: ['speech-output'],
-    clauses: ['8.2.1']
-  },
-  {
-    questions: ['web'],
-    clauses: ['9']
-  },
-  {
-    questions: ['non-web-docs'],
-    clauses: ['10']
-  },
-  {
-    questions: ['documentation'],
-    clauses: ['12.1.2']
-  },
-  {
-    questions: ['support'],
-    clauses: ['12.2']
-  },
-  {
-    questions: ['voice-comm'],
-    clauses: ['6']
-  },
-  {
-    questions: ['comm'],
-    clauses: ['13.2', '13.3']
-  },
-  {
-    questions: ['video-sync'],
-    clauses: ['7.1', '7.2']
-  },
-  {
-    questions: ['video-player'],
-    clauses: ['7.3']
-  },
-  {
-    questions: ['relay'],
-    clauses: ['13.1']
-  },
-  {
-    questions: ['ui'],
-    clauses: ['11.1', '11.2', '11.3', '11.4', '11.5', '11.6.2', '11.7']
-  },
-  {
-    questions: ['platform'],
-    clauses: ['11.5.2.1', '11.5.2.2']
-  },
-  {
-    questions: ['a11y'],
-    clauses: ['5.2']
-  },
-  {
-    questions: ['a11y', 'documentation'],
-    clauses: ['12.1.1']
-  },
-  {
-    questions: ['at'],
-    clauses: ['11.5.2.4']
-  },
-  {
-    questions: ['authoring'],
-    clauses: ['11.8']
-  },
-  {
-    questions: ['a11y', 'platform'],
-    clauses: ['11.6.1']
-  },
-  {
-    questions: ['integrated'],
-    clauses: ['8.3']
-  },
-  {
-    questions: ['t-coil'],
-    clauses: ['8.2.2.1']
-  },
-  {
-    questions: ['mobile-phone'],
-    clauses: ['8.2.2.2']
-  },
-  {
-    questions: ['closed'],
-    clauses: ['5.1']
-  },
-  {
-    questions: ['bio'],
-    clauses: ['5.3']
-  },
-  {
-    questions: ['conversion'],
-    clauses: ['5.4']
-  }
-];
-
-var negativeMappings = [
-  {
-    questions: ['video-comm'],
-    clauses: ['6.5', '6.6']
-  },
-  {
-    questions: ['keys'],
-    clauses: ['8.4.3']
-  },
-  {
-    questions: ['closed'],
-    clauses: ['11.5.1', '11.1.1.1.2', '11.1.2.1.2', '11.1.2.3.2', '11.1.3.1.2', '11.1.3.2.2', '11.1.4.4.2', '11.1.4.5.2', '11.1.4.10.2', '11.2.1.1.2', '11.2.1.4.2', '11.3.1.1.2', '11.3.3.1.2', '11.4.1.1.2', '11.4.1.2.2']
-  },
-  {
-    questions: ['platform'],
-    clauses: ['11.5.2.1', '11.5.2.2']
-  },
-  {
-    questions: ['at'],
-    clauses: ['11.5.2.4']
-  },
-];
 
 var updateWizard = function () {
   selectNone();
