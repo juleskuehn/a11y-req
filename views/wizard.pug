@@ -30,7 +30,7 @@ block content
           details#details-step2
             summary Step 2: Refine clause selection
             include includes/clause_tree
-            a.btn.btn-default.overlay-lnk(href='#clauseListModal' aria-controls='clauseListModal' role='button') Enter clause list
+            a.btn.btn-default.overlay-lnk(href='#clauseListModal' aria-controls='clauseListModal' role='button' title='Resume editing by pasting a previously generated requirements list') Enter clause list
             a.btn.btn-default.btn-next.wb-tabs-ext(href='#details-step3') Next
           details#details-step3
             summary Step 3: Generate requirements documents
@@ -40,5 +40,7 @@ block content
       header.modal-header
         h2.modal-title Enter clause list
       .modal-body
-        p Paste the clause list from a previously generated document to resume.
+        p Paste the clause list from a previously generated document to resume editing your selection.
+        p The clause list is a single sentence which looks something like this:
+        p "The offered solution should comply with clauses 5.1.2.1, 5.1.2.2, 5.1.3.1, 12.1.1 and 12.1.2."
         textarea.no-editor#clauseList
