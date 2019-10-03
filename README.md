@@ -4,7 +4,7 @@ Accessibility Requirements Generator for Information Communication Technology (I
 ## Motivation
 The EU [Accessible ICT Procurement Toolkit](http://mandate376.standards.eu/procurement-stages/writing-a-call-for-tenders/wizard/technical-requirements/) contains a tool which generates a custom set of accessibility requirements - a subset of the Functional Accessibility Requirements clauses from the EN 301 549 (2014). These clauses are included in a downloadable HTML document for inclusion in procurements.
 
-Unfortunately, this tool was never updated to the 2018 standard. The motivation for _a11y-req_ was to recreate this system, but with a Content Management System (CMS) to allow the clauses and informative sections to be updated as the EN 301 549 refreshes. At the same time, we wished to generate documents in both French and English.
+Unfortunately, this tool was never updated to the 2018 standard. The motivation for a11y-req was to recreate this system, but with a Content Management System (CMS) to allow the clauses and informative sections to be updated as the EN 301 549 refreshes. At the same time, we wished to generate documents in both French and English.
 
 ## Functional design decisions
 
@@ -22,15 +22,18 @@ All generated documents include a statement which identifies precisely which cla
 ## Known issues
 This application should be considered a prototype. As such, it has a number of unresolved issues.
 
-While the documents generated are free from textual errors and can be used in actual procurement activities, there remain a number of issues. These are primarily due to the requirement of generating Word documents and the limitations of the _html-docx-js_ and _CKEditor 5_ libraries. Returning to using HTML as the output format would resolve some of these issues. Alternately, modifying the _html-docx-js_ library could improve the generation of Word documents. Other issues would be resolved by switching to CKEditor 4, and using the Language and List-styles plugins.
+While the documents generated are free from textual errors and can be used in actual procurement activities, there remain a number of issues:
 - Image captions are not displayed correctly in the Word documents
 - French Word documents have language tagging issues:
- - The table of requirements is tagged as English in Word. This issue is not reflected in the code of the document.
- - English sections (such as references to English documents) are tagged as French.
+    - The table of requirements is tagged as English in Word. (This issue is not reflected in the code of the document.)
+    - English sections - such as references to English documents - are tagged as French.
 - Language of French content within rich text editors is tagged as English (despite setting CKEditor 5 content language to French).
 - Alphabetical list styles are not visible in the rich text editor, though present in the HTML of the clauses (which was generated outside of CKEditor).
 - Mapping between wizard questions and clauses is imperfect. This can be resolved simply with adjustment of the mappings in `a11y-req.js`.
 - CKEditor 5 is incompatible with Internet Explorer 11. Content remains editable as raw HTML.
+
+### Resolving issues
+The above issues are primarily due to the requirement of generating Word documents and the limitations of the html-docx-js and CKEditor 5 libraries. Returning to using HTML as the output format would resolve some of these issues. Alternately, modifying the html-docx-js library could improve the generation of Word documents. Other issues can be resolved by switching to CKEditor 4 and using the Language and List-styles plugins. (An inelegant workaround is simply editing the HTML manually in IE11, bypassing rich text editor issues.)
 
 ## Setup
 - Install node.js, npm, and MongoDB
@@ -56,3 +59,6 @@ It also depends on the following libraries:
 - [CKEditor 5](https://ckeditor.com/ckeditor-5/) (rich text editor)
 
 Images are stored in the database inline (base64 encoded).
+
+## Support
+[mailto:jules.kuehn@canada.ca](jules.kuehn@canada.ca)
