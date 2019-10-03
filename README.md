@@ -20,9 +20,8 @@ The wizard follows three steps:
 All generated documents include a statement which identifies precisely which clauses are included. This statement can be copy / pasted into this tool at step 2 in order to resume fine-tuning of a previous clause selection.
 
 ## Known issues
-This application should be considered a prototype. As such, it has a number of unresolved issues.
+This application should be considered a prototype. While the documents generated are free from textual errors and can be used in actual procurement activities, there are a number of unresolved issues:
 
-While the documents generated are free from textual errors and can be used in actual procurement activities, there remain a number of issues:
 - Image captions are not displayed correctly in the Word documents
 - French Word documents have language tagging issues:
     - The table of requirements is tagged as English in Word. (This issue is not reflected in the code of the document.)
@@ -61,4 +60,4 @@ It also depends on the following libraries:
 Images are stored in the database inline (base64 encoded).
 
 ## Support
-[mailto:jules.kuehn@canada.ca](jules.kuehn@canada.ca)
+[jules.kuehn@canada.ca](mailto:jules.kuehn@canada.ca)
