@@ -31,6 +31,7 @@ This application should be considered a prototype. While the documents generated
     - English sections - such as references to English documents - are tagged as French.
 - Page breaks cannot be set (eg. for putting an Appendix on a new page), nor can "keep together" properties. (The concept of paper pages does not exist in HTML.)
 - Styling of Word document is less than ideal
+- MHT format is proprietary to Word. Generated documents should be converted to standard docx format before release
 
 ### Web applicaton
 - Language of French content within rich text editors is tagged as English (despite setting CKEditor 5 content language to French).

@@ -23,9 +23,10 @@ exports.clause_list = (req, res, next) => {
     .exec((err, list_clauses) => {
       if (err) { return next(err); }
       list_clauses = list_clauses.sort((a, b) => a.number.localeCompare(b.number, undefined, { numeric: true }));
-      res.render('clause_list', {
+      res.render('item_list', {
         title: strings.listTitle,
         item_list: list_clauses,
+        type: 'clause',
         breadcrumbs: [
           { url: '/', text: 'Home' },
           { url: '/edit', text: 'Edit content' }
