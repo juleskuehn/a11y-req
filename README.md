@@ -88,7 +88,7 @@ Generated document views. Add views following these examples, and link to them i
 
 **`/views/download.css`**
 
-CSS for Word documents. Unfortunately, editing this is a matter of trial and error as styling support is inconsistent through html-docx-js library.
+CSS for Word documents. Unfortunately, editing this is a matter of trial and error as styling support is inconsistent through html-docx-js library. Try editing the styles in the generated .docx files. Once better styling is achieved, propagate those changes to `download.css`.
 
 **`/controllers/generatorController.js`**
 

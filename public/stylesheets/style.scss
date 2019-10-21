@@ -8,12 +8,17 @@ main {
   padding-bottom: 30px;
 }
 
-.btn-next {
+.right {
   float: right;
 }
 
 .document-properties {
   margin-top: 10px;
+}
+
+p.form-instructions-link {
+  height: 0;
+  margin-bottom: 0;
 }
 
 // WET Overrides
