@@ -26,52 +26,39 @@ block content
           details#details-step1
             summary Step 1: Define ICT functionality
             p.form-instructions-link
-              a.overlay-lnk.right(href='#instructionsStep1' aria-controls='instructionsStep1' role='button' title='Step 1 instructions') Instructions
+              a.overlay-lnk.right(href='#instructionsStep1' aria-controls='instructionsStep1' role='button' title='Step 1 instructions') Instructions: Step 1
             include includes/wizard_form
             a.btn.btn-default.wb-tabs-ext.right(href='#details-step2') Next
           details#details-step2
             summary Step 2: Refine clause selection
             p.form-instructions-link
-              a.overlay-lnk.right(href='#instructionsStep2' aria-controls='instructionsStep2' role='button' title='Step 2 instructions') Instructions
+              a.overlay-lnk.right(href='#instructionsStep2' aria-controls='instructionsStep2' role='button' title='Step 2 instructions') Instructions: Step 2
             include includes/clause_tree
             a.btn.btn-default.overlay-lnk(href='#clauseListModal' aria-controls='clauseListModal' role='button' title='Resume editing by pasting a previously generated requirements list') Enter clause list
             a.btn.btn-default.wb-tabs-ext.right(href='#details-step3') Next
           details#details-step3
             summary Step 3: Generate requirements documents
             p.form-instructions-link
-              a.overlay-lnk.right(href='#instructionsStep3' aria-controls='instructionsStep3' role='button' title='Step 3 instructions') Instructions
+              a.overlay-lnk.right(href='#instructionsStep3' aria-controls='instructionsStep3' role='button' title='Step 3 instructions') Instructions: Step 3
             include includes/download_chooser
-
-  section.wb-overlay.modal-content.overlay-def.wb-popup-mid#clauseListModal
-    header.modal-header
-      h2.modal-title Enter clause list
-    .modal-body
-      p Paste the clause list from a previously generated document to resume editing your selection.
-      p The clause list is a single sentence which looks something like this:
-      p "The offered solution should comply with clauses 5.1.2.1, 5.1.2.2, 5.1.3.1, 12.1.1 and 12.1.2."
-      textarea.no-editor#clauseList
 
   section.wb-overlay.modal-content.overlay-def.wb-popup-mid#instructionsStep1
     header.modal-header
       h2.modal-title Instructions: Step 1
     .modal-body
-      p
-        | Select all checkboxes which apply to the ICT being procured, even those which appear redundant.
+      p Select all checkboxes which apply to the ICT being procured, even those which appear redundant.
       p
         | Note that the procured product / service must itself 
         strong provide
         |  the component or feature. For example, consider the case of procuring e-learning services:
       ol
         li
-          p
-            | The statement of work specifies that the supplier must use a certain video-conferencing platform.
-          p
-            | "Two-way communication" and "Two-way video communication" requirements should not be selected (since these functions are not provided by the supplier as part of this procurement).
+          p The statement of work specifies that the supplier must use a certain video-conferencing platform.
+          p "Two-way communication" and "Two-way video communication" requirements should not be selected (since these functions are not provided by the supplier as part of this procurement).
         li
-          p
-            | The statement of work includes a learning management system with content-editing abilities, to be chosen or developed by the supplier.
-          p
-            | "Authoring tools" should be selected (since the supplier is providing content authoring functionality as part of this procurement).
+          p The statement of work includes a learning management system with content-editing abilities, to be chosen or developed by the supplier.
+          p "Authoring tools" should be selected (since the supplier is providing content authoring functionality as part of this procurement).
+      p When you are satisfied that your selection is correct, proceed to Step 2 by using the navigation tabs or the "Next" button. Further instructions are available within each tab.
 
       
   section.wb-overlay.modal-content.overlay-def.wb-popup-mid#instructionsStep2
@@ -134,3 +121,12 @@ block content
             li Abbreviations
           | Make sure that the notes (which are in French) are not set to English.
         li Save and close the French document.
+
+  section.wb-overlay.modal-content.overlay-def.wb-popup-mid#clauseListModal
+    header.modal-header
+      h2.modal-title Enter clause list
+    .modal-body
+      p Paste the clause list from a previously generated document to resume editing your selection.
+      p The clause list is a single sentence which looks something like this:
+      p "The offered solution should comply with clauses 5.1.2.1, 5.1.2.2, 5.1.3.1, 12.1.1 and 12.1.2."
+      textarea.no-editor#clauseList
