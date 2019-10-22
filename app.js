@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Simple authorization for edit routes
 const basicAuth = auth.basic(
   { realm: "Editing requires login" },
-  (user, pass, cb) => cb(user === "jules" && pass === "jules")
+  (user, pass, cb) => cb(user === 'admin' && pass === 'admin')
 );
 
 // THE IMPORTANT PART

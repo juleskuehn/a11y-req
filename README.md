@@ -1,5 +1,7 @@
 # a11y-req
-Accessibility Requirements Generator for Information Communication Technology (ICT) Procurement. Based on EN 301 549 (2018)
+Accessibility Requirements Generator for Information Communication Technology (ICT) Procurement. Based on EN 301 549 (2018).
+
+[Use the tool](http://a11yreq.herokuapp.com)
 
 ## Motivation
 The EU [Accessible ICT Procurement Toolkit](http://mandate376.standards.eu/procurement-stages/writing-a-call-for-tenders/wizard/technical-requirements/) contains a tool which generates a custom set of accessibility requirements - a subset of the Functional Accessibility Requirements clauses from the EN 301 549 (2014). These clauses are included in a downloadable HTML document for inclusion in procurements.
@@ -42,6 +44,8 @@ This application should be considered a prototype. While the documents generated
 ### Resolving issues
 The above issues are primarily due to the requirement of generating Word documents and the limitations of the html-docx-js and CKEditor 5 libraries. Returning to using HTML as the output format would resolve some of these issues. Alternately, modifying the html-docx-js library could improve the generation of Word documents. Other issues can be resolved by switching to CKEditor 4 and using the Language and List-styles plugins. (An inelegant workaround is simply editing the HTML manually in IE11, bypassing rich text editor issues.) Styling issues in the Word document can be resolved by modifying `download.css` (see "Editing the code" below) or simply by editing the generated Word documents.
 
+Instructions for editing the generated documents are available within the app (Step 3 instructions).
+
 ## Setup
 - Install node.js, npm, and MongoDB
 - Clone this repository: `git clone https://github.com/juleskuehn/a11y-req`
@@ -70,6 +74,16 @@ Images are stored in the database inline (base64 encoded).
 ## Editing the code
 The files most likely to require modification are:
 
+**`/app.js`**
+
+Set a unique username and password on line 37:
+
+`(user, pass, cb) => cb(user === 'admin' && pass === 'admin')`
+
+**`/views/wizard.pug`**
+
+The main page of the application, containing instructions for end-users and `includes` for each step of the wizard.
+
 **`/views/includes/wizard_form.pug`**
 
 Wizard questions, of form `+checkbox('User-facing physical (hardware) components', 'hardware')`. The first parameter to `checkbox()` is the question itself, and the second is the ID which needs to be used in `mappings.js`.
@@ -95,4 +109,4 @@ CSS for Word documents. Unfortunately, editing this is a matter of trial and err
 Options for generating documents, common to all `download_*` views.
 
 ## Support
-[jules.kuehn@canada.ca](mailto:jules.kuehn@canada.ca)
+Open an issue in this repository (preferred), or email [jules.kuehn@canada.ca](mailto:jules.kuehn@canada.ca).
