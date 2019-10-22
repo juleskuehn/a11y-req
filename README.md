@@ -11,7 +11,7 @@ Unfortunately, this tool was never updated to the 2018 standard. The motivation 
 ## Functional design decisions
 Initially, we followed the same principle of having commonly procured ICT as presets. (Each preset has a certain subset of the requirements relevant to that type of ICT.) In the process of piloting actual procurements, we found that the technical requirements in each Statement of Work (SoW) differed enough that a custom set of accessibility requirements should be chosen for each procurement.
 
-But in contrast to the overly simple "preset" solution, selecting each requirement manually is time consuming and requires strong knowledge of the EN 301 549 standard. A "wizard" style was chosen as a middle-ground between presets and the manual selection, inspired by the [GSA Accessibility Requirements Tool](https://www.buyaccessible.gov/).
+In contrast to the overly simple "preset" solution, selecting each requirement manually is time consuming and requires strong knowledge of the EN 301 549 standard. A "wizard" style was chosen as a middle-ground between presets and the manual selection, inspired by the [GSA Accessibility Requirements Tool](https://www.buyaccessible.gov/).
 
 The wizard follows three steps:
 1. The technical authority responsible for the SoW answers questions about the ICT functionality. Answering these questions require minimal knowledge of accessibility. Relevant clauses will be automatically selected based on a mapping between the questions and the clauses.
@@ -76,9 +76,7 @@ The files most likely to require modification are:
 
 **`/app.js`**
 
-Set a unique username and password on line 37:
-
-`(user, pass, cb) => cb(user === 'admin' && pass === 'admin')`
+Set a unique username and password on line 37: `(user, pass, cb) => cb(user === 'admin' && pass === 'admin')`
 
 **`/views/wizard.pug`**
 
