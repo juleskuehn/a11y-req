@@ -10,13 +10,23 @@ if item_list.length > 0
       each item in item_list
         tr
           td(valign='top')
-            strong #{item.number} #{item.frName}
+            p
+              strong #{item.number} #{item.frName}
             | !{item.frDescription}
           td(valign='top')
-            strong C.#{item.number} #{item.frName}
+            p
+              strong C.#{item.number} #{item.frName}
             | !{item.frCompliance}
-          td 
-          td
+          td(valign='top')
+            if item.informative || item.description.length === 0
+              | ---
+            else
+              | &nbsp;
+          td(valign='top')
+            if item.informative || item.description.length === 0
+              | ---
+            else
+              | &nbsp;
 else
   p
     strong Il n'y a pas d'exigences d'accessibilité fonctionnelle.
