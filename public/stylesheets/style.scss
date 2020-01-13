@@ -193,6 +193,10 @@ i.info {
   margin-right: 10px;
 }
 
+.clause-tree .checkbox .detail-inner * {
+  padding-left: auto !important;
+}
+
 // Wizard styling
 
 $color-focus: #1c578a;
