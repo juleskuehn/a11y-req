@@ -165,7 +165,6 @@ var setupWizardHandler = function () {
   // wb-shift.wb-tabs
   $(document).on("wb-updated.wb-tabs", ".wb-tabs", function (event, $newPanel) {
     if ($newPanel.is('#details-step2')) {
-      console.log('clause selections updated');
       updateWizard();
     }
   });
