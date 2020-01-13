@@ -28,7 +28,7 @@ $(document).on("wb-ready.wb", function (event) {
   };
 
   ClassicEditor.builtinPlugins.push(MinHeightPlugin);
-  
+
   $('textarea').each(function () {
     if (!$(this).hasClass('no-editor')) {
       initCK(this, $(this).attr('lang') === 'fr' ? 'fr' : 'en');
@@ -84,7 +84,7 @@ var updateClauseSelections = function () {
     if (clause[clause.length - 1] === '.') {
       clause = clause.substr(0, clause.length - 1);
     }
-    $('input[data-number="'+clause+'"]').prop('checked', true);
+    $('input[data-number="' + clause + '"]').prop('checked', true);
   }
 
   $('[role="treeitem"]').each(function () {
@@ -162,7 +162,13 @@ var initCK = function (element, lang) {
 
 var setupWizardHandler = function () {
   // #preset is the <select> element (see /views/select_fps.pug)
-  $('#wizard input').change(function () { updateWizard(); });
+  // wb-shift.wb-tabs
+  $(document).on("wb-updated.wb-tabs", ".wb-tabs", function (event, $newPanel) {
+    if ($newPanel.is('#details-step2')) {
+      console.log('clause selections updated');
+      updateWizard();
+    }
+  });
 
   // Focus highlighting
   $('#wizard input').focus(function () { $(this).closest('.checkbox').addClass('focus'); });
